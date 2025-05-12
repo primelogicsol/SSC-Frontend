@@ -30,7 +30,7 @@ const HomeSlides = [
   },
   {
     subTitle: "Explore, Reflect, Realize, Transform, Transcend  ",
-    title: "Journey Into Kashmir’s Inner <br/>Mystical Cosmos  ",
+    title: "Journey Into Kashmir’s<br/> Inner Mystical Cosmos  ",
     text: "Delve into the cosmos within, where Kashmiri Sufi teachings meet transformative sciences<br/> to elevate human consciousness and cultural understanding. ",
     buttonText: "Join Now",
     buttonLink: "/membership",
