@@ -2040,7 +2040,7 @@ ul {
 /*--------------------------------------------------------------
 # Main Slider Two
 --------------------------------------------------------------*/
-.main-slider-two {
+/* .main-slider-two {
   position: relative;
   display: block;
   z-index: 91;
@@ -2292,12 +2292,12 @@ ul {
 
 .main-slider-two__nav .swiper-button-prev {
   left: -100px;
-}
+} */
 
 /*--------------------------------------------------------------
 # Main Slider Three
 --------------------------------------------------------------*/
-.main-slider-three .main-slider-two__nav {
+/* .main-slider-three .main-slider-two__nav {
   align-items: flex-end;
   justify-content: flex-end;
   flex-direction: column;
@@ -2376,7 +2376,7 @@ ul {
 #main-slider-pagination
   .swiper-pagination-bullet.swiper-pagination-bullet-active:before {
   transform: scale(1);
-}
+} */
 
 
 /*--------------------------------------------------------------
