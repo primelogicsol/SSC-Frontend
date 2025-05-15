@@ -1,5 +1,5 @@
 import Layout from "../components/layout/Layout";
-
+import Image from "next/image";
 import Banner from "../components/sections/home3/Banner";
 import Services from "../components/sections/home3/Services";
 import Blog from "../components/sections/home3/Blog";
@@ -72,7 +72,7 @@ export default function Home() {
           className="transition-transform duration-500 hover:-translate-y-2"
         >
           <div className="relative text-center p-10 bg-white shadow-lg rounded-xl">
-            {/* Move 'We Are' label inside the box */}
+            
             <div className="absolute top-0 left-0 bg-fixnix-lightpurple text-white py-1 px-3 rounded-tl-xl rounded-br-xl text-sm font-medium z-20 inline-block">
               We Are
             </div>
@@ -111,11 +111,15 @@ export default function Home() {
                   data-wow-delay="100ms"
                   data-wow-duration="2500ms"
                 >
-                  <img 
-                    src="assets/images/resources/nextgeneration.png" 
-                    alt="" 
-                    className="w-full rounded-lg transition-all duration-500 delay-200 group-hover:scale-110" 
-                  />
+                  <Image
+                  src="/assets/images/resources/nextgeneration.webp"
+                  alt=""
+                  className="w-full rounded-lg transition-all duration-500 delay-200 group-hover:scale-110"
+                  width={500}
+                  height={300}
+                  priority={false}
+                  loading="lazy"
+                />
                   <div className="absolute bottom-0 left-0 right-0  bg-fixnix-lightpurple p-6 sm:p-8 md:p-10 lg:p-12 rounded-bl-lg rounded-tr-lg z-10">
                     <p className="text-base sm:text-lg font-semibold text-white uppercase pb-2 sm:pb-4">Our goal :</p>
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white leading-tight sm:leading-normal md:leading-10">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import Image from "next/image";
 export default function Footer() {
   return (
     <>
@@ -20,8 +20,15 @@ export default function Footer() {
                 <div className="relative block mr-0 lg:mr-12 xl:mr-20 mt-4">
                   <div className="relative block">
                     <Link href="#">
-                      <img src="assets/images/resources/logo-4.png" alt="Sufi Science Center Logo" className="max-w-full h-auto" />
-                    </Link>
+                    <Image 
+                      src="/assets/images/resources/logo-4.png" 
+                      alt="Sufi Science Center Logo" 
+                      width={150} 
+                      height={70} 
+                      className="max-w-full h-auto" 
+                      priority={true}
+                    />
+                  </Link>
                   </div>
                   <div className="relative block pt-8 md:pt-10 lg:pt-8 pb-4">
                     

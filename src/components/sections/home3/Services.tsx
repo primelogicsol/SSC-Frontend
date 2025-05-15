@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import Image from "next/image";
 export default function Services() {
   return (
     <section className="relative block py-20 z-10">
@@ -68,22 +68,33 @@ export default function Services() {
                 {service.title}
               </h3>
               <div className="text-center mt-3">
-  <Link
-    href={service.link1}
-    className="text-fixnix-lightpurple hover:underline sm:text-xs lg:text-lg font-semibold flex items-center justify-center gap-2"
-  >
-    {service.link1Text}
-    <img src="/assets/images/resources/learnmore.jpg" />
-  </Link>
-  <Link
-    href={service.link2}
-    className="text-fixnix-lightpurple hover:underline sm:text-xs lg:text-lg font-semibold  mt-1 flex items-center justify-center gap-2"
-  >
-    {service.link2Text}
-    {/* <i className="fa fa-arrow-right" aria-hidden="true"></i> */}
-    <img src="/assets/images/resources/learnmore.jpg" />
-  </Link>
-</div>
+            <Link
+              href={service.link1}
+              className="text-fixnix-lightpurple hover:underline sm:text-xs lg:text-lg font-semibold flex items-center justify-center gap-2"
+            >
+              {service.link1Text}
+              <Image 
+                src="/assets/images/resources/learnmore.webp" 
+                alt="Learn more" 
+                width={84} 
+                height={84}
+                className="inline-block"
+              />
+            </Link>
+            <Link
+              href={service.link2}
+              className="text-fixnix-lightpurple hover:underline sm:text-xs lg:text-lg font-semibold mt-1 flex items-center justify-center gap-2"
+            >
+              {service.link2Text}
+              <Image 
+                src="/assets/images/resources/learnmore.webp" 
+                alt="Learn more" 
+                width={84} 
+                height={84}
+                className="inline-block"
+              />
+            </Link>
+            </div>
 
             </div>
           ))}

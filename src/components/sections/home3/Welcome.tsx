@@ -2,6 +2,7 @@
 import ModalVideo from "react-modal-video";
 import { useState } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 
 export default function Welcome() {
   const [isOpen, setOpen] = useState(false);
@@ -85,12 +86,14 @@ export default function Welcome() {
             <div className="w-full lg:w-1/2 px-4">
               <div className="relative block ml-0 md:ml-6 lg:ml-12 z-10">
                 <div className="relative block rounded-md overflow-hidden">
-                  <img
-                    src="assets/images/resources/welcome.png"
-                    alt=""
+                  <Image
+                    src="/assets/images/resources/welcome.webp"
+                    alt="Welcome image"
+                    width={800}
+                    height={600}
                     className="w-full h-auto rounded-2xl"
+                    priority={true}
                   />
-                 
                 </div>
               </div>
             </div>
