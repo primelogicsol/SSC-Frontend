@@ -45,7 +45,7 @@ export default function Experience() {
             <div className="col-lg-6">
               <div className="experience-wrapper">
                 <div className="image">
-                  <img src="/assets/images/resource/graph.png" alt="" />
+                  <img src="/assets/images/resource/graph.png" alt="image" />
                 </div>
                 <h1>experience</h1>
                 <div className="experience-year">

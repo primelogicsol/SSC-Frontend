@@ -84,7 +84,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-1.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -103,7 +103,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-2 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-2.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -122,7 +122,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-1 cat-2 cat-4 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -141,7 +141,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-5 cat-2 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -160,7 +160,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-2 cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-5.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-5.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -179,7 +179,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-3 cat-5 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-1.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -198,7 +198,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-1 cat-3 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-2.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -217,7 +217,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-3.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">
@@ -236,7 +236,7 @@ export default function PortfolioFilter3() {
         <div className="project-block-five masonry-item all cat-4 cat-5 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-4.jpg" alt="image" />
             </div>
             <div className="lower-content">
               <div className="link-btn">

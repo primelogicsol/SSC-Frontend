@@ -24,7 +24,7 @@ export default function Footer4() {
                     <Link href="#">
                       <img
                         src="assets/images/resources/footer-logo-2.png"
-                        alt=""
+                        alt="image"
                       />
                     </Link>
                   </div>

@@ -45,7 +45,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-1.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Marketing</h5>
@@ -61,7 +61,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-2.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Financial</h5>
@@ -77,7 +77,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-3.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Technical</h5>
@@ -93,7 +93,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-4.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Coaching</h5>
@@ -109,7 +109,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-5.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-5.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Business</h5>
@@ -125,7 +125,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-6.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-6.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Marketing</h5>
@@ -141,7 +141,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-7.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-7.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Technical</h5>
@@ -157,7 +157,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-8.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-8.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Marketing</h5>
@@ -173,7 +173,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-9.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-9.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Financial</h5>
@@ -189,7 +189,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-10.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-10.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Technical</h5>
@@ -205,7 +205,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-11.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-11.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Marketing</h5>
@@ -221,7 +221,7 @@ export default function PortfolioFilter4() {
         <div className="col-lg-3 col-md-6 project-block-six">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-6-12.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-6-12.jpg" alt="image" />
             </div>
             <div className="content-box">
               <h5>Financial</h5>

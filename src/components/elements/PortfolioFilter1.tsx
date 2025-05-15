@@ -83,12 +83,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-1.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -108,12 +108,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-2 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-2.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -133,12 +133,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-1 cat-2 cat-4 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -158,12 +158,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-5 cat-2 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -183,12 +183,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-2 cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-5.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-5.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -208,12 +208,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-3 cat-5 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-1.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -233,12 +233,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-1 cat-3 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-2.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -258,12 +258,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-1 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-3.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>
@@ -283,12 +283,12 @@ export default function PortfolioFilter1() {
         <div className="case-block-one masonry-item all cat-4 cat-5 col-lg-4 col-md-6 col-sm-12">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-4-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-4-4.jpg" alt="image" />
             </div>
             <div className="overlay">
               <div className="title">
                 <span className="icon">
-                  <img src="/assets/images/icons/icon-8.png" alt="" />
+                  <img src="/assets/images/icons/icon-8.png" alt="image" />
                 </span>
                 Precision
               </div>

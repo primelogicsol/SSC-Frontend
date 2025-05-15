@@ -32,10 +32,10 @@ export default function Service() {
       {/*Services One Start*/}
       <section className="services-one">
         <div className="services-one-shape-1 float-bob-x">
-          <img src="assets/images/shapes/services-one-shape-1.png" alt="" />
+          <img src="assets/images/shapes/services-one-shape-1.png" alt="image" />
         </div>
         <div className="services-one-shape-2 float-bob-y">
-          <img src="assets/images/shapes/services-one-shape-2.png" alt="" />
+          <img src="assets/images/shapes/services-one-shape-2.png" alt="image" />
         </div>
         <div className="container">
           <div className="section-title section-title--two text-center">
@@ -55,7 +55,7 @@ export default function Service() {
             >
               <div className="services-one__single">
                 <div className="services-one__img">
-                  <img src="assets/images/services/services-1-1.jpg" alt="" />
+                  <img src="assets/images/services/services-1-1.jpg" alt="image" />
                   <div className="services-one__icon">
                     <span className="icon-laptop"></span>
                   </div>
@@ -87,7 +87,7 @@ export default function Service() {
             >
               <div className="services-one__single">
                 <div className="services-one__img">
-                  <img src="assets/images/services/services-1-2.jpg" alt="" />
+                  <img src="assets/images/services/services-1-2.jpg" alt="image" />
                   <div className="services-one__icon">
                     <span className="icon-phone"></span>
                   </div>
@@ -119,7 +119,7 @@ export default function Service() {
             >
               <div className="services-one__single">
                 <div className="services-one__img">
-                  <img src="assets/images/services/services-1-3.jpg" alt="" />
+                  <img src="assets/images/services/services-1-3.jpg" alt="image" />
                   <div className="services-one__icon">
                     <span className="icon-tap"></span>
                   </div>

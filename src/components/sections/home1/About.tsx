@@ -21,7 +21,7 @@ export default function About() {
                   data-wow-delay="100ms"
                   data-wow-duration="2500ms"
                 >
-                  <img src="assets/images/resources/about-1-1.jpg" alt="" />
+                  <img src="assets/images/resources/about-1-1.jpg" alt="image" />
                   <div className="about-one__our-goal">
                     <p className="about-one__our-goal-sub-title">Our goal:</p>
                     <h3 className="about-one__our-goal-title">

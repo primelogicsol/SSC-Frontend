@@ -23,7 +23,7 @@ export default function About() {
                 >
                   <img 
                     src="assets/images/resources/about-1-1.jpg" 
-                    alt="" 
+                    alt="image" 
                     className="w-full rounded-lg transition-all duration-500 delay-100 group-hover:scale-110"
                   />
                   <div className="absolute bottom-0 left-0 right-[168px] bg-[color:var(--fixnix-lightpuple)] p-12 rounded-bl-lg rounded-tr-lg z-[3]">

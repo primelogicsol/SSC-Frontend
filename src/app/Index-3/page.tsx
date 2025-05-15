@@ -112,7 +112,7 @@ export default function Home() {
                 >
                   <img 
                     src="assets/images/resources/about-1-1.jpg" 
-                    alt="" 
+                    alt="image" 
                     className="w-full rounded-lg transition-all duration-500 delay-200 group-hover:scale-110" 
                   />
                   <div className="absolute bottom-0 left-0 right-0 lg:right-40 bg-fixnix-lightpurple p-6 sm:p-8 md:p-10 lg:p-12 rounded-bl-lg rounded-tr-lg z-10">
@@ -245,7 +245,7 @@ export default function Home() {
                     >
                       <div className="blog-one__single">
                         <div className="blog-one__img">
-                          <img src="assets/images/blog/blog-1-1.jpg" alt="" />
+                          <img src="assets/images/blog/blog-1-1.jpg" alt="image" />
                           <div className="blog-one__plus">
                             <Link href="/Donations">
                               <i className="fa fa-plus"></i>
@@ -286,7 +286,7 @@ export default function Home() {
                     >
                       <div className="blog-one__single">
                         <div className="blog-one__img">
-                          <img src="assets/images/blog/blog-1-2.jpg" alt="" />
+                          <img src="assets/images/blog/blog-1-2.jpg" alt="image" />
                           <div className="blog-one__plus">
                             <Link href="/Donations">
                               <i className="fa fa-plus"></i>
@@ -327,7 +327,7 @@ export default function Home() {
                     >
                       <div className="blog-one__single">
                         <div className="blog-one__img">
-                          <img src="assets/images/blog/blog-1-3.jpg" alt="" />
+                          <img src="assets/images/blog/blog-1-3.jpg" alt="image" />
                           <div className="blog-one__plus">
                             <Link href="/Donations">
                               <i className="fa fa-plus"></i>
@@ -367,7 +367,7 @@ export default function Home() {
                     >
                       <div className="blog-one__single">
                         <div className="blog-one__img">
-                          <img src="assets/images/blog/blog-1-3.jpg" alt="" />
+                          <img src="assets/images/blog/blog-1-3.jpg" alt="image" />
                           <div className="blog-one__plus">
                             <Link href="/Donations">
                               <i className="fa fa-plus"></i>

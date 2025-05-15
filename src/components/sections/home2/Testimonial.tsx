@@ -62,7 +62,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">
@@ -96,7 +96,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">
@@ -130,7 +130,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">
@@ -164,7 +164,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">
@@ -198,7 +198,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">
@@ -232,7 +232,7 @@ export default function Testimonial() {
                       <div className="testimonial-two__client-img">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                         />
                       </div>
                       <div className="testimonial-two__content">

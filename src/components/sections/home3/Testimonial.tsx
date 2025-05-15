@@ -64,7 +64,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>
@@ -99,7 +99,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>
@@ -134,7 +134,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>
@@ -169,7 +169,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>
@@ -204,7 +204,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-1.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>
@@ -239,7 +239,7 @@ export default function Testimonial() {
                       <div className="w-[75px]">
                         <img
                           src="assets/images/testimonial/testimonial-2-2.jpg"
-                          alt=""
+                          alt="image"
                           className="w-full rounded-full"
                         />
                       </div>

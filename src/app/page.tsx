@@ -113,7 +113,7 @@ export default function Home() {
                 >
                   <Image
                   src="/assets/images/resources/nextgeneration.webp"
-                  alt=""
+                  alt="image"
                   className="w-full rounded-lg transition-all duration-500 delay-200 group-hover:scale-110"
                   width={500}
                   height={300}

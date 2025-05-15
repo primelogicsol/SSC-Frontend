@@ -45,7 +45,7 @@ export default function PortfolioFilter5() {
         <div className="project-block-three col-lg-3 col-md-6">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3-1.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3-1.jpg" alt="image" />
             </div>
             <div className="overlay-content">
               <div className="content">
@@ -63,7 +63,7 @@ export default function PortfolioFilter5() {
         <div className="project-block-three col-lg-3 col-md-6">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3-2.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3-2.jpg" alt="image" />
             </div>
             <div className="overlay-content">
               <div className="content">
@@ -81,7 +81,7 @@ export default function PortfolioFilter5() {
         <div className="project-block-three col-lg-3 col-md-6">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3-3.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3-3.jpg" alt="image" />
             </div>
             <div className="overlay-content">
               <div className="content">
@@ -99,7 +99,7 @@ export default function PortfolioFilter5() {
         <div className="project-block-three col-lg-3 col-md-6">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3-4.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3-4.jpg" alt="image" />
             </div>
             <div className="overlay-content">
               <div className="content">
@@ -117,7 +117,7 @@ export default function PortfolioFilter5() {
         <div className="project-block-three col-lg-3 col-md-6">
           <div className="inner-box">
             <div className="image">
-              <img src="/assets/images/gallery/gallery-3-5.jpg" alt="" />
+              <img src="/assets/images/gallery/gallery-3-5.jpg" alt="image" />
             </div>
             <div className="overlay-content">
               <div className="content">

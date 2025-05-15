@@ -30,7 +30,7 @@ export default function Blog() {
             >
               <div className="blog-one__single">
                 <div className="blog-one__img">
-                  <img src="assets/images/blog/blog-1-1.jpg" alt="" />
+                  <img src="assets/images/blog/blog-1-1.jpg" alt="image" />
                   <div className="blog-one__plus">
                     <Link href="blog-details">
                       <i className="fa fa-plus"></i>
@@ -71,7 +71,7 @@ export default function Blog() {
             >
               <div className="blog-one__single">
                 <div className="blog-one__img">
-                  <img src="/assets/images/blog/blog-1-2.jpg" alt="" />
+                  <img src="/assets/images/blog/blog-1-2.jpg" alt="image" />
                   <div className="blog-one__plus">
                     <Link href="blog-details">
                       <i className="fa fa-plus"></i>
@@ -112,7 +112,7 @@ export default function Blog() {
             >
               <div className="blog-one__single">
                 <div className="blog-one__img">
-                  <img src="public/assets/images/blog/blog-1-3.jpg" alt="" />
+                  <img src="public/assets/images/blog/blog-1-3.jpg" alt="image" />
                   <div className="blog-one__plus">
                     <Link href="blog-details">
                       <i className="fa fa-plus"></i>

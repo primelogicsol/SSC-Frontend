@@ -13,7 +13,7 @@ export default function Home() {
                   <div className="contact-page__shape-1">
                     <img
                       src="assets/images/shapes/contact-page-shape-1.png"
-                      alt=""
+                      alt="image"
                     />
                   </div>
                   <h3 className="contact-page__title">Leave a message</h3>

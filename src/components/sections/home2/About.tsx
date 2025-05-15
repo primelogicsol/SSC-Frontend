@@ -46,10 +46,10 @@ export default function About() {
                 </div>
                 <div className="about-two__img-box">
                   <div className="about-two__img">
-                    <img src="assets/images/resources/about-2-1.jpg" alt="" />
+                    <img src="assets/images/resources/about-2-1.jpg" alt="image" />
                   </div>
                   <div className="about-two__img-two">
-                    <img src="assets/images/resources/about-2-2.jpg" alt="" />
+                    <img src="assets/images/resources/about-2-2.jpg" alt="image" />
                     <div className="about-two__video-link">
                       <a onClick={() => setOpen(true)} className="video-popup">
                         <div className="about-two__video-icon">
@@ -63,13 +63,13 @@ export default function About() {
                 <div className="about-two__shape-1 shapeMover">
                   <img
                     src="assets/images/shapes/about-two-shape-1.png"
-                    alt=""
+                    alt="image"
                   />
                 </div>
                 <div className="about-two__shape-2 float-bob-y">
                   <img
                     src="assets/images/shapes/about-two-shape-2.png"
-                    alt=""
+                    alt="image"
                   />
                 </div>
               </div>

@@ -31,7 +31,7 @@ export default function Blog() {
           {/* Blog Item 1 */}
           <div className="bg-fixnix-lightpurple shadow-xl rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
             <div className="relative group">
-              <Image src="/assets/images/dialogs/9.webp" alt="" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
+              <Image src="/assets/images/dialogs/9.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center  bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700">
                 <Link href="/dialogseries">
                   <i className="fa fa-plus text-white text-2xl"></i>
@@ -52,7 +52,7 @@ export default function Blog() {
           {/* Blog Item 2 */}
           <div className="bg-fixnix-lightpurple shadow-xl rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
             <div className="relative group">
-              <Image src="/assets/images/hardtalk/9.webp" alt="" width={500} height={300}  className="w-full h-64 object-cover rounded-t-xl" />
+              <Image src="/assets/images/hardtalk/9.webp" alt="image" width={500} height={300}  className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 ">
                 <Link href="/hardtalk">
                   <i className="fa fa-plus text-white text-2xl"></i>
@@ -73,7 +73,7 @@ export default function Blog() {
           {/* Blog Item 3 */}
           <div className="bg-fixnix-lightpurple shadow-xl rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
             <div className="relative group">
-              <Image src="/assets/images/professions/1.webp" alt="" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
+              <Image src="/assets/images/professions/1.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
                 <Link href="/sacredprofessions">
                   <i className="fa fa-plus text-white text-2xl"></i>
@@ -94,7 +94,7 @@ export default function Blog() {
           {/* Blog Item 4 */}
           <div className="bg-fixnix-lightpurple  shadow-xl rounded-xl overflow-hidden transition-transform hover:scale-[1.02]">
             <div className="relative group">
-              <Image src="/assets/images/interview/1.webp" alt="" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
+              <Image src="/assets/images/interview/1.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700">
                 <Link href="/inspiringinterview">
                   <i className="fa fa-plus text-white text-2xl"></i>

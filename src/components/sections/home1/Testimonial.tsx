@@ -51,7 +51,7 @@ export default function Testimonial() {
                         <div className="testimonial-one__client-img">
                           <img
                             src="assets/images/testimonial/testimonial-1-1.jpg"
-                            alt=""
+                            alt="image"
                           />
                         </div>
                       </div>
@@ -83,7 +83,7 @@ export default function Testimonial() {
                         <div className="testimonial-one__client-img">
                           <img
                             src="assets/images/testimonial/testimonial-1-1.jpg"
-                            alt=""
+                            alt="image"
                           />
                         </div>
                       </div>
@@ -115,7 +115,7 @@ export default function Testimonial() {
                         <div className="testimonial-one__client-img">
                           <img
                             src="assets/images/testimonial/testimonial-1-1.jpg"
-                            alt=""
+                            alt="image"
                           />
                         </div>
                       </div>
@@ -147,7 +147,7 @@ export default function Testimonial() {
                         <div className="testimonial-one__client-img">
                           <img
                             src="assets/images/testimonial/testimonial-1-1.jpg"
-                            alt=""
+                            alt="image"
                           />
                         </div>
                       </div>
@@ -179,7 +179,7 @@ export default function Testimonial() {
                         <div className="testimonial-one__client-img">
                           <img
                             src="assets/images/testimonial/testimonial-1-1.jpg"
-                            alt=""
+                            alt="image"
                           />
                         </div>
                       </div>

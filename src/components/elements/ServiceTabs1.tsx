@@ -56,7 +56,7 @@ export default function ServiceTabs1() {
                 that are bound to ensue and equal blame belongs to those who
                 fail in their through weakness shrinking.
               </div>
-              <img src="/assets/images/resource/single-service-4.jpg" alt="" />
+              <img src="/assets/images/resource/single-service-4.jpg" alt="image" />
             </div>
             <div
               className={
@@ -74,7 +74,7 @@ export default function ServiceTabs1() {
                 that are bound to ensue and equal blame belongs to those who
                 fail in their through weakness shrinking.
               </div>
-              <img src="/assets/images/resource/single-service-4.jpg" alt="" />
+              <img src="/assets/images/resource/single-service-4.jpg" alt="image" />
             </div>
             <div
               className={
@@ -92,7 +92,7 @@ export default function ServiceTabs1() {
                 that are bound to ensue and equal blame belongs to those who
                 fail in their through weakness shrinking.
               </div>
-              <img src="/assets/images/resource/single-service-4.jpg" alt="" />
+              <img src="/assets/images/resource/single-service-4.jpg" alt="image" />
             </div>
             <div
               className={
@@ -110,7 +110,7 @@ export default function ServiceTabs1() {
                 that are bound to ensue and equal blame belongs to those who
                 fail in their through weakness shrinking.
               </div>
-              <img src="/assets/images/resource/single-service-4.jpg" alt="" />
+              <img src="/assets/images/resource/single-service-4.jpg" alt="image" />
             </div>
           </div>
         </div>

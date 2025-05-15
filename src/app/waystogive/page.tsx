@@ -139,7 +139,7 @@ export default function Home() {
               <Link href="/donationform" className="relative">
                 <img
                   src="/assets/images/resources/Donate.png"
-                  alt=""
+                  alt="image"
                   className="w-[500px] rounded-lg shadow-lg"
                 />
                 
@@ -198,7 +198,7 @@ export default function Home() {
               <Link href="/donationform" className="relative">
                 <img 
                   src="/assets/images/resources/Donate.png"
-                  alt=""
+                  alt="image"
                   className="w-[500px] rounded-lg shadow-lg"
                 />
                 
@@ -257,7 +257,7 @@ export default function Home() {
               <Link href="/donationform" className="relative">
                 <img
                   src="/assets/images/resources/Donate.png"
-                  alt=""
+                  alt="image"
                   className="w-[500px] rounded-lg shadow-lg"
                 />
                 
@@ -316,7 +316,7 @@ export default function Home() {
               <Link href="/donationform" className="relative">
                 <img
                   src="/assets/images/resources/Donate.png"
-                  alt=""
+                  alt="image"
                   className="w-[500px] rounded-lg shadow-lg"
                 />
                 
