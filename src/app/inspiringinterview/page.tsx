@@ -38,7 +38,7 @@ const cards = [
   {
     title:"Dusk became divine",
     quote: "The Awakening of Carter Nooruddin, Once a Wall Climber",
-    image: "/assets/images/interview/1.png",
+    image: "/assets/images/interview/1.webp",
   },
   {
     title:"Feather touched fire",

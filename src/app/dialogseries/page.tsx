@@ -37,7 +37,7 @@ const cards = [
   {
     title:"The Curious Seeker",
     quote: "A soul questions. A Master listens. What follows is not teaching, it’s unraveling.",
-    image: "/assets/images/dialogs/9.png",
+    image: "/assets/images/dialogs/9.webp",
   },
   {
     title:"The Sufism Challenger",

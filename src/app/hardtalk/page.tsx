@@ -36,7 +36,7 @@ const ResearchSlides=[
 const cards = [
   {
     quote: "This path bleeds, ask those who vanished in fire, not those who watched dancing",
-    image: "/assets/images/hardtalk/9.png",
+    image: "/assets/images/hardtalk/9.webp",
   },
   {
     quote: "We carry their light, not as merchants, but as mirrors of divine trust.",

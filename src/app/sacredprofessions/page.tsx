@@ -37,7 +37,7 @@ const cards = [
   {
     title:"The Statesman",
     quote: "I don’t rule by power,I serve where Divine Justice writes the laws unseen",
-    image: "/assets/images/professions/1.png",
+    image: "/assets/images/professions/1.webp",
   },
   {
     title:"The Administrator",
