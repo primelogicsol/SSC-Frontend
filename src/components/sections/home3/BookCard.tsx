@@ -70,7 +70,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       
       <div className="mt-4 text-center">
-        <Link href="/productdetails" className="px-4 py-2 bg-fixnix-lightpurple text-white rounded-lg hover:bg-fixnix-darkpurple transition-colors duration-300">
+        <Link href="/bookdetails" className="px-4 py-2 bg-fixnix-lightpurple text-white rounded-lg hover:bg-fixnix-darkpurple transition-colors duration-300">
           View Details
         </Link>
       </div>

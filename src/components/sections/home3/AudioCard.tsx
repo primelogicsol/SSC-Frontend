@@ -67,14 +67,7 @@ const AudioCard: React.FC<AudioCardProps> = ({ product }) => {
               )}
             </button>
           </div>
-          <button
-            className="absolute top-2 right-2 p-2 bg-white rounded-full shadow"
-            onClick={handleWishlistToggle}
-          >
-            <Heart
-              className={`w-5 h-5 ${isWished ? "text-red-500 fill-red-500" : "text-gray-400"}`}
-            />
-          </button>
+          
         </div>
       </div>
 

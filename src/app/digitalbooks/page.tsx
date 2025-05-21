@@ -5,6 +5,7 @@ import ProductCard from "@/components/sections/home3/ProductCard";
 import Banner from "@/components/sections/home3/Banner";
 import { useState } from "react";
 import Breadcrumb from "@/components/sections/home3/Breadcrumb";
+import BookCard from "@/components/sections/home3/BookCard";
 const BooksSlides = [
   {
     subTitle: "Sacred Texts, Anytime, Anywhere",
@@ -241,7 +242,7 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <BookCard key={product.id} product={product} />
                 ))}
               </div>
 
