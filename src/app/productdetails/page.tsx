@@ -433,13 +433,13 @@ export default function ProductDetails() {
                   <FaShareAlt /> Share:
                 </span>
                 <div className="flex gap-4">
-                  <Link href="#" className="text-blue-600 hover:opacity-80">
+                  <Link href="#" className="text-fixnix-darkpurple hover:opacity-80">
                     <FaFacebook size={20} />
                   </Link>
-                  <Link href="#" className="text-green-500 hover:opacity-80">
+                  <Link href="#" className="text-fixnix-darkpurple hover:opacity-80">
                     <FaWhatsapp size={20} />
                   </Link>
-                  <Link href="#" className="text-red-600 hover:opacity-80">
+                  <Link href="#" className="text-fixnix-darkpurple hover:opacity-80">
                     <FaPinterest size={20} />
                   </Link>
                 </div>

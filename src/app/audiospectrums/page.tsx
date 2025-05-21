@@ -5,6 +5,7 @@ import ProductCard from "@/components/sections/home3/ProductCard";
 import Banner from "@/components/sections/home3/Banner";
 import { useState } from "react";
 import Breadcrumb from "@/components/sections/home3/Breadcrumb";
+import AudioCard from "@/components/sections/home3/AudioCard";
 
 const MusicSlides = [
   {
@@ -46,7 +47,7 @@ const MusicSlides = [
 
 const sampleProducts = Array.from({ length: 36 }, (_, i) => ({
   id: i + 1,
-  title: `Product ${i + 1}`,
+  title: `Audio Track ${i + 1}`,
   image: `/assets/images/shop/product1.jpg`,
   description: "Handcrafted Sufi-inspired décor blending tradition and spirituality.",
   price: (i + 1) * 10 + 20,
@@ -54,6 +55,9 @@ const sampleProducts = Array.from({ length: 36 }, (_, i) => ({
   rating: 4 + (i % 2),
   tags: ["Handmade", "Spiritual", "Kashmir"],
   isWished: false,
+  duration: "5:30",
+  artist: "Sufi Artist",
+  previewUrl: "/assets/audio/sample-preview.mp3"
 }));
 
 export default function Home() {
@@ -124,7 +128,7 @@ export default function Home() {
               The harmonium enriches Sufi melodies and sacred hymns, creating
               soulful tunes. Complementing these are Sufi musical recordings,
               featuring traditional qawwali and instrumental music, capturing
-              Kashmir’s spiritual essence.
+              Kashmir's spiritual essence.
             </p>
           </div>
         </div>
@@ -244,7 +248,7 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <AudioCard key={product.id} product={product} />
                 ))}
               </div>
 
