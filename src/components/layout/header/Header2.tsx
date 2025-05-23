@@ -49,6 +49,13 @@ const Header2: React.FC<Header2Props> = ({
               Kashmir Chapter
             </p>
             <div className="flex items-center space-x-4">
+              <Link
+                href="/profile"
+                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+              >
+                <i className="fas fa-user "></i>
+                
+              </Link>
               <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300   space-x-1">
                 {/* Login Link */}
                 <Link

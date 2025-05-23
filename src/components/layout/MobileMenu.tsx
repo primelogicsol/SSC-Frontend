@@ -590,6 +590,13 @@ const MobileMenu = ({
                   <i className="fas fa-book-reader"></i>
                   <span className="ml-2 text-sm">Library</span>
                 </Link>
+                <Link
+                  href="/profile"
+                  className="text-white text-lg"
+                >
+                  <i className="fas fa-user"></i>
+                  <span className="ml-2 text-sm">Profile</span>
+                </Link>
               </li>
 
               <li>
