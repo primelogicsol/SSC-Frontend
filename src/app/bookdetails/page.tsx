@@ -55,7 +55,8 @@ export default function BookDetails() {
     });
     setTimeout(() => {
       setShowAddedToCart(false);
-    }, 3000);
+      window.location.href = "/cart";
+    }, 1500);
   };
 
   // Handle buy now

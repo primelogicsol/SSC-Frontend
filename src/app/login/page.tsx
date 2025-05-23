@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -19,12 +19,27 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const onSubmit = (data: LoginFormInputs) => {
+  const onSubmit = async (data: LoginFormInputs) => {
     setLoading(true);
-    // Simulate login API call
-    setTimeout(() => {
-      router.push("/otp"); // Replace with actual redirect after login
-    }, 1000);
+    try {
+      // Simulate login API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Set login state
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      // Get return URL if exists
+      const returnUrl = localStorage.getItem('returnUrl');
+      
+      // Clear return URL from storage
+      localStorage.removeItem('returnUrl');
+      
+      // Redirect to return URL or home
+      router.push(returnUrl || '/');
+    } catch (error) {
+      console.error('Login failed:', error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,7 +105,7 @@ export default function Login() {
         </form>
 
         <p className="text-center mt-4 text-sm">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link href="/Register" className="text-fixnix-darkpurple font-bold">
             Register
           </Link>

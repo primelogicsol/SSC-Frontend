@@ -5,7 +5,7 @@ import React from "react";
 export default function Menu() {
   return (
     <>
-      <ul className="main-menu__list lg:pl-[100px] xl:pl-[100px]  2xl:pl-[140px]  hidden lg:flex  lg:space-x-[25px] xl:space-x-[30px]  2xl:space-x-[55px]  ">
+      <ul className="main-menu__list lg:pl-[20px] xl:pl-[40px]  2xl:pl-[60px]  hidden lg:flex  lg:space-x-[25px] xl:space-x-[30px]  2xl:space-x-[55px]  ">
         {/* HOME */}
         <li className="dropdown megamenu relative group">
           <Link
@@ -453,6 +453,13 @@ export default function Menu() {
           className="text-xl px-2 sm:text-md md:text-2xl text-fixnix-lightpurple transition-all duration-500 ease-in-out hover:text-fixnix-darkpurple"
         >
           <i className="fas fa-shopping-cart"></i>
+        </Link>
+
+        <Link
+          href="/library"
+          className="text-xl px-2 sm:text-md md:text-2xl text-fixnix-lightpurple transition-all duration-500 ease-in-out hover:text-fixnix-darkpurple"
+        >
+          <i className="fas fa-book-reader"></i>
         </Link>
 
         {/* Additional Dropdowns */}

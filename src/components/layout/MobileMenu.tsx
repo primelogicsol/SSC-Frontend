@@ -575,6 +575,23 @@ const MobileMenu = ({
               </li>
 
               {/* Additional menu items... */}
+              <li className="flex items-center space-x-4">
+                <Link
+                  href="/cart"
+                  className="text-white text-lg"
+                >
+                  <i className="fas fa-shopping-cart"></i>
+                  <span className="ml-2 text-sm">Cart</span>
+                </Link>
+                <Link
+                  href="/library"
+                  className="text-white text-lg"
+                >
+                  <i className="fas fa-book-reader"></i>
+                  <span className="ml-2 text-sm">Library</span>
+                </Link>
+              </li>
+
               <li>
                 <Link
                   href="/membership"

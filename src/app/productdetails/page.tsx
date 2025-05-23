@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import { FaStar, FaStarHalfAlt, FaRegStar, FaShareAlt, FaFacebook, FaWhatsapp, FaPinterest, FaHeart, FaRegHeart, FaInfoCircle } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaRegStar, FaShareAlt, FaFacebook, FaWhatsapp, FaPinterest, FaHeart, FaRegHeart, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
 type Review = {
@@ -11,6 +11,12 @@ type Review = {
   rating: number;
   // other fields...
 };
+
+interface ToastMessage {
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
 // Helper component for star ratings
 const RatingStars = ({ rating }: { rating: number }) => {
 
@@ -31,6 +37,23 @@ const RatingStars = ({ rating }: { rating: number }) => {
   return <div className="flex items-center">{stars}</div>;
 };
 
+// Toast Component
+const Toast = ({ message, type }: { message: string; type: 'success' | 'error' | 'info' }) => {
+  return (
+    <div className="fixed bottom-4 right-4 z-50">
+      <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center ${
+        type === 'success' ? 'bg-green-500' :
+        type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+      } text-white`}>
+        {type === 'success' && <FaCheckCircle className="mr-2" />}
+        {type === 'error' && <FaInfoCircle className="mr-2" />}
+        {type === 'info' && <FaInfoCircle className="mr-2" />}
+        {message}
+      </div>
+    </div>
+  );
+};
+
 export default function ProductDetails() {
   // State for product details
   const [quantity, setQuantity] = useState(1);
@@ -39,6 +62,7 @@ export default function ProductDetails() {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
+  const [showToast, setShowToast] = useState<ToastMessage | null>(null);
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
   const [sortReviewsBy, setSortReviewsBy] = useState("recent");
   
@@ -149,16 +173,19 @@ export default function ProductDetails() {
   
   // Handle add to cart
   const handleAddToCart = () => {
-    // Add product to cart logic here
     setShowAddedToCart(true);
+    setShowToast({
+      message: "Sacred product added to your cart",
+      type: 'success'
+    });
     setTimeout(() => {
       setShowAddedToCart(false);
-    }, 3000);
+      window.location.href = "/cart";
+    }, 1500);
   };
   
   // Handle buy now
   const handleBuyNow = () => {
-    // Add to cart and redirect to checkout
     window.location.href = "/checkout";
   };
   
@@ -210,6 +237,16 @@ export default function ProductDetails() {
     ? "text-orange-500" 
     : "text-red-600";
   
+  // Clear toast after 5 seconds
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+  
   return (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Product Details">
       {/* Main product section */}
@@ -255,6 +292,14 @@ export default function ProductDetails() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Preview Message */}
+            <div className="bg-fixnix-lightpurple/5 border border-fixnix-lightpurple/10 rounded-lg p-4 mt-4">
+              <p className="text-sm text-fixnix-lightpurple flex items-center">
+                <FaInfoCircle className="mr-2" />
+                View detailed images. Purchase to receive this sacred handcrafted piece.
+              </p>
             </div>
             
             {/* Lightbox */}
@@ -407,7 +452,7 @@ export default function ProductDetails() {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm text-green-700">
-                      Item added to your cart!
+                      {showToast?.message}
                     </p>
                   </div>
                   <div className="ml-auto pl-3">
@@ -787,6 +832,11 @@ export default function ProductDetails() {
             />
           </svg>
         </button>
+      )}
+      
+      {/* Toast Messages */}
+      {showToast && (
+        <Toast message={showToast.message} type={showToast.type} />
       )}
     </Layout>
   );
