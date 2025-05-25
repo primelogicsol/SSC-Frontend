@@ -1,6 +1,8 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface MobileMenuProps {
   isSidebar: boolean;
@@ -18,6 +20,32 @@ const MobileMenu = ({
     key: "",
     subMenuKey: "",
   });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check login status
+    const checkLoginStatus = () => {
+      const loginStatus = localStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(loginStatus);
+    };
+
+    checkLoginStatus();
+    // Add event listener for storage changes
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("returnUrl");
+    setIsLoggedIn(false);
+    handleMobileMenu();
+    router.push("/");
+  };
 
   const handleToggle = (key: string, subMenuKey = "") => {
     if (isActive.key === key && isActive.subMenuKey === subMenuKey) {
@@ -614,14 +642,26 @@ const MobileMenu = ({
          {/* Contact */}
 <ul className="mobile-nav__contact list-unstyled space-y-3">
 <li className="flex items-center text-sm text-dark">
-    <i className="fa fa-user-circle text-white bg-lightpurple p-2 rounded-full mr-2"></i>
-    <Link href="/login" className="text-white">
-      Login
-    </Link>
-    <span className="mx-2 text-white">/</span>
-    <Link href="/Register" className="text-white">
-      Register
-    </Link>
+    {isLoggedIn ? (
+      <button
+        onClick={handleLogout}
+        className="text-white flex items-center"
+      >
+        <i className="fa fa-sign-out-alt text-white bg-lightpurple p-2 rounded-full mr-2"></i>
+        Logout
+      </button>
+    ) : (
+      <>
+        <i className="fa fa-user-circle text-white bg-lightpurple p-2 rounded-full mr-2"></i>
+        <Link href="/login" className="text-white">
+          Login
+        </Link>
+        <span className="mx-2 text-white">/</span>
+        <Link href="/Register" className="text-white">
+          Register
+        </Link>
+      </>
+    )}
   </li>
   <li className="flex items-center text-sm text-dark">
     <i className="fa fa-envelope text-white bg-lightpurple p-2 rounded-full mr-2"></i>
@@ -629,8 +669,6 @@ const MobileMenu = ({
       info@sufisciencecenter.info
     </Link>
   </li>
-  
-  
 </ul>
 
 

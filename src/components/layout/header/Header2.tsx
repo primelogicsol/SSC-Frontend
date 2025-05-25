@@ -1,9 +1,11 @@
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import StickyHeader from "../StickyHeader";
 import Menu from "../Menu";
 import MobileMenu from "../MobileMenu";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Header2Props {
   scroll: number;
@@ -24,6 +26,8 @@ const Header2: React.FC<Header2Props> = ({
 }: Header2Props) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   const handleScroll = () => {
     const currentScrollPosition = window.scrollY;
@@ -33,11 +37,28 @@ const Header2: React.FC<Header2Props> = ({
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+    // Check login status
+    const checkLoginStatus = () => {
+      const loginStatus = localStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(loginStatus);
+    };
+
+    checkLoginStatus();
+    // Add event listener for storage changes
+    window.addEventListener("storage", checkLoginStatus);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("storage", checkLoginStatus);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("returnUrl");
+    setIsLoggedIn(false);
+    router.push("/");
+  };
 
   return (
     <>
@@ -53,25 +74,33 @@ const Header2: React.FC<Header2Props> = ({
                 href="/profile"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
               >
-                <i className="fas fa-user "></i>
-                
+                <i className="fas fa-user"></i>
               </Link>
-              <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300   space-x-1">
-                {/* Login Link */}
-                <Link
-                  href="/login"
-                  className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
-                >
-                  Login
-                </Link>
-                <span>/</span>
-                {/* Register Link */}
-                <Link
-                  href="/Register"
-                  className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
-                >
-                  Register
-                </Link>
+              <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300 space-x-1">
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                    >
+                      Login
+                    </Link>
+                    <span>/</span>
+                    <Link
+                      href="/Register"
+                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
               </div>
               <div className="flex space-x-3">
               <Link

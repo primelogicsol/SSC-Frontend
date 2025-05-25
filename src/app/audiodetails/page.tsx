@@ -177,7 +177,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: LoginModalProps) => {
           >
             View Membership Plans
           </Link>
-          <button
+          <button 
             onClick={onClose}
             className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 transition-colors"
           >
@@ -250,7 +250,7 @@ const DownloadModal = ({ isOpen, onClose, track, countdown }: DownloadModalProps
   
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
-  
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-md w-full">
@@ -377,8 +377,8 @@ export default function AudioDetails() {
             <div className="border border-gray-300 rounded-lg overflow-hidden mb-4">
               <div className="relative h-96">
                 <Image
-                  src={track.coverImage}
-                  alt={track.title}
+              src={track.coverImage} 
+              alt={track.title}
                   fill
                   className="object-cover"
                 />
@@ -420,7 +420,7 @@ export default function AudioDetails() {
                 <FaClock className="mr-2" />
                 {track.duration}
               </span>
-            </div>
+        </div>
 
             {/* Price Section */}
             <div className="mb-6">
@@ -521,7 +521,7 @@ export default function AudioDetails() {
             {activeTab === "description" && (
               <div className="prose max-w-none">
                 <h2 className="text-2xl font-bold mb-4">About this Sacred Recording</h2>
-                <p className="text-gray-600 mb-6">{track.description}</p>
+          <p className="text-gray-600 mb-6">{track.description}</p>
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="text-xl font-bold mb-3">Spiritual Context</h3>
                   <p className="text-gray-600">

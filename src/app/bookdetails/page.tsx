@@ -102,8 +102,8 @@ export default function BookDetails() {
             <div className="border border-gray-300 rounded-lg overflow-hidden mb-4">
               <div className="relative h-96">
                 <Image
-                  src={sampleBook.coverImage}
-                  alt={sampleBook.title}
+              src={sampleBook.coverImage}
+              alt={sampleBook.title}
                   fill
                   className="object-cover"
                 />
@@ -167,12 +167,12 @@ export default function BookDetails() {
                   </div>
                 </div>
               ) : (
-                <button
+              <button
                   onClick={handleDownload}
                   className="w-full bg-fixnix-lightpurple text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center"
-                >
+              >
                   <FaDownload className="mr-2" /> Download Full Book
-                </button>
+              </button>
               )}
             </div>
 
