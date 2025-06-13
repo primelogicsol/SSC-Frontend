@@ -3,11 +3,23 @@ import Layout from "@/components/layout/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ModalVideo from "react-modal-video";
 import Banner from "@/components/sections/home3/Banner";
 import Features from "@/components/sections/home3/Features";
+import { InsightCategory , HeroSections } from '../../types/insightTypes';
+import { PortableText } from "next-sanity";
+import { urlFor } from "@/sanity/lib/image";
+
+
+interface Props {
+    data: InsightCategory;
+    banner : HeroSections
+  }
+
+
+    
 
 const featuresData = [
   { text: "Bridging Ancient Knowledge with Modern Inquiry"  },
@@ -15,43 +27,7 @@ const featuresData = [
   { text: "Integrating Mysticism with Scientific Exploration" },
   { text: "Practical Applications for Consciousness & Transformation" },
 ];
-const MatricesSlides = [
-  {
-    subTitle: "Blueprint of Spiritual Design",
-    title: "Discovering the Core <br/>of Existence",
-    text: " Foundational matrices reveal the hidden patterns of creation, guiding seekers <br/>toward the universal truth and spiritual balance.  ",
-    buttonText: "Read More",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "Patterns of Divine Order ",
-    title: "Unlocking the Mysteries<br/> of Creation",
-    text: "Foundational matrices provide a map to understanding existence through<br/> spiritual codes and sacred geometric alignments.  ",
-    buttonText: "Join Now",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "Decoding the Sacred Patterns",
-    title: " Exploring the Core<br/> of Reality",
-    text: "Spiritual matrices offer insight into the architecture of<br/> existence, connecting seekers with the hidden order of life.  ",
-    buttonText: "Join Now",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: " Keys to Spiritual Frameworks  ",
-    title: "Mapping the Divine<br/> Blueprints ",
-    text: "Foundational matrices serve as spiritual keys to understanding<br/> creation and unlocking higher states of consciousness.  ",
-    buttonText: "Join Now",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "Understanding Life’s Sacred Grid",
-    title: "  Foundational Insights <br/>into Creation",
-    text: "The foundational matrices reflect the sacred structure of existence,<br/> guiding seekers to the heart of divine truth.  ",
-    buttonText: "Join Now",
-    buttonLink: "/",
-  },
-];
+
 const blogs = [
   {
     title: "Spiritual Foundations",
@@ -101,7 +77,7 @@ const swiperOptions = {
     clickable: true,
   },
 };
-export default function Home() {
+const SufiScienceExplorer : React.FC<Props> = ({ data , banner }) => {
   const [isActive, setIsActive] = useState({
     status: false,
     key: 1,
@@ -127,7 +103,10 @@ export default function Home() {
     <>
       <Layout headerStyle={2} footerStyle={1}>
         {/*Core Services Start*/}
-        <Banner slides={MatricesSlides}/>
+        {Array.isArray(banner) && (
+         <Banner slides={banner}/>
+        )}
+        
         
 
         <div className="py-16 bg-gray-100 text-left-mobile">
@@ -141,29 +120,30 @@ export default function Home() {
                 <div>
                   <div className="text-left ">
                     <span className="relative inline-block text-sm sm:text-base md:text-lg text-fixnix-lightpurple font-bold uppercase z-[1]">
-                    Foundational Matrices
+                    {data?.categoryName}
                       <span className="absolute top-[10px] left-[-50px] w-[35px] sm:w-[45px] h-[2px] bg-fixnix-lightpurple"></span>
                     </span>
                     
                   </div>
-                  <p className="text-gray-700 mt-4">
-                  The Foundational Matrices serve as a structured framework for exploring the intersection of mysticism, science, and consciousness. Rooted in classical Sufi knowledge yet adapted for the modern seeker, this study unveils the hidden order of existence through mathematical, cosmological, and psychological dimensions.
-                  </p>
-                  <p className="text-gray-700 mt-2">
-                  At the Kashmir Sufi Science Center, under the Sufi Science Explorer Module, this structured approach provides seekers with a scientific yet experiential path to understanding divine reality, soul dynamics, and cosmic harmony.
-                  </p>
+                  <div className="text-gray-700 mt-4">
+                    <PortableText value={data?.description} />
+                  </div>
+                  
                 </div>
 
                 {/* Right Column */}
                 <div className="relative">
                   <div className="rounded-lg overflow-hidden w-[350px] h-[350px]  bg-fixnix-lightpurple">
-                  <Image
-                    src="/assets/images/resources/matrices.png"
-                    alt="Repair Services"
-                    width={350}
-                    height={350}
-                    className="w-[350px] h-[350px]"
-                  />
+                    {data?.image && (
+                     <Image
+                     src={urlFor(data?.image).url()}
+                     alt="Repair Services"
+                     width={350}
+                     height={350}
+                     className="w-[350px] h-[350px]"
+                   />
+                    )}
+                  
                     
                   </div>
                 </div>
@@ -172,18 +152,20 @@ export default function Home() {
 
             {/* Counter Section */}
           </section>
-          <Features title="Why This Matters?" features={featuresData} />
+          <Features title={data?.matterHeading} features={data?.matters} />
+          
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog, index) => (
+            
+        {data?.books.map((blog, index) => (
   <div
     key={index}
     className="bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105"
   >
     <div className="relative">
       <Image
-  src={`/${blog.image}`}
-  alt={blog.title}
+  src={urlFor(blog.bookImage).url()}
+  alt={blog.sectionTitle || ""}
   width={400}
   height={240}
   className="w-full h-60 object-cover"
@@ -200,7 +182,7 @@ export default function Home() {
           href="/details"
           className="text-fixnix-darkpurple hover:text-fixnix-lightpurple"
         >
-          {blog.title}
+          {blog.sectionTitle}
         </Link>
       </h3>
       <div className="flex justify-center">
@@ -227,3 +209,5 @@ export default function Home() {
     </>
   );
 }
+
+export default SufiScienceExplorer

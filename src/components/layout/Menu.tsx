@@ -1,8 +1,36 @@
+"use client"
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { client } from "@/sanity/lib/client";
 
 export default function Menu() {
+  const [ssePage , setSSEPage] = useState<any>()
+  const [dBookPage , setDBookPage] = useState<any>()
+
+
+  const pageLinkQSSE = `*[_type == "page" && type == "sufiScienceExplorer"] {
+    "slug": slug.current,
+    "categoryName" : contentSections[type == "insightCategory"][0].insightCategory.categoryName,
+    
+  }`;
+  const pageLinkQDBook = `*[_type == "page" && type == "digitalAcademy"] {
+    "slug": slug.current,
+    "categoryName" : contentSections[type == "digitalBookCategory"][0].digitalBookCategory.category,
+    
+  }`;
+  useEffect(() => {
+    const getData = async () => {
+ 
+      const pageLinkSSE = await client.fetch(pageLinkQSSE)
+      const pageLinkDBook = await client.fetch(pageLinkQDBook)
+     
+      setSSEPage(pageLinkSSE)
+      setDBookPage(pageLinkDBook)
+    }
+  
+    getData()
+  }, [])
   return (
     <>
       <ul className="main-menu__list lg:pl-[20px] xl:pl-[40px]  2xl:pl-[60px]  hidden lg:flex  lg:space-x-[25px] xl:space-x-[30px]  2xl:space-x-[55px]  ">
@@ -64,6 +92,7 @@ export default function Menu() {
         </li>
 
         {/* About Us */}
+        
         <li className="relative group">
           <Link
             href="#"
@@ -190,7 +219,23 @@ export default function Menu() {
           >
             SUFI SCIENCE EXPLORER
           </Link>
-          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px]   hidden group-hover:block">
+          {Array.isArray(ssePage) && (
+            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px]   hidden group-hover:block">
+              {ssePage.map((page : any , pageIndex)=>{
+                return(
+                  <li key={pageIndex} className="mb-2">
+              <Link
+                href={`/${page.slug}`}
+                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+              >
+                {page.categoryName}
+              </Link>
+            </li>
+                )
+              })}
+            </ul>
+          )}
+          {/* <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px]   hidden group-hover:block">
             <li className="mb-2">
               <Link
                 href="/foundationalmatrices"
@@ -296,7 +341,7 @@ export default function Menu() {
               </Link>
             </li>
 
-          </ul>
+          </ul> */}
         </li>
 
         {/* Knowledge Hub Dropdown */}
@@ -307,7 +352,23 @@ export default function Menu() {
           >
             DIGITAL ACADEMY
           </Link>
-          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
+          {Array.isArray(dBookPage) && (
+            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
+              {dBookPage.map((page : any , pageIndex)=>{
+                return(
+                  <li key={pageIndex} className="mb-2">
+              <Link
+                href={`/${page.slug}`}
+                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+              >
+                {page.categoryName}
+              </Link>
+            </li>
+                )
+              })}
+            </ul>
+          )}
+          {/* <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
             <li className="mb-2">
               <Link
                 href="/dialogseries"
@@ -341,7 +402,7 @@ export default function Menu() {
               </Link>
             </li>
             
-          </ul>
+          </ul> */}
         </li>
 
         {/* Sufi Gifts Dropdown */}

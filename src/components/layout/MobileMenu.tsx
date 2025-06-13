@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { client } from "@/sanity/lib/client";
+
 
 interface MobileMenuProps {
   isSidebar: boolean;
@@ -21,7 +23,33 @@ const MobileMenu = ({
     subMenuKey: "",
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [ssePage , setSSEPage] = useState<any>()
+  const [dBookPage , setDBookPage] = useState<any>()
   const router = useRouter();
+
+  const pageLinkQSSE = `*[_type == "page" && type == "sufiScienceExplorer"] {
+    "slug": slug.current,
+    "categoryName" : contentSections[type == "insightCategory"][0].insightCategory.categoryName,
+    
+  }`;
+  const pageLinkQDBook = `*[_type == "page" && type == "digitalAcademy"] {
+    "slug": slug.current,
+    "categoryName" : contentSections[type == "digitalBookCategory"][0].digitalBookCategory.category,
+    
+  }`;
+
+  useEffect(() => {
+    const getData = async () => {
+      
+      const pageLinkSSE = await client.fetch(pageLinkQSSE)
+      const pageLinkDBook = await client.fetch(pageLinkQDBook)
+
+      setSSEPage(pageLinkSSE)
+      setDBookPage(pageLinkDBook)
+    }
+  
+    getData()
+  }, [])
 
   useEffect(() => {
     // Check login status
@@ -328,78 +356,26 @@ const MobileMenu = ({
                 >
                   Sufi Science Explorer
                 </Link>
-                <ul
+                {Array.isArray(ssePage) && (
+                  <ul
                   style={{
                     display: `${isActive.key === "4" ? "block" : "none"}`,
                   }}
                   className="space-y-2 ml-4"
                 >
-                  <li>
-                    <Link href="/foundationalmatrices" className="text-white text-sm font-medium">
-                      Foundational Matrices
+                  {ssePage.map((page : any , pageIndex : number)=>{
+                    return (
+                      <li key={pageIndex}>
+                    <Link href={`/${page.slug}`} className="text-white text-sm font-medium">
+                      {page.categoryName}
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/ecologicalintelligence" className="text-white text-sm font-medium">
-                      Ecological Intelligence
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/consciousnessgeometries" className="text-white text-sm font-medium">
-                      Consciousness Geometries
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/perceptualgateways" className="text-white text-sm font-medium">
-                      Perceptual Gateways
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/realityframeworks" className="text-white text-sm font-medium">
-                      Reality Frameworks
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/cosmicharmonics" className="text-white text-sm font-medium">
-                      Cosmic Harmonics
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/energeticarchitectures" className="text-white text-sm font-medium">
-                      Energetic Architectures
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/characteralchemy" className="text-white text-sm font-medium">
-                      Character Alchemy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/unitysciences" className="text-white text-sm font-medium">
-                      Unity Sciences
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/healingmysteries" className="text-white text-sm font-medium">
-                      Healing Mysteries
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/wisdomtransmission" className="text-white text-sm font-medium">
-                      Wisdom Transmission
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/sacredartistry" className="text-white text-sm font-medium">
-                      Sacred Artistry
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/advancedtechnologies" className="text-white text-sm font-medium">
-                      Advanced Technologies
-                ```    </Link>
-                  </li>
-                ````</ul>
+                    )
+                  })}
+                </ul>
+                )}
+                
+                
                 <button
                   className={`absolute right-2 top-1 mt-2 transform -translate-y-1/2 text-white transition-transform duration-300 ${
                     isActive.key === "4" ? "rotate-90" : ""
@@ -419,46 +395,25 @@ const MobileMenu = ({
                 >
                   Digital Academy
                 </Link>
-                <ul
+                {Array.isArray(dBookPage) && (
+                  <ul
                   style={{
                     display: `${isActive.key === "5" ? "block" : "none"}`,
                   }}
                   className="space-y-2 ml-4"
                 >
-                  <li>
-                    <Link
-                      href="/dialogseries"
-                      className="text-white text-sm font-medium"
-                    >
-                       Dialog Series
+                  {dBookPage.map((page : any , pageIndex : number)=>{
+                    return (
+                      <li key={pageIndex}>
+                    <Link href={`/${page.slug}`} className="text-white text-sm font-medium">
+                      {page.categoryName}
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      href="/hardtalk"
-                      className="text-white text-sm font-medium"
-                    >
-                      Hard Talk Series
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/sacredprofessions"
-                      className="text-white text-sm font-medium"
-                    >
-                      Sufi Professions
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/inspiringinterview"
-                      className="text-white text-sm font-medium"
-                    >
-                      Inspiring Interviews
-                    </Link>
-                  </li>
-                  
+                    )
+                  })}
                 </ul>
+                )}
+                
                 <button
                   className={`absolute right-2 top-1 mt-2 transform -translate-y-1/2 text-white transition-transform duration-300 ${
                     isActive.key === "5" ? "rotate-90" : ""

@@ -55,13 +55,9 @@ export default function Banner({ slides }: BannerProps) {
                   <p className="text-xs md:text-xl font-medium mb-2">
                   {slide.title}
                   </p>
-                  <h2 className="text-2xl text-white md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-                    {slide.heading.split("<br/>").map((line, i) => (
-                      <span key={i}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
+                  <h2 style={{ whiteSpace: 'pre-line' }} className="text-2xl text-white md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
+                  {slide.heading.replace(/\\n/g, '\n')}
+                    
                   </h2>
                   <p className="text-xs md:text-base text-white/90 mb-6">
                     {slide.description.split("<br/>").map((line, i) => (

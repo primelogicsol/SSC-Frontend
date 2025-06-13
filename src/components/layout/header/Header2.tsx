@@ -6,6 +6,8 @@ import Menu from "../Menu";
 import MobileMenu from "../MobileMenu";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 interface Header2Props {
   scroll: number;
@@ -27,6 +29,7 @@ const Header2: React.FC<Header2Props> = ({
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [data , setData] = useState<any>()
   const router = useRouter();
 
   const handleScroll = () => {
@@ -34,6 +37,26 @@ const Header2: React.FC<Header2Props> = ({
     setScrollPosition(currentScrollPosition);
     setIsSticky(currentScrollPosition > 100); 
   };
+  const query = `
+  *[_type == "header"][0]{
+    mainTitle,
+    topButton,
+    socialMediaLinks,
+    image,
+    websiteName,
+    subtitle,
+    bottomButton,
+  }
+`
+
+useEffect(() => {
+  const getData = async () => {
+    const headerData = await client.fetch(query)
+    setData(headerData)
+  }
+
+  getData()
+}, [])
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -67,7 +90,7 @@ const Header2: React.FC<Header2Props> = ({
         <div className="bg-fixnix-darkpurple py-2 lg:block hidden">
           <div className="container mx-auto flex items-center justify-between px-4">
             <p className="text-white text-base font-bold font-sans lg:ml-28 xl:-ml-4 2xl:-ml-[210px] ">
-              Kashmir Chapter
+            {data?.mainTitle}
             </p>
             <div className="flex items-center space-x-4">
               <Link
@@ -104,7 +127,7 @@ const Header2: React.FC<Header2Props> = ({
               </div>
               <div className="flex space-x-3">
               <Link
-                href="https://www.facebook.com"
+                href={data?.socialMediaLinks[0].url ?  data?.socialMediaLinks[0].url : '/'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
@@ -112,7 +135,7 @@ const Header2: React.FC<Header2Props> = ({
                 <i className="fab fa-facebook"></i>
               </Link>
               <Link
-                href="https://www.linkedin.com"
+                href={data?.socialMediaLinks[1].url ?  data?.socialMediaLinks[1].url : '/'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
@@ -120,7 +143,7 @@ const Header2: React.FC<Header2Props> = ({
                 <i className="fab fa-linkedin-in"></i>
               </Link>
               <Link
-                href="https://www.youtube.com"
+                href={data?.socialMediaLinks[2].url ?  data?.socialMediaLinks[2].url : '/'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
@@ -128,7 +151,7 @@ const Header2: React.FC<Header2Props> = ({
                 <i className="fab fa-youtube"></i>
               </Link>
               <Link
-                href="https://twitter.com"
+                href={data?.socialMediaLinks[3].url ?  data?.socialMediaLinks[3].url : '/'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
@@ -136,7 +159,7 @@ const Header2: React.FC<Header2Props> = ({
                 <i className="fab fa-twitter"></i>
               </Link>
               <Link
-                href="https://www.instagram.com"
+                href={data?.socialMediaLinks[4].url ?  data?.socialMediaLinks[4].url : '/'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
@@ -156,19 +179,22 @@ const Header2: React.FC<Header2Props> = ({
             <div className="flex flex-wrap items-center justify-between p-4">
               <div className="flex items-center gap-3">
                 <Link href="/">
-                  <Image
-                    src="/assets/images/resources/logo-3.png"
-                    alt="Sufi Science Center Logo"
-                    width={110}
-                    height={110}
-                    className="responsive-logo  w-[110px] h-[110px] transition-all duration-300 ease-in-out
-                    2xl:w-[130px] 2xl:h-[130px]
-                   3xl:w-[200px] 3xl:h-[200px]
-                  lg:w-[90px] lg:h-[90px]
-                  md:w-[90px] md:h-[90px]
-          sm:w-[50px] sm:h-[50px]
-          xs:w-[40px] xs:h-[40px]"
-                  />
+                {data?.image && (
+                   <Image
+                   src={urlFor(data.image).url()}
+                   alt="Sufi Science Center Logo"
+                   width={110}
+                   height={110}
+                   className="responsive-logo  w-[110px] h-[110px] transition-all duration-300 ease-in-out
+                   2xl:w-[130px] 2xl:h-[130px]
+                  3xl:w-[200px] 3xl:h-[200px]
+                 lg:w-[90px] lg:h-[90px]
+                 md:w-[90px] md:h-[90px]
+         sm:w-[50px] sm:h-[50px]
+         xs:w-[40px] xs:h-[40px]"
+                 />
+                  )}
+                  
                 </Link>
                 <span className="text-fixnix-darkpurple  leading-none font-serif whitespace-nowrap responsive-website-name  text-[1.8rem] font-bold truncate transition-all duration-300 ease-in-out text-center
                3xl:text-[5.5rem]
@@ -178,15 +204,15 @@ const Header2: React.FC<Header2Props> = ({
                sm:text-[23px]
                xs:text-[19px]
                2xs:text-[16px]">
-                  Sufi Science Center
+                  {data?.websiteName}
                 </span>
               </div>
               <div className="flex items-center  ml-auto">
                 <Link
-                  href="/membership"
+                  href={data?.bottomButton ? data.bottomButton.link : '/' }
                   className="membership-btn "
                 >
-                  Get Membership
+                  {data?.bottomButton.text}
                 </Link>
                 
               </div>
@@ -202,8 +228,7 @@ const Header2: React.FC<Header2Props> = ({
         sxs:text-[5px] sxs:-mt-[20px] sxs:ml-[50px]
         2xs:text-[4px] 2xs:-mt-[22px] 2xs:ml-[50px]
         3xs:text-[4px] 3xs:-mt-[22px] 3xs:ml-[53px]">
-                A Harmony of Knowledge and Inner Peace: The Next Generation Sufi
-                Way Forward
+                {data?.subtitle}
               </p>
 
               {/* Mobile and Desktop Navigation */}
