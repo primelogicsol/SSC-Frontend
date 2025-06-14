@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/lib/image";
-import { HeroSections } from '../../types/insightTypes';
+import { HeroSections  } from '../../types/pageType';
 import {DigitalBookCategory} from '../../types/digitalBookTypes'
 import { client } from "@/sanity/lib/client";
 
@@ -15,89 +15,14 @@ interface Props {
     banner : HeroSections
   }
 
-const ResearchSlides=[
-  {
-    subTitle: "DIGITAL ACADEMY",
-    title: "Inspiring Interviews",
-    text: "Conversations with remarkable individuals who embody spiritual principles<br/> in their everyday lives."  ,
-    buttonText: "Read More",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "STORIES OF TRANSFORMATION",
-    title: "Inspiring Interviews",
-    text: "Intimate discussions revealing how spiritual practice shapes<br/> personal and professional paths.",
-    buttonText: "Explore",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "FROM PRINCIPLE TO PRACTICE",
-    title: "Inspiring Interviews",
-    text: "Discovering how timeless teachings are applied to <br/>modern challenges through personal stories.",
-    buttonText: "Join Now",
-    buttonLink: "/membership",
-  },
-  {
-    subTitle: "LIVING TRADITION",
-    title: "Inspiring Interviews",
-    text:  "Capturing the knowledge and experiences of notable figures within the spiritual tradition.",
-    buttonText: "Explore",
-    buttonLink: "/membership",
-  },
- 
-];
-const cards = [
-  {
-    title:"Dusk became divine",
-    quote: "The Awakening of Carter Nooruddin, Once a Wall Climber",
-    image: "/assets/images/interview/1.webp",
-  },
-  {
-    title:"Feather touched fire",
-    quote: "Layla Sabreen's journey from dance to divine surrender ",
-    image: "/assets/images/interview/2.png",
-  },
-  {
-    title:"Silence led me Home",
-    quote: "Malik Jennings silent breakdown that became prayer",
-    image: "/assets/images/interview/3.png",
-  },
-  {
-    title:"Name turned light",
-    quote: "How Fatime Delgado walked away from titles and toward truth",
-    image: "/assets/images/interview/4.png",
-  },
-  {
-    title:"Unseen, Yet so Near",
-    quote: "Rashid Green healing after loss opened a secret door",
-    image: "/assets/images/interview/5.png",
-  },
-  {
-    title:"He found me disappearing",
-    quote: "Iman Rivera moment of surrender in the forests of oregon",
-    image: "/assets/images/interview/6.png",
-  },
-  {
-    title:"Veils fell, Light spoke",
-    quote: "Zayn Taylor sudden clarity in a seattle bookstore",
-    image: "/assets/images/interview/7.png",
-  },
-  {
-    title:"The path wrote me",
-    quote: "Maryam Hall stopped planning and started listening",
-    image: "/assets/images/interview/8.png",
-  },
-  {
-    title:"Breath from rhythm",
-    quote: "Jasmine Rahma learns that dhikr lives in science",
-    image: "/assets/images/interview/9.png",
-  },
-  
+interface category{
+    slug : string
+    categoryName : string
 
-  
-];
+}
+
 const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
-    const [categories , setCategories] = useState<any>()
+    const [categories , setCategories] = useState<category[]>()
 
     const query = `*[_type == "page" && type == "digitalAcademy"] {
         "slug": slug.current,
@@ -159,7 +84,7 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
                 <h3 className="font-semibold mb-2">Categories</h3>
                 {Array.isArray(categories) && (
                  <ul className="space-y-2">
-                    {categories.map((c : any , idx : number)=>{
+                    {categories.map((c , idx : number)=>{
                         return(
                             <li key={idx} className="font-bold">
                             <Link
@@ -297,7 +222,7 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
     </div>
     <div className="px-4 py-3">
       <h3 className="text-xl font-semibold mt-2 text-white">
-        <Link href="/hardtalkdetails" className="text-white">{card.linkTitle + " " + index + 1}</Link>
+        <Link href="/hardtalkdetails" className="text-white">{card.linkTitle  + " " + index + 1}</Link>
       </h3>
       <p className="text-sm text-gray-100 mt-2 italic">"{card.coverImageText}"</p>
     </div>

@@ -8,7 +8,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import ModalVideo from "react-modal-video";
 import Banner from "@/components/sections/home3/Banner";
 import Features from "@/components/sections/home3/Features";
-import { InsightCategory , HeroSections } from '../../types/insightTypes';
+import { InsightCategory  } from '../../types/insightTypes';
+import { HeroSections  } from '../../types/pageType';
+
 import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/lib/image";
 

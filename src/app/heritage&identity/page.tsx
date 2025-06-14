@@ -654,6 +654,7 @@ import { useEffect, useState } from "react";
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/lib/image";
+import { HeroSections  } from '../../../types/pageType';
 
 export interface ComplexContentBlock {
   title?: string;
@@ -696,7 +697,7 @@ export interface ParagraphBlock {
 
 
 export default function Home() {
-  const [heroData, setHeroData] = useState<any[]>([])
+  const [heroData, setHeroData] = useState<HeroSections>([])
   const [rightsideImageContent , setRightSideImageContent] = useState<any>()
   const [leftsideImageContent , setLeftSideImageContent] = useState<any>()
   const [purpleChart , setPurpleChart] = useState <any>()
