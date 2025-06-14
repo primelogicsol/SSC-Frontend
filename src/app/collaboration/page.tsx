@@ -445,7 +445,6 @@
 import CounterUp from "../../components/elements/CounterUp";
 import Layout from "../../components/layout/Layout";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ModalVideo from "react-modal-video";

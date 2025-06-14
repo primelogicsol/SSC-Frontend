@@ -1225,4 +1225,3 @@ console.log("rsi2", leftsideImageContent2,)
     </>
   );
 }
-
