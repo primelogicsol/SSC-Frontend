@@ -74,6 +74,13 @@ import { notFound } from "next/navigation";
 import SufiScienceExplorer from "@/components/SufiScienceExplorer";
 import DigitalAcademy from "@/components/DigitalAcademy";
 
+// Add this function to provide slugs for static generation
+export async function generateStaticParams() {
+  // Fetch all slugs from your Sanity CMS or data source
+  const slugs = await client.fetch(`*[_type == "page" && defined(slug.current)]{ "slug": slug.current }`);
+  return slugs.map((item: { slug: string }) => ({ slug: item.slug }));
+}
+
 type Props = {
   params: { slug: string };
 };
