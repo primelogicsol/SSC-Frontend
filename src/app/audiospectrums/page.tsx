@@ -1,7 +1,6 @@
 "use client";
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
-import ProductCard from "@/components/sections/home3/ProductCard";
 import Banner from "@/components/sections/home3/Banner";
 import { useState } from "react";
 import Breadcrumb from "@/components/sections/home3/Breadcrumb";

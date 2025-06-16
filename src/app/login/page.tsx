@@ -1,8 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 type LoginFormInputs = {
   email: string;
@@ -18,26 +20,23 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { login } = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     setLoading(true);
     try {
-      // Simulate login API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Set login state
-      localStorage.setItem('isLoggedIn', 'true');
+      await login(data.email, data.password);
       
       // Get return URL if exists
-      const returnUrl = localStorage.getItem('returnUrl');
+      const returnUrl = searchParams?.get('redirect') || '/';
+      router.push(returnUrl);
       
-      // Clear return URL from storage
-      localStorage.removeItem('returnUrl');
-      
-      // Redirect to return URL or home
-      router.push(returnUrl || '/');
-    } catch (error) {
+      toast.success('Login successful!');
+    } catch (error: any) {
+      toast.error(error.message || 'Login failed. Please try again.');
       console.error('Login failed:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -53,7 +52,13 @@ export default function Login() {
           {/* Email Field */}
           <label className="relative block">
             <input
-              {...register("email", { required: "Email is required" })}
+              {...register("email", { 
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address"
+                }
+              })}
               type="email"
               placeholder=" "
               className="w-full p-2 border border-gray-300 rounded focus:border-blue-500 outline-none peer"
@@ -98,7 +103,8 @@ export default function Login() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition"
+            disabled={loading}
+            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Login"}
           </button>

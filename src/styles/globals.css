@@ -1,0 +1,15 @@
+@import './fixnix.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --fixnix-lightpurple: #70436b;
+  --fixnix-darkpurple: #472a44;
+  --fixnix-white: #ffffff;
+}
+
+body {
+  @apply bg-gray-50;
+} 
