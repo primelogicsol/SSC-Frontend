@@ -1,0 +1,31 @@
+body {
+  background-color: yellow !important;
+}
+/* 
+.sanity-rich-text.data-mark-redText {
+  color: red !important;
+}
+
+.sanity-rich-text.data-mark-greenText {
+  color: green !important;
+} */
+
+[data-mark="greenText"] {
+  color: green !important;
+}
+
+[data-mark="redText"] {
+  color: red !important;
+}
+
+[data-mark="purpleText"] {
+  color: purple !important;
+}
+[data-mark="lightPurple"] {
+  color: rgb(116, 74, 116) !important;
+}
+[data-mark="bgGray"] {
+  background-color :rgb(216, 214, 214)  !important;
+  margin: 4px 4px 4px 4px;
+}
+/* <span data-mark="greenText" class="sc-eJNWfD jkuslg"><strong data-mark="strong" class="sc-eJNWfD jkuslg"><span data-slate-string="true">hghj</span></strong></span> */

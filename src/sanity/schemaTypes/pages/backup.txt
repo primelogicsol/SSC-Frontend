@@ -1,0 +1,493 @@
+// schemas/page.ts
+
+import { defineType } from 'sanity';
+
+export default defineType({
+  name: 'page',
+  type: 'document',
+  title: 'Page',
+  fields: [
+    {
+        name : "pageName",
+        title : "Page Name",
+        type : "string",
+    },
+    {
+      name: 'contentSections',
+      type: 'array',
+      title: 'Content Sections',
+      of: [
+        {
+          type: 'object',
+          name: 'typeSelectorBlock',
+          title: 'Content Block',
+          fields: [
+            {
+              name: 'type',
+              type: 'string',
+              title: 'Section Type',
+              options: {
+                list: [
+                  { title : 'Purple Chart', value: 'purpleChart' },
+                  { title : 'Purple Content', value : 'purpleContent'},
+                  { title : 'White Chart' , value : 'whiteChart'},
+                  { title : 'Voucher', value : 'voucher'},
+                  { title : 'Beginner Check List', value : 'beginnerCheckList'},
+                  { title : 'Membership Form', value : 'membershipForm'},
+                  { title : 'Teaching Assignment', value : 'teachingAssignment'},
+                  { title : 'Support Section', value : 'supportSection'},
+                  { title : 'Complex Content Block', value : 'complexContentBlock'},
+                  { title : 'Sufi Transmission', value : 'sufiTrans'},
+                  { title : 'sufi Statics', value: 'sufiStats' },
+                  { title : 'Matter Box', value : 'matterBox' },
+                  { title : 'Hero Section', value : 'heroSections' },
+                  { title: 'Goal Section', value: 'goalSection' },
+                ],
+                layout: 'dropdown',
+              },
+            },
+
+            // Conditional fields
+            {
+              name: 'purpleChart',
+              type: 'purpleChart',
+              hidden: ({ parent }) => parent?.type !== 'purpleChart',
+            },
+            {
+              name: 'purpleContent',
+              type: 'purpleContent',
+              hidden: ({ parent }) => parent?.type !== 'purpleContent',
+            },
+            {
+              name: 'whiteChart',
+              type: 'whiteChart',
+              hidden: ({ parent }) => parent?.type !== 'whiteChart',
+            },
+            {
+              name: 'voucher',
+              type: 'voucher',
+              hidden: ({ parent }) => parent?.type !== 'voucher',
+            },
+            {
+              name: 'beginnerCheckList',
+              type: 'beginnerCheckList',
+              hidden: ({ parent }) => parent?.type !== 'beginnerCheckList',
+            },
+            {
+              name: 'membershipForm',
+              type: 'membershipForm',
+              hidden: ({ parent }) => parent?.type !== 'membershipForm',
+            },
+            {
+              name: 'teachingAssignment',
+              type: 'teachingAssignment',
+              hidden: ({ parent }) => parent?.type !== 'teachingAssignment',
+            },
+            {
+              name: 'supportSection',
+              type: 'supportSection',
+              hidden: ({ parent }) => parent?.type !== 'supportSection',
+            },
+            {
+              name: 'complexContentBlock',
+              type: 'complexContentBlock',
+              hidden: ({ parent }) => parent?.type !== 'complexContentBlock',
+            },
+            {
+              name: 'sufiTrans',
+              type: 'sufiTrans',
+              hidden: ({ parent }) => parent?.type !== 'sufiTrans',
+            },
+            {
+              name: 'sufiStats',
+              type: 'sufiStats',
+              hidden: ({ parent }) => parent?.type !== 'sufiStats',
+            },
+            {
+              name: 'matterBox',
+              type: 'matterBox',
+              hidden: ({ parent }) => parent?.type !== 'matterBox',
+            },
+            {
+              name: 'heroSections',
+              type: 'heroSections',
+              hidden: ({ parent }) => parent?.type !== 'heroSections',
+            },
+            {
+              name: 'goalSection',
+              type: 'goalSection',
+              hidden: ({ parent }) => parent?.type !== 'goalSection',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+});
+
+
+
+// membershipForm 
+
+{
+        name: 'inputFields',
+        title: 'Input Fields',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              { name: 'title', title: 'Title', type: 'string' },
+              { name: 'inputName', title: 'Input Name', type: 'string' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'checkBoxField',
+        title: 'Check Box Field',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              { name: 'label', title: 'Label', type: 'string' },
+              {
+                name: 'titles',
+                title: 'Titles',
+                type: 'array',
+                of: [{ type: 'string' }],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'textField',
+        title: 'Text Field',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              { name: 'label', title: 'Label', type: 'string' },
+              {
+                name: 'titles',
+                title: 'Titles',
+                type: 'array',
+                of: [{ type: 'string' }],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'agreementCheckBox',
+        title: 'Agreement Check Box',
+        type: 'array',
+        of: [{ type: 'string' }],
+      },
+      {
+        name: 'buttonName',
+        title: 'Button Name',
+        type: 'string',
+      },
+
+
+/// contactSection
+{
+      name: 'inputFields',
+      title: 'Input Fields',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'inputField',
+          title: 'Input Field',
+          fields: [
+            {
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+            },
+            {
+              name: 'title',
+              title: 'Title',
+              type: 'string',
+            },
+            {
+              name: 'type',
+              title: 'Type',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Text', value: 'text' },
+                  { title: 'Long Text', value: 'longtext' },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    },
+
+
+    /// beginnerCheckList
+
+          {
+        name: 'checkForms',
+        title: 'Check Forms',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            name: 'checkForm',
+            title: 'Check Form',
+            fields: [
+              {
+                name: 'label',
+                title: 'Label',
+                type: 'string',
+              },
+              {
+                name: 'checkboxes',
+                title: 'Checkboxes',
+                type: 'array',
+                of: [
+                  {
+                    type: 'string',
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+// teachingAssignment
+
+const teachingAssessment = {
+    name: 'teachingAssignment',
+    title: 'Teaching Assessment',
+    type: 'document',
+    fields: [
+      {
+        name: 'title',
+        title: 'Field Title',
+        type: 'string',
+      },
+      {
+        name: 'heading',
+        title: 'Heading',
+        type: 'string',
+      },
+      {
+        name: 'subheading',
+        title: 'Subheading',
+        type: 'string',
+      },
+      {
+        name: 'inputs',
+        title: 'Inputs',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            name: 'inputObject',
+            title: 'Input Object',
+            fields: [
+              {
+                name: 'inputName',
+                title: 'Input Name',
+                type: 'string',
+              }
+            ]
+          }
+        ]
+      }
+      ,
+      {
+        name: 'listInputs',
+        title: 'List Inputs',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            name: 'listInput',
+            title: 'List Input',
+            fields: [
+              {
+                name: 'title',
+                title: 'Title',
+                type: 'string',
+              },
+              {
+                name: 'options',
+                title: 'Options',
+                type: 'array',
+                of: [{ type: 'string' }],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'assignments',
+        title: 'Assignments',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            name: 'assignment',
+            title: 'Assignment',
+            fields: [
+              {
+                name: 'title',
+                title: 'Title',
+                type: 'string',
+              },
+              {
+                name: 'paragraph',
+                title: 'Paragraph',
+                type: 'text',
+              },
+              {
+                name: 'ranks',
+                title: 'Ranks',
+                type: 'array',
+                of: [{ type: 'string' }], // multiple titles
+              },
+              {
+                name: 'range',
+                title: 'Range',
+                type: 'number',
+                validation: (Rule: any) => Rule.min(1).max(100),
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'finalAssignment',
+        title: 'Final Assignment',
+        type: 'object',
+        fields: [
+          {
+            name: 'title',
+            title: 'Title',
+            type: 'string',
+          },
+          {
+            name: 'message',
+            title: 'Message',
+            type: 'text',
+          },
+        ],
+      },
+    ],
+  };
+  
+  export default teachingAssessment;
+  ____________________________________
+  /// Registration form
+  {
+        name: 'registrationFields',
+        title: 'Registration Fields',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              {
+                name: 'title',
+                title: 'Title',
+                type: 'string',
+              },
+              {
+                name: 'inputFields',
+                title: 'Input Fields',
+                type: 'array',
+                of: [
+                  {
+                    type: 'object',
+                    fields: [
+                      {
+                            name: 'heading',
+                            title : 'Heading',
+                            type : 'string'
+                      },
+                      {
+                        name: 'title',
+                        title: 'Title',
+                        type: 'string',
+                      },
+                      {
+                        name: 'inputName',
+                        title: 'Input Name',
+                        type: 'string',
+                      },
+                      {
+                        name: 'inputType',
+                        title: 'Input Type',
+                        type: 'string',
+                        options: {
+                          list: ['text', 'longtext'],
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: 'listInputFields',
+                title: 'List Input Fields',
+                type: 'array',
+                of: [
+                  {
+                    type: 'object',
+                    fields: [
+                      {
+                            name: 'heading',
+                            title : 'Heading',
+                            type : 'string'
+                      },
+                      {
+                        name: 'title',
+                        title: 'Title',
+                        type: 'string',
+                      },
+                      {
+                        name: 'listInputName',
+                        title: 'List Input Name',
+                        type: 'string',
+                      },
+                      {
+                        name: 'options',
+                        title: 'Options',
+                        type: 'array',
+                        of: [
+                          {
+                            type: 'object',
+                            fields: [
+                              {
+                                name: 'title',
+                                title: 'Title',
+                                type: 'string',
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'buttonName',
+        title: 'Button Name',
+        type: 'string',
+      },

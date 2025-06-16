@@ -57,7 +57,7 @@ const Header1: React.FC<Header1Props> = ({
           handleSidebar={handleSidebar}
         />
       )}
-
+     
       <div
         className={`stricky-header stricked-menu main-menu ${scroll ? "stricky-fixed" : ""}`}
       >

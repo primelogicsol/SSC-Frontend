@@ -1,5 +1,5 @@
 interface Feature {
-  text: string;
+  title: string;
   
 }
 
@@ -28,7 +28,7 @@ export default function Features({ title, features }: FeaturesProps) {
                   ✓
                 </div>
                 <h3 className="mt-4 text-[17px] font-semibold leading-[30px] text-[var(--fixnix-darkpurple)] transition-all duration-500 hover:text-[var(--fixnix-lightpuple)]">
-                  {feature.text}
+                  {feature.title}
                 </h3>
               </div>
             </div>

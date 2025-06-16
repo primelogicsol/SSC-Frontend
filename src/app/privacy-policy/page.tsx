@@ -1,175 +1,125 @@
+"use client"
 import React from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { client } from "@/sanity/lib/client";
+import { PortableText } from "next-sanity";
+import { urlFor } from "@/sanity/lib/image";
+import { PortableTextComponents } from '@portabletext/react'
 
+const components: PortableTextComponents = {
+  block: {
+    h1: ({ children }) => <h1 className="text-4xl font-bold mb-4">{children}</h1>,
+    h2: ({ children }) => <h2 className="text-3xl font-semibold mb-3">{children}</h2>,
+    h3: ({ children }) => <h3 className="text-2xl font-medium mb-2">{children}</h3>,
+    h5: ({ children }) => <h3 className="text-lg">{children}</h3>,
+    h6: ({ children }) => (
+      <h6 className="sm:text-sm md:text-md font-semibold lg:text-md xl:text-md 2xl:text-lg italic mt-4 mb-6 leading-snug sm:leading-tight">
+        {children}
+      </h6>
+    ),
+    normal: ({ children }) => <p className=" py-1 my-0  text-sm md:text-base">{children}</p>,
+  },
+
+  // ✅ Add this section for inline decorators
+  marks: {
+    lightPurple: ({ children }) => (
+      <span className="text-fixnix-darkpurple text-base md:text-lg  font-semibold">{children}</span>
+    ),
+    redText: ({ children }) => (
+      <span className="text-red-500 text-xl  my-4 mb-6 font-semibold">{children}</span>
+    ),
+    greenText: ({ children }) => (
+      <span className="text-green-500 text-xl my-4 mb-6 font-semibold">{children}</span>
+    ),
+    bgGray: ({ children }) => (
+      <span className="py-2   ml-3 pl-2  my-[-4px]  bg-gray-100 block leading-[1.6]  break-words box-decoration-clone  ">{children}</span>
+    ),
+    strong: ({ children }) => <strong>{children}</strong>,
+    em: ({ children }) => <em>{children}</em>,
+    indent: ({ children }) => (
+      <p style={{ marginLeft: '2em' }}>{children}</p>)
+  },
+};
 export default function PrivacyPolicy() {
+  const [pageData, setPageData] = useState<any>()
+  
+
+  const query = `
+  *[_type == "page" && pageName == "Privacy Policy"][0]{
+    _id,
+    pageName,
+    "aboutContent": contentSections[type == "aboutContent"][0].aboutContent,
+    
+  }
+`;
+
+useEffect(() => {
+  
+
+  client.fetch(query)
+    .then((data) => {setPageData(data.aboutContent);
+                    
+                  }
+    )
+    .catch((err) => console.error('Sanity Fetch Error:', err))
+    
+}, [])
   return (
+    <div>
+      
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--fixnix-darkpurple)] mb-4">
-            Privacy Policy
+            {pageData?.title}
           </h1>
           <div className="flex justify-center items-center">
             <div className="h-1 w-24 bg-[var(--fixnix-lightpuple)]"></div>
           </div>
           <p className="mt-4 text-lg">
-            <span className="font-medium">Sufi Science Center: The Next Generation Sufi Way Forward</span>
+            <span className="font-medium">{pageData?.mainHeading}</span>
             <br />
-                        <span className="text-gray-600">
-            Last Updated: {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}
+            <span className="text-gray-600">
+              Last Updated: {pageData?.updatedDate}
             </span>
-
           </p>
         </div>
 
         <div className="bg-white shadow-md rounded-lg p-6 md:p-8 lg:p-10 mb-10">
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              1. Our Commitment to Your Privacy
+              
             </h2>
-            <p className="text-gray-700">
-              At the Sufi Science Center, your privacy is a sacred trust. As seekers
-              of truth and unity, we value transparency and honor your personal data
-              with utmost responsibility. This Privacy Policy outlines how we collect,
-              use, and protect your information.
-            </p>
+            <PortableText value={pageData?.mainDescription} components={components} />
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              2. Information We Collect
-            </h2>
-            <p className="text-gray-700 mb-4">
-              We may collect the following types of information:
-            </p>
-            <ul className="list-disc ml-6 text-gray-700 space-y-2">
-              <li><span className="font-medium">Personal Identification</span> (Name, Email, Phone)</li>
-              <li><span className="font-medium">Demographic Data</span> (Country, Language Preferences)</li>
-              <li><span className="font-medium">Transactional Information</span> (Purchases, Donations)</li>
-              <li><span className="font-medium">Browsing Behavior</span> (Page visits, Time on site, Clicks)</li>
-              <li><span className="font-medium">User Submissions</span> (Forms, Abstracts, Feedback)</li>
-            </ul>
-          </section>
+          {pageData?.contentSections?.map((section, index) => (
+            <section key={index} className="mb-8">
+              <h2 className="text-2xl font-semibold  text-[var(--fixnix-darkpurple)] mb-4">
+                {section.sectionHeading}
+              </h2>
+              <PortableText value={section.sectionDescription} components={components} />
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              3. How We Use Your Information
-            </h2>
-            <p className="text-gray-700 mb-4">
-              We use your data to:
-            </p>
-            <ul className="list-disc ml-6 text-gray-700 space-y-2">
-              <li>Facilitate your learning journey and purchases</li>
-              <li>Personalize your experience across our platform</li>
-              <li>Process donations and support requests</li>
-              <li>Send you newsletters, event updates, and spiritual insights (only with your consent)</li>
-              <li>Improve our website and offerings through analytics</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              4. Data Sharing & Third Parties
-            </h2>
-            <p className="text-gray-700 mb-4">
-              We <span className="font-bold">never sell</span> your data.<br />
-              We may share data with trusted partners strictly to:
-            </p>
-            <ul className="list-disc ml-6 text-gray-700 space-y-2">
-              <li>Process payments (e.g., Stripe, Razorpay)</li>
-              <li>Deliver products or digital materials</li>
-              <li>Provide email or messaging services (e.g., Mailchimp)</li>
-              <li>Ensure platform security and compliance</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              5. Your Rights
-            </h2>
-            <p className="text-gray-700 mb-4">
-              You have the right to:
-            </p>
-            <ul className="list-disc ml-6 text-gray-700 space-y-2">
-              <li>Access or correct your data</li>
-              <li>Withdraw consent</li>
-              <li>Request deletion of your data</li>
-              <li>Lodge complaints with a data protection authority</li>
-            </ul>
-            <p className="mt-4 text-gray-700">
-              To exercise any of the above, email us at <span className="font-medium">privacy@sufisciencecenter.info</span>.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              6. Cookies & Tracking
-            </h2>
-            <p className="text-gray-700 mb-4">
-              We use cookies to:
-            </p>
-            <ul className="list-disc ml-6 text-gray-700 space-y-2">
-              <li>Enhance your site experience</li>
-              <li>Remember your preferences</li>
-              <li>Analyze visitor behavior</li>
-            </ul>
-            <p className="mt-4 text-gray-700">
-              You may disable cookies via your browser, but some features may be limited.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              7. Security
-            </h2>
-            <p className="text-gray-700">
-              We use <span className="font-medium">SSL encryption</span>, <span className="font-medium">two-factor authentication</span>, 
-              and <span className="font-medium">secure data storage protocols</span> to safeguard your information.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              8. Children's Privacy
-            </h2>
-            <p className="text-gray-700">
-              Our platform is intended for individuals aged <span className="font-medium">16 and above</span>. We do
-              not knowingly collect data from children without parental consent.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              9. International Users
-            </h2>
-            <p className="text-gray-700">
-              If you're accessing from outside India or the USA, please note that
-              your data may be stored and processed in servers located in either
-              region, in compliance with local and global data protection laws.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              10. Policy Updates
-            </h2>
-            <p className="text-gray-700">
-              We may update this policy from time to time. The latest version will
-              always be posted here with the updated date.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
-              11. Contact Us
-            </h2>
-            <p className="text-gray-700">
-              If you have any questions or concerns, reach out to our Data Privacy Officer:<br />
-              📧 <span className="font-medium">privacy@sufisciencecenter.info</span>
-            </p>
-          </section>
+              {section.subSections?.map((subSection, subIndex) => (
+                <div key={subIndex} className="mb-6">
+                  <h3 className="text-2xl font-semibold text-[var(--fixnix-darkpurple)] mb-4">
+                    {subSection.subHeading}
+                  </h3>
+                  {subSection.note && (
+                    <p style={{ whiteSpace: 'pre-line' }} className="text-gray-700 my-4 ">{subSection.note.replace(/\\n/g, '\n')}</p>
+                  )}
+                  
+                  <PortableText value={subSection.paragraphs} components={components} />
+                  {subSection.bottomNote && (
+                    <p style={{ whiteSpace: 'pre-line' }} className="text-sm mt-6 text-gray-500">{subSection.bottomNote.replace(/\\n/g, '\n')}</p>
+                  )}
+                  
+                </div>
+              ))}
+            </section>
+          ))}
         </div>
-
         <div className="text-center">
           <Link 
             href="/"
@@ -179,6 +129,9 @@ export default function PrivacyPolicy() {
           </Link>
         </div>
       </div>
+      
     </div>
+    </div>
+    
   );
 }

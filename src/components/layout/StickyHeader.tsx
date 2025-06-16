@@ -1,9 +1,47 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 export default function StickyHeader() {
   const [isSticky, setIsSticky] = useState(false);
+  const [data , setData] = useState<any>()
+  const [ssePage , setSSEPage] = useState<any>()
+  const [dBookPage , setDBookPage] = useState<any>()
+  
+  const query = `
+  *[_type == "header"][0]{
+    image,
+    websiteName,
+    subtitle,
+    bottomButton,
+    headerSections,
+  }
+`
+const pageLinkQSSE = `*[_type == "page" && type == "sufiScienceExplorer"] {
+  "slug": slug.current,
+  "categoryName" : contentSections[type == "insightCategory"][0].insightCategory.categoryName,
+  
+}`;
+const pageLinkQDBook = `*[_type == "page" && type == "digitalAcademy"] {
+  "slug": slug.current,
+  "categoryName" : contentSections[type == "digitalBookCategory"][0].digitalBookCategory.category,
+  
+}`;
+useEffect(() => {
+  const getData = async () => {
+    const headerData = await client.fetch(query)
+    const pageLinkSSE = await client.fetch(pageLinkQSSE)
+    const pageLinkDBook = await client.fetch(pageLinkQDBook)
+    setData(headerData)
+    setSSEPage(pageLinkSSE)
+    setDBookPage(pageLinkDBook)
+  }
+
+  getData()
+}, [])
+console.log('D Book data',dBookPage)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,13 +66,16 @@ export default function StickyHeader() {
         {/* Aligning everything to the left */}
         {/* Logo */}
         <Link href="/">
-          <Image
-            src="/assets/images/resources/logo-4.png"
+        {data?.image && (
+            <Image
+            src={urlFor(data.image).url()}
             alt="Logo"
             width={60}
             height={60}
             className="transition-all duration-300"
           />
+
+          )}
         </Link>
 
         {/* Navigation Menu */}
@@ -223,8 +264,26 @@ export default function StickyHeader() {
   >
     SUFI SCIENCE EXPLORER
   </Link>
+  
+  {Array.isArray(ssePage) && (
   <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] hidden group-hover:block">
-    <li className="mb-2">
+    {ssePage.map((page: any, pageIndex: number) =>{
+      return (
+        <li key={pageIndex} className="mb-2">
+          <Link
+            href={`/${page.slug}`} 
+            className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+          >
+            {page.categoryName}
+          </Link>
+        </li>
+      )
+    }
+      
+    )}
+  </ul>
+)}
+    {/* <li className="mb-2">
       <Link
         href="/foundationalmatrices"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
@@ -328,7 +387,7 @@ export default function StickyHeader() {
         Advanced Technologies
       </Link>
     </li>
-  </ul>
+  </ul> */}
 </li>
 
 
@@ -340,8 +399,24 @@ export default function StickyHeader() {
             >
               DIGITAL ACADEMY
             </Link>
-            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
-              <li className="mb-2">
+            {Array.isArray(dBookPage) && (
+              <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
+                {dBookPage.map((page : any , pageIndex : number)=>{
+                  return (
+                    <li key={pageIndex} className="mb-2">
+                <Link
+                  href={`/${page.slug}`}
+                  className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                >
+                  {page.categoryName}
+                </Link>
+              </li>
+                  )
+                })}
+              </ul>
+            )}
+            
+              {/* <li className="mb-2">
                 <Link
                   href="/dialogseries"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
@@ -374,7 +449,7 @@ export default function StickyHeader() {
                 </Link>
               </li>
               
-            </ul>
+            </ul> */}
           </li>
 
           {/* Sufi Gifts Dropdown */}

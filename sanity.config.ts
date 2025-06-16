@@ -12,17 +12,42 @@ import {structureTool} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
+import blockContent from '@/sanity/schemaTypes/blockContent'
 
+// Custom layout jisme CSS inject ki gayi hai
+import { StudioLayout } from '@/sanity/studio/StudioLayout'
+
+
+// export default defineConfig({
+//   basePath: '/studio',
+//   projectId,
+//   dataset,
+//   // Add and edit the content schema in the './sanity/schemaTypes' folder
+//   schema,
+//   plugins: [
+//     structureTool({structure}),
+//     // Vision is for querying with GROQ from inside the Studio
+//     // https://www.sanity.io/docs/the-vision-plugin
+//     visionTool({defaultApiVersion: apiVersion}),
+//   ],
+  
+// })
 export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
+
   schema,
+
   plugins: [
-    structureTool({structure}),
-    // Vision is for querying with GROQ from inside the Studio
-    // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({defaultApiVersion: apiVersion}),
+    structureTool({ structure }),
+    visionTool({ defaultApiVersion: apiVersion }),
   ],
+
+  // ✅ Inject custom layout here
+  studio: {
+    components: {
+      layout: StudioLayout,
+    },
+  },
 })
