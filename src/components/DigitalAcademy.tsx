@@ -12,7 +12,9 @@ import { client } from "@/sanity/lib/client";
 
 interface Props {
     data: DigitalBookCategory;
-    banner : HeroSections
+    banner : HeroSections;
+    slug : string,
+    pageName : string
   }
 
 interface category{
@@ -21,7 +23,7 @@ interface category{
 
 }
 
-const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
+const DigitalAcademy : React.FC<Props> = ({ data , banner , slug , pageName}) =>{
     const [categories , setCategories] = useState<category[]>()
 
     const query = `*[_type == "page" && type == "digitalAcademy"] {
@@ -89,7 +91,7 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
                             <li key={idx} className="font-bold">
                             <Link
                               href={`/${c.slug}`}
-                              className="text-fixnix-lightpurple font-semibold hover:underline hover:text-fixnix-darkpurple"
+                              className={`${pageName == c.categoryName ? "text-black" : "text-fixnix-lightpurple"} font-semibold hover:underline hover:text-fixnix-darkpurple`}
                             >
                               {c.categoryName}
                             </Link>
@@ -106,7 +108,7 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
                 <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-lg mx-auto transition-transform hover:shadow-lg">
                 {/* Compact header with gradient background */}
                 <div className="bg-gradient-to-r from-fixnix-darkpurple to-fixnix-lightpurple py-2 px-4">
-                  <h3 className="font-bold text-lg text-white">Be Part of an Inspiring Interview</h3>
+                  <h3 className="font-bold text-lg text-white">{data.guideChart.heading}</h3>
                 </div>
                 
                 {/* Condensed content section */}
@@ -115,20 +117,19 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
                   <div className="flex items-start">
                     <div className="border-l-4 border-fixnix-lightpurple pl-2 flex-1">
                       <p className="text-sm font-medium text-gray-800 italic">
-                        Your Story Can Illuminate Paths for Others
+                        {data.guideChart.subHeading}
                       </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        Join a curated series of interviews with individuals who merge professional 
-                        excellence with spiritual depth. Share your insights and the intersections of Sufism with your work.
-                      </p>
+                      <div className="text-xs text-gray-600 mt-1">
+                        <PortableText value={data?.guideChart?.content} />
+                      </div>
                     </div>
                   </div>
                   
                   
                   
-                    <h3 className="font-medium text-sm text-gray-800">Start Your Interview Journey</h3>
-                    <Link href="interviewform" className="bg-fixnix-lightpurple hover:bg-fixnix-darkpurple text-white text-sm font-medium py-3 px-4 rounded transition-colors duration-200 flex items-center">
-                      Book Interview Now
+                    <h3 className="font-medium text-sm text-gray-800">{data.guideChart.button?.heading}</h3>
+                    <Link href={data.guideChart.button?.link || "/#"} className="bg-fixnix-lightpurple hover:bg-fixnix-darkpurple text-white text-sm font-medium py-3 px-4 rounded transition-colors duration-200 flex items-center">
+                      {data.guideChart.button?.title}
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
@@ -184,14 +185,14 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
           className="w-full h-64 object-cover rounded-t-xl"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-          <Link href="/interviewdetails">
+          <Link href={`/${slug}/${card.slug?.current}`}>
             <i className="fa fa-plus text-white text-2xl"></i>
           </Link>
         </div>
       </div>
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold mt-2 text-white">
-          <Link href="/interviewdetails" className="text-white">{card.linkTitle}</Link>
+          <Link href={`/${slug}/${card.slug?.current}`} className="text-white">{card.linkTitle}</Link>
         </h3>
         <p className="text-sm text-gray-100 mt-2 italic">"{card.coverImageText}"</p>
       </div>
@@ -215,14 +216,14 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
         className="w-full h-64 object-cover rounded-t-xl"
       />
       <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-        <Link href="/hardtalkdetails">
+        <Link href={`/${slug}/${card.slug?.current}`}>
           <i className="fa fa-plus text-white text-2xl"></i>
         </Link>
       </div>
     </div>
     <div className="px-4 py-3">
       <h3 className="text-xl font-semibold mt-2 text-white">
-        <Link href="/hardtalkdetails" className="text-white">{card.linkTitle  + " " + index + 1}</Link>
+        <Link href={`/${slug}/${card.slug?.current}`} className="text-white">{card.linkTitle  + " " + index + 1}</Link>
       </h3>
       <p className="text-sm text-gray-100 mt-2 italic">"{card.coverImageText}"</p>
     </div>
@@ -246,14 +247,14 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
           className="w-full h-64 object-cover rounded-t-xl"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-          <Link href="/interviewdetails">
+          <Link href={`/${slug}/${card.slug?.current}`}>
             <i className="fa fa-plus text-white text-2xl"></i>
           </Link>
         </div>
       </div>
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold mt-2 text-white">
-          <Link href="/interviewdetails" className="text-white">{card.linkTitle}</Link>
+          <Link href={`/${slug}/${card.slug?.current}`} className="text-white">{card.linkTitle}</Link>
         </h3>
         <p className="text-sm text-gray-100 mt-2 italic">"{card.coverImageText}"</p>
       </div>
@@ -277,14 +278,14 @@ const DigitalAcademy : React.FC<Props> = ({ data , banner }) =>{
           className="w-full h-64 object-cover rounded-t-xl"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-          <Link href="/interviewdetails">
+          <Link href={`/${slug}/${card.slug?.current}`}>
             <i className="fa fa-plus text-white text-2xl"></i>
           </Link>
         </div>
       </div>
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold mt-2 text-white">
-          <Link href="/interviewdetails" className="text-white">{card.linkTitle}</Link>
+          <Link href={`/${slug}/${card.slug?.current}`} className="text-white">{card.linkTitle}</Link>
         </h3>
         <p className="text-sm text-gray-100 mt-2 italic">"{card.coverImageText}"</p>
       </div>

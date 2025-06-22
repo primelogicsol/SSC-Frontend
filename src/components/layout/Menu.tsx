@@ -7,6 +7,7 @@ import { client } from "@/sanity/lib/client";
 export default function Menu() {
   const [ssePage , setSSEPage] = useState<any>()
   const [dBookPage , setDBookPage] = useState<any>()
+  const [giftShopPage , setGiftpage] = useState<any>()
 
 
   const pageLinkQSSE = `*[_type == "page" && type == "sufiScienceExplorer"] {
@@ -19,14 +20,21 @@ export default function Menu() {
     "categoryName" : contentSections[type == "digitalBookCategory"][0].digitalBookCategory.category,
     
   }`;
+  const pageLinkQGiftShop = `*[_type == "page" && type == "sacredGiftShop"] {
+    "slug": slug.current,
+    pageName,
+    
+  }`;
   useEffect(() => {
     const getData = async () => {
- 
+      
       const pageLinkSSE = await client.fetch(pageLinkQSSE)
       const pageLinkDBook = await client.fetch(pageLinkQDBook)
-     
+      const pageLinkGiftShop = await client.fetch(pageLinkQGiftShop)
+      
       setSSEPage(pageLinkSSE)
       setDBookPage(pageLinkDBook)
+      setGiftpage(pageLinkGiftShop)
     }
   
     getData()
@@ -413,7 +421,24 @@ export default function Menu() {
           >
             SACRED GIFT SHOP
           </Link>
-          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
+          {Array.isArray(giftShopPage) && (
+            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
+              {giftShopPage.map((page , idx)=>{
+                return (
+                  <li key={idx} className="mb-2">
+                  <Link
+                    href={`/${page.slug}`}
+                    className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                  >
+                    {page.pageName}
+                  </Link>
+                </li>
+                )
+              })}
+            </ul>
+
+          )}
+          {/* <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
             <li className="mb-2">
               <Link
                 href="/wall&artdecor"
@@ -470,7 +495,7 @@ export default function Menu() {
                 Audio Spectrum
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </li>
 
         {/* Support Us Dropdown */}

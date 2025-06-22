@@ -14,15 +14,25 @@ export default defineType( {
       title: 'Product Name',
       type: 'string',
       description: 'Full product name (can be same as title)',
-      validation: (Rule: Rule) => Rule.required().min(3).max(50),
+      
+    },
+    {
+      name : 'title',
+      title : 'Title',
+      type : 'string'
     },
     {
         name: 'subTitle',
         title: 'Sub Title',
         type: 'string',
         description: 'Short display title of the product',
-        validation: (Rule: Rule) => Rule.required().min(3).max(100),
-      },
+        
+    },
+    {
+      name : 'productDescription',
+      title : 'Description',
+      type : 'text'
+    },
     {
       name: 'slug',
       title: 'Slug',
@@ -55,12 +65,12 @@ export default defineType( {
       title: 'Discount in Prize',
       type: 'number',
       description: 'Discount in prize',
-      validation: (Rule: Rule) => Rule.min(0).max(90),
+      
     },
     {
-        name: 'inStock',
-        title: 'In Stock',
-        type: 'boolean',
+        name: 'quantity',
+        title: 'Quantity',
+        type: 'number',
     },
     {
         name : 'labels',
@@ -108,7 +118,18 @@ export default defineType( {
                                       name : 'content',
                                       title : 'Content',
                                       type : 'array',
-                                      of : [{type : 'block'}]
+                                      of: [
+                                        {
+                                          type: 'block',
+                                          marks: {
+                                            decorators: [
+                                              { title: 'Strong', value: 'strong' },
+                                              { title: 'Emphasis', value: 'em' },
+                                              { title: 'Indented Paragraph', value: 'indent' },
+                                            ],
+                                          },
+                                        },
+                                      ],
                                    }
                          ]
                        }

@@ -28,4 +28,11 @@ body {
   background-color :rgb(216, 214, 214)  !important;
   margin: 4px 4px 4px 4px;
 }
+[data-mark="purpleLine"] {
+  border-left: 4px solid #4B0082 !important;
+  padding-left: 8px;
+  display: block;
+  margin: -4px 0;
+  background: none !important; /* no background like bgGray */
+}
 /* <span data-mark="greenText" class="sc-eJNWfD jkuslg"><strong data-mark="strong" class="sc-eJNWfD jkuslg"><span data-slate-string="true">hghj</span></strong></span> */

@@ -12,6 +12,10 @@ export default defineType({
           { title: 'Strong', value: 'strong' },
           { title: 'Emphasis', value: 'em' },
           { title: 'purple Text', value: 'purpleText' },
+          {title : 'PupleLine' , value : 'purpleLine'},
+          {title : 'Dark Purple' , value : 'lightPurple'},
+          { title: 'Indented Paragraph', value: 'indent' },
+          {title : 'bg Gray' , value : 'bgGray'},
           
         ],
       },

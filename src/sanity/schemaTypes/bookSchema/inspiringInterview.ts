@@ -154,7 +154,22 @@ export default defineType ({
                         name: 'description',
                         title: 'Description',
                         type: 'array',
-                        of: [{ type: 'block' }],
+                        of: [
+                          {
+                            type: 'block',
+                            marks: {
+                              decorators: [
+                                { title: 'Strong', value: 'strong' },
+                                { title: 'Emphasis', value: 'em' },
+                                { title: 'purple Text', value: 'purpleText' },
+                                {title : 'PupleLine' , value : 'purpleLine'},
+                                {title : 'Dark Purple' , value : 'lightPurple'},
+                                { title: 'Indented Paragraph', value: 'indent' },
+                                
+                              ],
+                            },
+                          },
+                        ],
                       },
                       {
                          name : 'note',

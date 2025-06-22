@@ -9,10 +9,7 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
+      
     },
     {
       name: 'fullBook',
@@ -39,6 +36,11 @@ export default defineType({
       },
     },
     {
+      name : 'pages',
+      title : 'Pages Quantity',
+      type : 'number'
+    },
+    {
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -54,10 +56,9 @@ export default defineType({
       type: 'string',
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'array',
-      of: [{ type: 'block' }],
+      name : 'productDescription',
+      title : 'Description',
+      type : 'text'
     },
     {
       name: 'tags',
@@ -168,7 +169,18 @@ export default defineType({
             name: 'description',
             title: 'Description',
             type: 'array',
-            of: [{ type: 'block' }],
+            of: [
+              {
+                type: 'block',
+                marks: {
+                  decorators: [
+                    { title: 'Strong', value: 'strong' },
+                    { title: 'Emphasis', value: 'em' },
+                    { title: 'Indented Paragraph', value: 'indent' },
+                  ],
+                },
+              },
+            ],
           },
         ],
       }

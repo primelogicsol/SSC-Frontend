@@ -94,7 +94,17 @@ export default defineType({
           name: 'content',
           title: 'Content',
           type: 'array',
-          of: [{ type: 'block' }],
+          of: [{ type: 'block',
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' },
+              {title : 'Light Purple' , value : 'lightPurple'},
+              
+              
+            ],
+          },
+         }],
         },
         {
           name: 'content2',

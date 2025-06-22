@@ -25,6 +25,7 @@ const MobileMenu = ({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [ssePage , setSSEPage] = useState<any>()
   const [dBookPage , setDBookPage] = useState<any>()
+  const [giftShopPage , setGiftpage] = useState<any>()
   const router = useRouter();
 
   const pageLinkQSSE = `*[_type == "page" && type == "sufiScienceExplorer"] {
@@ -37,15 +38,21 @@ const MobileMenu = ({
     "categoryName" : contentSections[type == "digitalBookCategory"][0].digitalBookCategory.category,
     
   }`;
+  const pageLinkQGiftShop = `*[_type == "page" && type == "sacredGiftShop"] {
+    "slug": slug.current,
+    pageName
+    
+  }`;
 
   useEffect(() => {
     const getData = async () => {
       
       const pageLinkSSE = await client.fetch(pageLinkQSSE)
       const pageLinkDBook = await client.fetch(pageLinkQDBook)
-
+      const pageLinkGiftShop = await client.fetch(pageLinkQGiftShop)
       setSSEPage(pageLinkSSE)
       setDBookPage(pageLinkDBook)
+      setGiftpage(pageLinkGiftShop)
     }
   
     getData()
@@ -433,70 +440,28 @@ const MobileMenu = ({
                 >
                   Sacred Gift Shop
                 </Link>
-                <ul
+                {Array.isArray(giftShopPage) && (
+                  <ul
                   style={{
                     display: `${isActive.key === "6" ? "block" : "none"}`,
                   }}
                   className="space-y-2 ml-4"
                 >
-                  <li>
+                  {giftShopPage.map((page, idx)=>{
+                    return(
+                      <li key={idx}>
                     <Link
-                      href="/jewelry&accessories"
+                      href={`/${page.slug}`}
                       className="text-white text-sm font-medium"
                     >
-                      Jewelry & Accessories
+                      {page.pageName}
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      href="/wall&artdecor"
-                      className="text-white text-sm font-medium"
-                    >
-                      Art & Wall Decor
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/home&living"
-                      className="text-white text-sm font-medium"
-                    >
-                      Home & Living
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/fashion&apparel"
-                      className="text-white text-sm font-medium"
-                    >
-                      Fashion & Apparel
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/wellness&meditation"
-                      className="text-white text-sm font-medium"
-                    >
-                      Wellness & Medication
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/digitalbooks"
-                      className="text-white text-sm font-medium"
-                    >
-                      Digital Books
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/audiospectrums"
-                      className="text-white text-sm font-medium"
-                    >
-                      Audio Spectrum
-                    </Link>
-                  </li>
-                  
+                    )
+                  })}
                 </ul>
+                )}
+                
                 <button
                   className={`absolute right-2 top-1 mt-2 transform -translate-y-1/2 text-white transition-transform duration-300 ${
                     isActive.key === "6" ? "rotate-90" : ""

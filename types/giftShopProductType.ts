@@ -5,7 +5,7 @@ export interface GiftShopProduct {
   _type: 'giftShopProduct'
   title?: string
   heading?: string
-  description?: PortableTextBlock[]
+  description?: any[]
   typeOfProduct: 'handCraftProduct' | 'digitalBook' | 'audioSpectrum'
 
   handCraftProduct?: HandCraftProduct[]
@@ -16,23 +16,15 @@ export interface GiftShopProduct {
 
 
   
-  export interface DigitalBook {
-    _id?: string
-    _type: 'digitalBook'
-    // Add fields here
-  }
+ 
   
-  export interface AudioSpectrum {
-    _id?: string
-    _type: 'audioSpectrum'
-    // Add fields here
-  }
+  
 
   // handcraft inferface 
   export interface HandCraftProduct {
     _id?: string
     _type: 'handCraftProduct'
-  
+    title : string
     produtName: string
     subTitle: string
     slug?: {
@@ -43,8 +35,9 @@ export interface GiftShopProduct {
     images: any[]
     rating?: Rating[]
     price: number
+    productDescription : string
     discount?: number
-    inStock?: boolean
+    quantity : number
     labels?: string[]
   
     shippingEstimate?: {
@@ -98,7 +91,7 @@ export interface GiftShopProduct {
     subTitle?: string
     author?: string
     description?: PortableTextBlock[]
-  
+    pages? : string
     tags?: string[]
     language?: string
     genre?: string

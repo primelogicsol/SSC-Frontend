@@ -18,6 +18,7 @@ import { urlFor } from "@/sanity/lib/image";
 interface Props {
     data: InsightCategory;
     banner : HeroSections
+    slug : string
   }
 
 
@@ -79,7 +80,7 @@ const swiperOptions = {
     clickable: true,
   },
 };
-const SufiScienceExplorer : React.FC<Props> = ({ data , banner }) => {
+const SufiScienceExplorer : React.FC<Props> = ({ data , banner , slug}) => {
   const [isActive, setIsActive] = useState({
     status: false,
     key: 1,
@@ -173,7 +174,7 @@ const SufiScienceExplorer : React.FC<Props> = ({ data , banner }) => {
   className="w-full h-60 object-cover"
 />
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
-        <Link href="/details" className="text-white text-2xl">
+        <Link href={`${slug}/${blog.slug?.current}`} className="text-white text-2xl">
           View Details
         </Link>
       </div>
@@ -181,7 +182,7 @@ const SufiScienceExplorer : React.FC<Props> = ({ data , banner }) => {
     <div className="p-4">
       <h3 className="text-xl text-center font-semibold text-fixnix-darkpurple mb-3">
         <Link
-          href="/details"
+          href={`${slug}/${blog.slug?.current}`}
           className="text-fixnix-darkpurple hover:text-fixnix-lightpurple"
         >
           {blog.sectionTitle}
@@ -189,7 +190,7 @@ const SufiScienceExplorer : React.FC<Props> = ({ data , banner }) => {
       </h3>
       <div className="flex justify-center">
         <Link
-          href="/details"
+          href={`${slug}/${blog.slug?.current}`}
           className="inline-block bg-fixnix-lightpurple text-white hover:bg-fixnix-darkpurple px-2 py-1 rounded-md"
         >
           Unveil Insights

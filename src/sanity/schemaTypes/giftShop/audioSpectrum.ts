@@ -9,10 +9,7 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
+      
     },
     {
       name: 'title',
@@ -30,10 +27,9 @@ export default defineType({
       type: 'string',
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'array',
-      of: [{ type: 'block' }],
+      name : 'productDescription',
+      title : 'Description',
+      type : 'text'
     },
     {
       name: 'audioFile',

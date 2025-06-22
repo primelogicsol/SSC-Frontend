@@ -28,7 +28,7 @@ export interface DigitalBookCategory {
     _type: 'guideChart'
     heading?: string
     subHeading?: string
-    content?: PortableTextBlock[]
+    content?: PortableTextBlock[] | any[]
     button?: {
       heading?: string
       title?: string
@@ -52,15 +52,15 @@ export interface DigitalBookCategory {
     headerSection?: {
       heading?: string
       personName?: string
-      description?: PortableTextBlock[]
+      description?: PortableTextBlock[] | any[]
       note?: string
     }
     pages?: DPage[]
     footerSection?: {
       heading?: string
       subHeading?: string
-      content?: PortableTextBlock[]
-      content2?: PortableTextBlock[]
+      content?: PortableTextBlock[] | any
+      content2?: PortableTextBlock[] | any
     }
   }
 
@@ -81,15 +81,15 @@ export interface HardTalkItem {
     headerSection?: {
       heading?: string
       personName?: string
-      description?: PortableTextBlock[]
+      description?: PortableTextBlock[] | any[]
       note?: string
     }
     pages?: DPage[]
     footerSection?: {
       heading?: string
       subHeading?: string
-      content?: PortableTextBlock[]
-      content2?: PortableTextBlock[]
+      content?: PortableTextBlock[] | any[]
+      content2?: PortableTextBlock[] | any[]
     }
   }
 
@@ -110,7 +110,7 @@ export interface ProfessionsDetailItem {
     headerSection?: {
       heading?: string
       personName?: string
-      description?: PortableTextBlock[]
+      description?: PortableTextBlock[] | any[]
       note?: string
     }
     pages?: DPage[]
@@ -172,7 +172,7 @@ export interface InspiringInterviewItem {
   // Footer content items
   export interface FooterContentItem {
     title?: string
-    description?: PortableTextBlock[]
+    description?: PortableTextBlock[] | any[]
     note?: string
   }
   
@@ -191,14 +191,14 @@ export interface InspiringInterviewItem {
     ComparisonHeading?: string
     subHeading?: string
     charts?: ChartItem[]
-    comparisonNote?: PortableTextBlock[]
+    comparisonNote?: PortableTextBlock[] | any[]
   }
   
   export interface ChartItem {
     title?: string
-    content?: PortableTextBlock[]
+    content?: PortableTextBlock[] | any[]
   }
   
   // Assuming digitalBlock is a custom block type similar to Portable Text
-  export type DigitalBlock = PortableTextBlock[]
+  export type DigitalBlock = PortableTextBlock[] | any[]
     

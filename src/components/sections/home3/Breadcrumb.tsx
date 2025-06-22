@@ -1,8 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";  // Using usePathname instead of useRouter
 import Link from "next/link";
-
-const Breadcrumb = () => {
+import React from "react";
+interface Props {
+  pageName : string,
+  slug : string
+}
+const Breadcrumb  : React.FC<Props> = ({pageName , slug}) => {
   const pathname = usePathname();
   const pathnames = pathname?.split("/").filter(Boolean) || [];
 
@@ -36,8 +40,8 @@ const Breadcrumb = () => {
           return (
             <li key={href} className="flex items-center  space-x-2">
               <span className="mx-2">/</span>
-              <Link href={href} className="hover:text-fixnix-lightpurple text-fixnix-darkpurple">
-                {getBreadcrumbText(path)}
+              <Link href={`/${slug}`} className="hover:text-fixnix-lightpurple text-fixnix-darkpurple">
+                {pageName}
               </Link>
             </li>
           );
