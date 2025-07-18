@@ -62,7 +62,7 @@ export default function Footer() {
                         <span className="absolute top-0 left-0 right-0 h-full bg-[var(--fixnix-lightpuple)] transition-all delay-100 duration-400 ease-in-out opacity-100 origin-top transform scale-y-0 z-[-1] group-hover:scale-y-100"></span>
                       </Link>
                       <Link
-                        href="https://www.youtube.com"
+                        href="https://www.youtube.com/@SufiPulse-Studio-USA"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="relative flex items-center justify-center h-10 w-10 text-center text-[var(--fixnix-white)] bg-[#272a2d] text-sm rounded overflow-hidden transition-all duration-500 ease-in-out z-10 hover:text-[var(--fixnix-white)] hover:bg-[var(--fixnix-lightpuple)] group ml-2.5"
@@ -252,6 +252,7 @@ export default function Footer() {
                     </li>
                     
                   </ul>
+                  
 
                   {/* Newsletter Sign-up */}
                   {/* <div className="relative block">
@@ -274,13 +275,28 @@ export default function Footer() {
                     </form>
                   </div> */}
                 </div>
+                
               </div>
             </div>
+            
+          </div>
+          <div className="w-full flex flex-col items-center justify-center pt-6 bg-[var(--fixnix-darkpurple)]">
+          <div className="text-left mb-3">
+            <h3 className="text-xl md:text-2xl text-[var(--fixnix-white)] font-semibold leading-6">OUR NETWORK</h3>
+          </div>
+          <div className=" md:text-center text-[var(--fixnix-white)] mb-2 w-full max-w-2xl">
+            Part of the Dr. Kumar Foundation USA, a global platform for Sufi healing and research and SufiPulse Studio, where sacred sound meets modern expression.
+          </div>
+          <div className="flex items-center justify-center gap-6">
+            <Image src="/assets/images/resources/drkumar-logo.png" alt="Dr. Kumar Foundation Logo" width={90} height={90} className="  " />
+            <Image src="/assets/images/resources/sufipulse-logo.png" alt="SufiPulse Studio Logo" width={90} height={90} className="" />
           </div>
         </div>
+        </div>
 
+       
         {/* Copyright Section */}
-        <div className="border-t border-[var(--fixnix-lightpuple)] -mt-6  py-6">
+        <div className="border-t border-[var(--fixnix-lightpuple)] -mt-16  py-6">
           <div className="container px-4 md:px-6 mx-auto flex flex-col md:flex-row justify-between items-center text-[var(--fixnix-white)] text-sm space-y-4 md:space-y-0">
             <p>&copy; {new Date().getFullYear()} Sufi Science Center. All Rights Reserved. <br/>Developed by Prime Logic Solutions with devotion in USA & guided by the wisdom of the cosmos.</p>
             <div className="flex flex-wrap gap-4">

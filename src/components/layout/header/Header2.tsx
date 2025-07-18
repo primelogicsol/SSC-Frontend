@@ -87,14 +87,14 @@ const Header2: React.FC<Header2Props> = ({
                 ) : (
                   <>
                     <Link
-                      href="/login"
+                      href="/awakening-soon"
                       className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
                     >
                       Login
                     </Link>
                     <span>/</span>
                     <Link
-                      href="/Register"
+                      href="/awakening-soon"
                       className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
                     >
                       Register
@@ -120,7 +120,7 @@ const Header2: React.FC<Header2Props> = ({
                 <i className="fab fa-linkedin-in"></i>
               </Link>
               <Link
-                href="https://www.youtube.com"
+                href="https://www.youtube.com/@SufiPulse-Studio-USA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"

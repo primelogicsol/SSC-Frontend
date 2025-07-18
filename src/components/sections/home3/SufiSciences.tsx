@@ -34,67 +34,67 @@ const swiperOptions = {
 const testimonials = [
   {
     name: "Foundational Matrices",
-    link: "/foundationalmatrices",
+    link: "/awakening-soon",
     text: "Unveil the divine scaffolding of existence, where the Pen (Qalam) etched realities into being through luminous codes of pre-eternity.",
   },
   {
     name: "Ecological Intelligence",
-    link: "/ecologicalintelligence",
+    link: "/awakening-soon",
     text: "Witness nature as the Breath of the Compassionate, where every leaf, stream, and stone mirrors divine balance (mīzān) and remembrance.",
   },
   {
     name: "Consciousness Geometries",
-    link: "/consciousnessgeometries",
+    link: "/awakening-soon",
     text: "Trace the soul’s ascent through sacred forms—latā’if, circles, and stars—mapping the inner heavens of experiential gnosis (ma‘rifah).",
   },
   {
     name: "Perceptual Gateways",
-    link: "/perceptualgateways",
+    link: "/awakening-soon",
     text: "Open the subtle senses (bāṭin) beyond physical sight—where intuition becomes vision (basīrah) and silence speaks through unveiling (kashf).",
   },
   {
     name: "Reality Frameworks",
-    link: "/realityframeworks",
+    link: "/awakening-soon",
     text: "Journey through the layered worlds (‘ālam al-mithāl, al-malakūt, al-jabarūt)—where quantum multiplicity reflects divine oneness (tawḥīd).",
   },
   {
     name: "Cosmic Harmonics",
-    link: "/cosmicharmonics",
+    link: "/awakening-soon",
     text: "Enter the symphony of divine breath—where dhikr aligns soul to the harmonic architecture of the Names (Asmā’ al-Ḥusnā).",
   },
   {
     name: "Energetic Architectures",
-    link: "/energeticarchitectures",
+    link: "/awakening-soon",
     text: "Know your being as a luminous circuitry—where spiritual centers (latā’if) channel divine light (nūr) through remembrance and stillness.",
   },
   {
     name: "Character Alchemy",
-    link: "/characteralchemy",
+    link: "/awakening-soon",
     text: "Refine the nafs through inner jihad—transmuting rusted traits into polished mirrors of divine attributes via Sufi disciplines and adab.",
   },
   {
     name: "Unity Sciences",
-    link: "/unitysciences",
+    link: "/awakening-soon",
     text: "Witness the hidden One in every form—where multiplicity collapses into the Face of the Friend (Wajh Allāh), eternally present.",
   },
   {
     name: "Healing Mysteries",
-    link: "/healingmysteries",
+    link: "/awakening-soon",
     text: "Let divine names descend like medicine—where sacred sound, breath, and presence become elixirs for hearts wounded by distance.",
   },
   {
     name: "Wisdom Transmission",
-    link: "/wisdomtransmission",
+    link: "/awakening-soon",
     text: "Receive the unseen (ghaib) through chains of light—where the master’s gaze, silence, or a single breath transfers oceans.",
   },
   {
     name: "Sacred Artistry",
-    link: "/sacredartistry",
+    link: "/awakening-soon",
     text: "Create with reverence—where form is veil and unveiling, and every curve is a reflection of al-Jamīl, the Beautiful.",
   },
   {
     name: "Advanced Technologies",
-    link: "/advancedtechnologies",
+    link: "/awakening-soon",
     text: "Navigate modern tools as instruments of the Real—where AI, neurotech, and digital networks become means of divine witnessing (shuhūd).",
   },
 ];
@@ -148,7 +148,6 @@ export default function Testimonial() {
             </SwiperSlide>
           ))}
         </Swiper>
-
         <div className="swiper-pagination mt-6 text-center"></div>
         <div className="flex justify-center gap-4 mt-4">
           <div className="srp cursor-pointer px-3 py-2 bg-fixnix-lightpurple text-white rounded hover:bg-fixnix-darkpurple ">
