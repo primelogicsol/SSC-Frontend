@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/context/AuthContext";
 
 type LoginFormInputs = {
   email: string;
@@ -10,47 +11,74 @@ type LoginFormInputs = {
 };
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormInputs>();
-
-  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const { login, googleLogin, loading: authLoading } = useAuth();
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormInputs) => {
-    setLoading(true);
+    setError(null);
     try {
-      // Simulate login API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Set login state
-      localStorage.setItem('isLoggedIn', 'true');
-      
-      // Get return URL if exists
-      const returnUrl = localStorage.getItem('returnUrl');
-      
-      // Clear return URL from storage
-      localStorage.removeItem('returnUrl');
-      
-      // Redirect to return URL or home
-      router.push(returnUrl || '/');
-    } catch (error) {
-      console.error('Login failed:', error);
-      setLoading(false);
+      await login(data.email, data.password);
+      const returnUrl = localStorage.getItem("returnUrl") || "/";
+      localStorage.removeItem("returnUrl");
+      router.push(returnUrl);
+    } catch (err: any) {
+      setError(err.message);
     }
+  };
+
+  // ✅ Google Auth Initialization
+  useEffect(() => {
+    // @ts-ignore
+    google.accounts.id.initialize({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      callback: handleGoogleResponse,
+    });
+    // @ts-ignore
+    google.accounts.id.renderButton(document.getElementById("google-btn"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
+
+  const handleGoogleResponse = (response: any) => {
+    const user = decodeJwt(response.credential);
+    googleLogin(user.email, user.name)
+      .then(() => router.push("/"))
+      .catch(err => setError(err.message));
+  };
+
+  const decodeJwt = (token: string) => {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="mb-4 text-fixnix-darkpurple hover:underline text-sm"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-center text-2xl font-semibold text-fixnix-lightpurple">
           Login to SSC
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          {/* Email Field */}
+          {/* Email */}
           <label className="relative block">
             <input
               {...register("email", { required: "Email is required" })}
@@ -62,11 +90,9 @@ export default function Login() {
               Email
             </span>
           </label>
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-          {/* Password Field */}
+          {/* Password */}
           <label className="relative block">
             <input
               {...register("password", {
@@ -81,48 +107,38 @@ export default function Login() {
               Password
             </span>
           </label>
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-          {/* Forgot Password Link */}
+          {/* Forgot Password */}
           <div className="text-right">
-            <Link
-              href="/forget-password"
-              className="text-sm text-fixnix-darkpurple hover:underline"
-            >
+            <Link href="/forget-password" className="text-sm text-fixnix-darkpurple hover:underline">
               Forgot Password?
             </Link>
           </div>
 
-          {/* Submit Button */}
+          {/* Error */}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition"
+            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition-colors duration-200"
+            disabled={authLoading}
           >
-            {loading ? "Processing..." : "Login"}
+            {authLoading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
-          <Link href="/Register" className="text-fixnix-darkpurple font-bold">
+          <Link href="/register" className="text-fixnix-darkpurple font-bold">
             Register
           </Link>
         </p>
 
-        {/* Social Login Buttons */}
-        <p className="text-sm sm:text-md text-center text-gray-600 mt-4">
-          Sign In With
-        </p>
-        <div className="flex items-center justify-center py-2 space-x-3 text-center">
-          <Link
-            href="#"
-            className="flex items-center justify-center h-9 w-9 bg-fixnix-lightpurple text-white rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-          >
-            <i className="fab fa-google"></i>
-          </Link>
-        </div>
+        {/* Google Login */}
+        <p className="text-center text-gray-600 mt-4">Or sign in with</p>
+        <div id="google-btn" className="flex justify-center mt-2"></div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { forgotPassword } from "@/hooks/authServices";
 
 type ForgotPasswordInputs = {
   email: string;
@@ -17,16 +18,25 @@ export default function ForgotPassword() {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const onSubmit = (data: ForgotPasswordInputs) => {
+  const onSubmit = async (data: ForgotPasswordInputs) => {
     setLoading(true);
-    console.log("Reset link sent to:", data.email);
-
-    // Simulate backend call delay
-    setTimeout(() => {
-      // After sending reset link, navigate to OTP screen
-      router.push("/otp");
-    }, 1000);
+    setError(null);
+    setSuccess(null);
+    try {
+      await forgotPassword(data.email);
+      setSuccess("Reset link sent! Check your email.");
+      setTimeout(() => {
+        // After sending reset link, navigate to OTP screen
+        router.push("/otp");
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || "Failed to send reset link");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,6 +59,8 @@ export default function ForgotPassword() {
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
           )}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
           <button
             type="submit"

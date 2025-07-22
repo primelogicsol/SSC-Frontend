@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { register as registerApi } from "@/hooks/authServices";
 
 type RegisterFormInputs = {
   name: string;
@@ -18,14 +19,25 @@ export default function Register() {
   } = useForm<RegisterFormInputs>(); // <-- Pass the form type here
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
-  const onSubmit = (data: RegisterFormInputs) => {
+  const onSubmit = async (data: RegisterFormInputs) => {
     setLoading(true);
-    // Simulate an async request, then go to OTP page
-    setTimeout(() => {
-      router.push("/otp");
-    }, 1000);
+    setError(null);
+    setSuccess(null);
+    try {
+      await registerApi(data.name, data.email, data.password);
+      setSuccess("Registration successful! Please check your email for the OTP.");
+      setTimeout(() => {
+        router.push("/otp");
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,9 +92,8 @@ export default function Register() {
   </label>
   {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-
-
-
+  {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+  {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
           {/* Submit Button */}
           <button
