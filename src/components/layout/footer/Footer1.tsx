@@ -278,9 +278,7 @@ export default function Footer() {
                 
               </div>
             </div>
-            
-          </div>
-          <div className="w-full flex flex-col items-center justify-center pt-6 bg-[var(--fixnix-darkpurple)]">
+            <div className="w-full flex flex-col items-center justify-center pt-6 bg-[var(--fixnix-darkpurple)]">
           <div className="text-left mb-3">
             <h3 className="text-xl md:text-2xl text-[var(--fixnix-white)] font-semibold leading-6">OUR NETWORK</h3>
           </div>
@@ -288,10 +286,12 @@ export default function Footer() {
             Part of the Dr. Kumar Foundation USA, a global platform for Sufi healing and research and SufiPulse Studio, where sacred sound meets modern expression.
           </div>
           <div className="flex items-center justify-center gap-6">
-            <Image src="/assets/images/resources/drkumar-logo.png" alt="Dr. Kumar Foundation Logo" width={90} height={90} className="  " />
-            <Image src="/assets/images/resources/sufipulse-logo.png" alt="SufiPulse Studio Logo" width={90} height={90} className="" />
+            <Image src="/assets/images/resources/drkumar-logo.png" alt="Dr. Kumar Foundation Logo" width={100} height={100} className="  " />
+            <Image src="/assets/images/resources/sufipulse-logo.png" alt="SufiPulse Studio Logo" width={80} height={90} className="" />
           </div>
         </div>
+          </div>
+        
         </div>
 
        
