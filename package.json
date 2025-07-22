@@ -20,7 +20,6 @@
     "@react-pdf/renderer": "^4.3.0",
     "@sanity/icons": "^3.7.0",
     "@sanity/image-url": "^1.1.0",
-    "@sanity/vision": "^2.2.6",
     "@types/isotope-layout": "^3.0.14",
     "@types/react-curved-text": "^2.0.3",
     "animate.css": "^4.1.1",
