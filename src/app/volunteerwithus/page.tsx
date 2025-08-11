@@ -1,11 +1,16 @@
-"use client"
+"use client";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Banner from "@/components/sections/home3/Banner";
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
-import Link from "next/link";
-
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import {
+  createBooking,
+  getBookings,
+} from "@/hooks/bookServices";
 const VolunteerSlides = [
   {
     subTitle: "Serve, Inspire, Grow, Connect, Transform",
@@ -44,30 +49,49 @@ const VolunteerSlides = [
   },
 ];
 
-const swiperOptions = {
-  modules: [Autoplay, Pagination, Navigation],
-  slidesPerView: 1,
-  spaceBetween: 30,
-  // autoplay: {
-  //     delay: 2500,
-  //     disableOnInteraction: false,
-  // },
-  loop: true,
 
-  // Navigation
-  navigation: {
-    nextEl: ".srn",
-    prevEl: ".srp",
-  },
-
-  // Pagination
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-};
 
 export default function Home() {
+  
+    const { register, handleSubmit, reset } = useForm();
+    const [loading, setLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
+    const [bookings, setBookings] = useState<any[]>([]);
+    const [refresh, setRefresh] = useState(false);
+  
+    useEffect(() => {
+      const fetchBookings = async () => {
+        try {
+          const data = await getBookings();
+          setBookings(data || []);
+        } catch (err) {
+          console.error("Error fetching bookings:", err);
+        }
+      };
+      fetchBookings();
+    }, [refresh]);
+  
+    const onSubmit = async (data: any) => {
+      setLoading(true);
+      try {
+        await createBooking({
+          subject: data.subject,
+          service: data.service,
+          date: data.date,
+          comment: data.comment,
+        });
+        setSuccessMsg("Your booking has been submitted successfully!");
+        reset();
+        setRefresh(!refresh);
+      } catch (err) {
+        console.error("Error:", err);
+        setSuccessMsg("Failed to submit booking.");
+      }
+      setLoading(false);
+    };
+  
+  
+  
   return (
     <>
       <Layout headerStyle={2} footerStyle={1}>
@@ -315,73 +339,94 @@ export default function Home() {
       {/* Left Side - Contact Form */}
       <div className="w-full lg:w-1/2">
         <div className="bg-fixnix-primary p-6 sm:p-8 lg:p-10 rounded-lg">
-          <form
-            action="assets/inc/sendemail.php"
-            className="contact-form-validated"
-          >
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  className="w-full h-14 bg-fixnix-white border rounded-md px-5 text-fixnix-gray text-base md:text-lg"
-                />
-              </div>
-              <div>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  className="w-full h-14 bg-fixnix-white border rounded-md px-5 text-fixnix-gray text-base md:text-lg"
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  name="Subject"
-                  className="w-full h-14 bg-fixnix-white border rounded-md px-5 text-fixnix-gray text-base md:text-lg"
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Pick a date"
-                  name="date"
-                  id="datepicker"
-                  className="w-full h-14 bg-fixnix-white border rounded-md px-5 text-fixnix-gray text-base md:text-lg"
-                />
-              </div>
-              <div className="col-span-1 md:col-span-2">
-                <select className="w-full h-14 bg-fixnix-white border rounded-md px-5 text-fixnix-gray text-base md:text-lg">
-                  <option>Select Services</option>
-                  <option value="1">Assist with Spiritual Programs</option>
-                  <option value="2">Support Craft and Culture Preservation</option>
-                  <option value="3">Fundraising and Event Organization</option>
-                  <option value="4">Outreach and Community Engagement</option>
-                  <option value="5">Help with Digital and Media</option>
-                  <option value="6">Create Sacred Art and Handicrafts</option>
+              <input
+                type="text"
+                placeholder="Subject"
+                {...register("subject", { required: true })}
+                className="w-full h-14 bg-white border rounded-md px-5 text-gray-700"
+              />
+              <input
+                type="date"
+                {...register("date", { required: true })}
+                className="w-full h-14 bg-white border rounded-md px-5 text-gray-700"
+              />
+              <div className="col-span-2">
+                <select
+                  {...register("service", { required: true })}
+                  className="w-full h-14 bg-white border rounded-md px-5 text-gray-700"
+                >
+                  <option value="">Select Service</option>
+                  <option value="ASSIST_WITH_SPRITUAL_PROGRAM">
+                    Assist with Spiritual Programs
+                  </option>
+                  <option value="SUPPORT_CRAFT_CULTURE">
+                    Support Craft and Culture Preservation
+                  </option>
+                  <option value="FUND_RAISING_EVENT_ORGANIZATION">
+                    Fundraising and Event Organization
+                  </option>
+                  <option value="OUTREACH_COMMUNITY">
+                    Outreach and Community Engagement
+                  </option>
+                  <option value="HELP_DIGITAL_MEDIA">
+                    Help with Digital and Media
+                  </option>
+                  <option value="CREATE_SACRED_ART_HANDICRAFTS">
+                    Create Sacred Art and Handicrafts
+                  </option>
                 </select>
               </div>
             </div>
             <div className="mt-5">
               <textarea
-                name="message"
+                {...register("comment")}
                 placeholder="Comment"
-                className="w-full h-52 bg-fixnix-white border rounded-md p-5 text-fixnix-gray text-base md:text-lg"
+                className="w-full h-32 bg-white border rounded-md p-5 text-gray-700"
               ></textarea>
-              <div>
-                <Link
-                  href=""
-                  className="inline-block bg-fixnix-lightpurple px-8 py-3 my-4 rounded-lg text-white hover:bg-fixnix-darkpurple hover:text-white transition duration-300"
-                >
-                  Send Message
-                </Link>
-              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-block bg-fixnix-lightpurple px-8 py-3 my-4 rounded-lg text-white hover:bg-fixnix-darkpurple transition duration-300"
+              >
+                {loading ? "Sending..." : "Send Booking"}
+              </button>
+              {successMsg && <p className="text-green-500 mt-2">{successMsg}</p>}
             </div>
           </form>
         </div>
+        <h2 className="text-2xl font-bold mb-4">Your Bookings</h2>
+        {bookings.length === 0 ? (
+          <p>No bookings yet.</p>
+        ) : (
+          <table className="w-full border text-sm bg-white shadow rounded-lg">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-2">Subject</th>
+                <th className="p-2">Date</th>
+                <th className="p-2">Service</th>
+                <th className="p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookings.map((booking) => (
+                <tr key={booking.id} className="border-t">
+                  <td className="p-2">{booking.subject}</td>
+                  <td className="p-2">{booking.date}</td>
+                  <td className="p-2">{booking.service}</td>
+                  <td className="p-2">
+                    {booking.status === 0
+                      ? "Pending"
+                      : booking.status === 1
+                      ? "Completed"
+                      : "Canceled"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Right Side - Contact Info */}
@@ -416,3 +461,4 @@ export default function Home() {
     </>
   );
 }
+

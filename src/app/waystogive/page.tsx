@@ -5,6 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Banner from "@/components/sections/home3/Banner";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { useState } from "react";
 const WaysSlides = [
   {

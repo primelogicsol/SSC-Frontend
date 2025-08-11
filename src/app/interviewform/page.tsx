@@ -1,6 +1,7 @@
 "use client";
 import Layout from "@/components/layout/Layout";
 import React, { useState,useEffect, ChangeEvent, FormEvent } from "react";
+import { createInterview, getInterviews, cancelInterview, type Interview } from "@/hooks/interview";
 
 type InterviewFormState = {
   fullName: string;
@@ -48,6 +49,23 @@ const InterviewForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof InterviewFormState, string>>>({});
   const [availableSaturdays, setAvailableSaturdays] = useState<SaturdayOption[]>([]);
+  const [existingInterviews, setExistingInterviews] = useState<Interview[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // Fetch existing interviews on component mount
+  useEffect(() => {
+    const fetchInterviews = async () => {
+      try {
+        const interviews = await getInterviews();
+        setExistingInterviews(interviews);
+      } catch (err) {
+        console.error("Error fetching interviews:", err);
+      }
+    };
+    fetchInterviews();
+  }, []);
 
   // Set up available Saturdays and default date on component load
   useEffect(() => {
@@ -84,6 +102,20 @@ const InterviewForm = () => {
         : (prev[name as keyof InterviewFormState] as string[]).filter((item) => item !== value);
       return { ...prev, [name]: updatedList };
     });
+  };
+
+  const handleCancelInterview = async (id: string) => {
+    try {
+      await cancelInterview(id);
+      setSuccessMessage("Interview cancelled successfully");
+      // Refresh the interviews list
+      const interviews = await getInterviews();
+      setExistingInterviews(interviews);
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (err) {
+      setApiError("Failed to cancel interview");
+      setTimeout(() => setApiError(""), 3000);
+    }
   };
 
   // Helper function to get available Saturdays for the next few weeks
@@ -185,24 +217,105 @@ const InterviewForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Submitting form data:", formState);
-      setFormSubmitted(true);
-      setErrors({});
+      setLoading(true);
+      setApiError("");
+      setSuccessMessage("");
+      
+      try {
+        // Combine date and time into a single datetime string
+        const scheduledAt = new Date(`${formState.interviewDate}T${formState.interviewTime}:00`);
+        
+        const payload = {
+          profession: formState.profession,
+          institution: formState.affiliation,
+          website: formState.website || undefined,
+          areasOfImpact: formState.impactAreas,
+          spiritualOrientation: formState.tariqa,
+          publicVoice: formState.hasPublicVoice === "Yes",
+          interviewIntent: formState.interviewGoals,
+          interviewTimeZone: formState.tone,
+          scheduledAt: scheduledAt.toISOString(),
+          additionalNotes: formState.additionalNotes || undefined,
+        };
+        
+        await createInterview(payload);
+        setFormSubmitted(true);
+        setFormState(defaultState);
+        setSuccessMessage("Interview booked successfully!");
+        
+        // Refresh the interviews list
+        const interviews = await getInterviews();
+        setExistingInterviews(interviews);
+        
+      } catch (err) {
+        setApiError("Failed to book interview. Please try again.");
+        console.error("Error booking interview:", err);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
     <Layout headerStyle={2} footerStyle={1}>
+      <div className="max-w-6xl mx-auto my-8 px-4">
+        <h1 className="text-3xl font-bold text-center text-fixnix-lightpurple mb-8">
+          SSC Interview Application
+        </h1>
+        
+        {apiError && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            {apiError}
+          </div>
+        )}
+        
+        {successMessage && (
+          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            {successMessage}
+          </div>
+        )}
+        
+        {/* Existing Interviews Section */}
+        {existingInterviews.length > 0 && (
+          <div className="mb-8 bg-white shadow-lg rounded-lg p-6">
+            <h2 className="text-xl font-bold text-fixnix-lightpurple mb-4">Your Scheduled Interviews</h2>
+            <div className="space-y-4">
+              {existingInterviews.map((interview) => (
+                <div key={interview.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{interview.profession}</h3>
+                      <p className="text-gray-600">{interview.institution}</p>
+                      <p className="text-sm text-gray-500">
+                        Scheduled: {new Date(interview.scheduledAt).toLocaleDateString()} at {new Date(interview.scheduledAt).toLocaleTimeString()}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Status: {interview.status === 0 ? "Pending" : interview.status === 1 ? "Confirmed" : "Cancelled"}
+                      </p>
+                    </div>
+                    {interview.status === 0 && (
+                      <button
+                        onClick={() => handleCancelInterview(interview.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 max-w-3xl my-16 mx-auto p-8 bg-white shadow-2xl rounded-2xl"
+        className="space-y-6 max-w-3xl mx-auto p-8 bg-white shadow-2xl rounded-2xl"
       >
-        <h2 className="text-2xl font-bold text-center text-fixnix-lightpurple mb-4">
-          SSC Interview Application Form
-        </h2>
+       
 
         {formSubmitted && (
           <div className="bg-green-100 border border-fixnix-darkpurple text-fixnix-darkpurple p-4 rounded-lg">
@@ -403,12 +516,14 @@ const InterviewForm = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="px-6 py-2 bg-fixnix-lightpurple text-white rounded-lg hover:bg-fixnix-darkpurple transition duration-200"
+            disabled={loading}
+            className="px-6 py-2 bg-fixnix-lightpurple text-white rounded-lg hover:bg-fixnix-darkpurple transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit Interview Form
+            {loading ? "Booking Interview..." : "Submit Interview Form"}
           </button>
         </div>
       </form>
+      </div>
     </Layout>
   );
 };

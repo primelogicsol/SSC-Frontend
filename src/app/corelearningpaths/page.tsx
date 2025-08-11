@@ -4,6 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { SetStateAction, useState,  useEffect  } from "react";
 import Banner from "@/components/sections/home3/Banner";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { createOrUpdateChecklist, getChecklist } from "@/hooks/sufiChecklist";
+import type { ChecklistItem } from "@/hooks/sufiChecklist";
+
 type ChecklistSection = {
   title: string;
   items: string[];
@@ -105,27 +111,96 @@ export default function Home() {
   const [overallProgress, setOverallProgress] = useState(0);
   const [sectionProgress, setSectionProgress] = useState<number[]>(Array(8).fill(0));
   const [showProgressDetails, setShowProgressDetails] = useState(false);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
-  const toggleItem = (sectionIndex: number, itemIndex: number) => {
+  // Fetch checklist from API on mount
+  useEffect(() => {
+    const fetchChecklist = async () => {
+      setApiLoading(true);
+      setApiError("");
+      try {
+        const data = await getChecklist();
+        if (data && data.items) {
+          // Transform API data to match local state structure
+          const transformedSections = sections.map(section => ({
+            ...section,
+            completed: section.items.map(item => {
+              const apiItem = data.items.find((apiItem: any) => apiItem.title === item);
+              return apiItem?.status === "COMPLETED";
+            })
+          }));
+          setSections(transformedSections);
+        }
+      } catch (err) {
+        setApiError("Failed to load checklist");
+        console.error("Error fetching checklist:", err);
+      }
+      setApiLoading(false);
+    };
+    fetchChecklist();
+  }, []);
+
+  // Save checklist to API
+  const saveChecklist = async (newSections: ChecklistSection[]) => {
+    try {
+      const items = newSections.flatMap((section, sectionIndex) =>
+        section.items.map((item, itemIndex) => ({
+          section: section.title.toUpperCase().replace(/\s+/g, '_') as any,
+          title: item,
+          status: section.completed[itemIndex] ? "COMPLETED" : "PENDING"
+        }))
+      );
+      
+      await createOrUpdateChecklist({
+        progress: overallProgress,
+        items: items as ChecklistItem[]
+      });
+    } catch (err) {
+      setApiError("Failed to save checklist");
+      console.error("Error saving checklist:", err);
+    }
+  };
+
+  const toggleItem = async (sectionIndex: number, itemIndex: number) => {
     const newSections = [...sections];
     newSections[sectionIndex].completed[itemIndex] = !newSections[sectionIndex].completed[itemIndex];
     setSections(newSections);
+    await saveChecklist(newSections);
   };
 
-  const resetAll = () => {
+  const resetAll = async () => {
     const newSections = sections.map(section => ({
       ...section,
       completed: Array(section.items.length).fill(false)
     }));
     setSections(newSections);
+    try {
+      await createOrUpdateChecklist({
+        progress: 0,
+        resetAll: true,
+        items: []
+      });
+    } catch (err) {
+      setApiError("Failed to reset checklist");
+    }
   };
 
-  const completeAll = () => {
+  const completeAll = async () => {
     const newSections = sections.map(section => ({
       ...section,
       completed: Array(section.items.length).fill(true)
     }));
     setSections(newSections);
+    try {
+      await createOrUpdateChecklist({
+        progress: 100,
+        completeAll: true,
+        items: []
+      });
+    } catch (err) {
+      setApiError("Failed to complete checklist");
+    }
   };
 
   useEffect(() => {
@@ -162,25 +237,6 @@ export default function Home() {
       return "You've established a robust foundation across all dimensions of the beginner's path. You're ready to advance to intermediate practices and deeper studies. Consider increasing commitment to a specific lineage while maintaining your integrated approach.";
     }
   };
-
-  // Add local storage functionality
-  useEffect(() => {
-    // Try to load saved data from localStorage when component mounts
-    const savedData = localStorage.getItem('sufiJourneyProgress');
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData);
-        setSections(parsedData);
-      } catch (e) {
-        console.error('Error loading saved progress', e);
-      }
-    }
-  }, []);
-  
-  // Save to localStorage whenever sections change
-  useEffect(() => {
-    localStorage.setItem('sufiJourneyProgress', JSON.stringify(sections));
-  }, [sections]);
 
   const [activeIndex, setActiveIndex] = useState(1);
   const handleOnClick = (index: SetStateAction<number>) => {
@@ -587,6 +643,16 @@ export default function Home() {
           </div>
           
           <div className="p-4 sm:p-6 md:p-10">
+            {apiError && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                {apiError}
+              </div>
+            )}
+            {apiLoading && (
+              <div className="mb-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded">
+                Loading checklist...
+              </div>
+            )}
             <div className="mb-6 sm:mb-8">
               <div className="flex flex-wrap items-center justify-between mb-2 gap-2">
                 <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Overall Progress</h2>

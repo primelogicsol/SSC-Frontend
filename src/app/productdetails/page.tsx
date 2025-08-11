@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaShareAlt, FaFacebook, FaWhatsapp, FaPinterest, FaHeart, FaRegHeart, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { addToCart, type CartCategory } from "@/hooks/cart";
 
 type Review = {
   date: string; // or Date if you have Date objects
@@ -65,13 +66,15 @@ export default function ProductDetails() {
   const [showToast, setShowToast] = useState<ToastMessage | null>(null);
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
   const [sortReviewsBy, setSortReviewsBy] = useState("recent");
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartError, setCartError] = useState("");
   
   // Ref for scrolling back to top
   const topRef = useRef(null);
   
   // Dummy product data (replace with actual API data in production)
   const product = {
-    id: "handcraft-001",
+    id: 1, // Changed from string to number to match API requirements
     title: "Traditional Handcrafted Wooden Chair",
     tagline: "Authentic heritage craftsmanship from artisans of North India",
     originalPrice: 249.99,
@@ -131,28 +134,28 @@ export default function ProductDetails() {
   // Dummy related products
   const relatedProducts = [
     {
-      id: "handcraft-002",
+      id: 2,
       title: "Traditional Wooden Side Table",
       price: 149.99,
       rating: 4.6,
       image: "/assets/images/shop/cart-page-img-2.jpg"
     },
     {
-      id: "handcraft-003",
+      id: 3,
       title: "Hand-Carved Wooden Stool",
       price: 89.99,
       rating: 4.7,
       image: "/assets/images/shop/cart-page-img-1.jpg"
     },
     {
-      id: "handcraft-004",
+      id: 4,
       title: "Decorative Wooden Wall Panel",
       price: 179.99,
       rating: 4.9,
       image: "/assets/images/shop/cart-page-img-2.jpg"
     },
     {
-      id: "handcraft-005",
+      id: 5,
       title: "Carved Wooden Coffee Table",
       price: 229.99,
       rating: 4.5,
@@ -172,16 +175,45 @@ export default function ProductDetails() {
   };
   
   // Handle add to cart
-  const handleAddToCart = () => {
-    setShowAddedToCart(true);
-    setShowToast({
-      message: "Sacred product added to your cart",
-      type: 'success'
-    });
-    setTimeout(() => {
-      setShowAddedToCart(false);
-      window.location.href = "/cart";
-    }, 1500);
+  const handleAddToCart = async () => {
+    try {
+      setAddingToCart(true);
+      setCartError("");
+      
+      // Determine the product category based on the current page URL or product ID
+      // For now, using a default category - this should be adjusted based on your routing
+      let category: CartCategory = "living"; // default
+      
+      // You can determine the category based on the URL path or product ID
+      // For example: if the URL contains /music/ then category = "music"
+      // This is a placeholder - adjust based on your actual routing structure
+      
+      await addToCart({
+        category,
+        productId: product.id,
+        qty: quantity
+      });
+      
+      setShowAddedToCart(true);
+      setShowToast({
+        message: "Product added to your cart successfully!",
+        type: 'success'
+      });
+      
+      setTimeout(() => {
+        setShowAddedToCart(false);
+      }, 3000);
+      
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      setCartError("Failed to add product to cart. Please try again.");
+      setShowToast({
+        message: "Failed to add product to cart",
+        type: 'error'
+      });
+    } finally {
+      setAddingToCart(false);
+    }
   };
   
   // Handle buy now
@@ -427,12 +459,13 @@ export default function ProductDetails() {
             
             {/* Purchase Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Link
-                href="/cart"
-                className="flex-1 bg-fixnix-lightpurple text-center text-white py-3 px-6 font-medium hover:bg-fixnix-darkpurple transition-colors"
+              <button
+                onClick={handleAddToCart}
+                disabled={addingToCart || product.stock === 0}
+                className="flex-1 bg-fixnix-lightpurple text-center text-white py-3 px-6 font-medium hover:bg-fixnix-darkpurple transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Add to Cart
-              </Link>
+                {addingToCart ? "Adding to Cart..." : product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+              </button>
               <Link
                 href="checkout"
                 className="flex-1 bg-fixnix-lightpurple text-white py-3 px-6 font-medium text-center hover:bg-fixnix-darkpurple transition-opacity"
@@ -440,6 +473,13 @@ export default function ProductDetails() {
                 Buy Now
               </Link>
             </div>
+            
++            {/* Cart Error Message */}
+            {cartError && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                {cartError}
+              </div>
+            )}
             
             {/* Added to Cart Notification */}
             {showAddedToCart && (

@@ -2,17 +2,168 @@
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getCart, updateCartItem, deleteCartItem, clearCart, type CartItem, type CartCategory } from "@/hooks/cart";
 
 export default function Home() {
   const [showGiftCard, setShowGiftCard] = useState(false);
   const [giftCardAmount, setGiftCardAmount] = useState(100);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [updatingItem, setUpdatingItem] = useState<number | null>(null);
+  const [deletingItem, setDeletingItem] = useState<number | null>(null);
+
+  // Fetch cart items on component mount
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  const fetchCartItems = async () => {
+    try {
+      setLoading(true);
+      const items = await getCart();
+      setCartItems(items);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      setError("Failed to load cart items");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuantityChange = async (item: CartItem, newQty: number) => {
+    if (newQty < 1) return;
+    
+    try {
+      setUpdatingItem(item.id);
+      
+      // Determine the category based on which product field exists
+      let category: CartCategory = "living"; // default
+      if (item.music) category = "music";
+      else if (item.digitalBook) category = "book";
+      else if (item.fashion) category = "fashion";
+      else if (item.meditation) category = "meditation";
+      else if (item.decoration) category = "decoration";
+      else if (item.accessories) category = "accessories";
+      
+      // Get the product ID
+      const productId = item.music?.id || item.digitalBook?.id || item.fashion?.id || 
+                       item.meditation?.id || item.decoration?.id || item.living?.id || 
+                       item.accessories?.id;
+      
+      if (!productId) {
+        setError("Product ID not found");
+        return;
+      }
+      
+      await updateCartItem({
+        category,
+        productId,
+        qty: newQty
+      });
+      
+      // Refresh cart items
+      await fetchCartItems();
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+      setError("Failed to update quantity");
+    } finally {
+      setUpdatingItem(null);
+    }
+  };
+
+  const handleRemoveItem = async (item: CartItem) => {
+    try {
+      setDeletingItem(item.id);
+      
+      // Determine the category based on which product field exists
+      let category: CartCategory = "living"; // default
+      if (item.music) category = "music";
+      else if (item.digitalBook) category = "book";
+      else if (item.fashion) category = "fashion";
+      else if (item.meditation) category = "meditation";
+      else if (item.decoration) category = "decoration";
+      else if (item.accessories) category = "accessories";
+      
+      // Get the product ID
+      const productId = item.music?.id || item.digitalBook?.id || item.fashion?.id || 
+                       item.meditation?.id || item.decoration?.id || item.living?.id || 
+                       item.accessories?.id;
+      
+      if (!productId) {
+        setError("Product ID not found");
+        return;
+      }
+      
+      await deleteCartItem({
+        category,
+        productId
+      });
+      
+      // Refresh cart items
+      await fetchCartItems();
+    } catch (err) {
+      console.error("Error removing item:", err);
+      setError("Failed to remove item");
+    } finally {
+      setDeletingItem(null);
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      setLoading(true);
+      await clearCart();
+      setCartItems([]);
+    } catch (err) {
+      console.error("Error clearing cart:", err);
+      setError("Failed to clear cart");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getProductInfo = (item: CartItem) => {
+    const product = item.music || item.digitalBook || item.fashion || 
+                   item.meditation || item.decoration || item.living || 
+                   item.accessories;
+    
+    if (!product) return { title: "Unknown Product", price: 0, image: "" };
+    
+    return {
+      title: product.title || product.name || "Product",
+      price: product.price || 0,
+      image: product.images?.[0] || product.coverImage || "/assets/images/shop/cart-page-img-1.jpg"
+    };
+  };
+
+  const calculateSubtotal = () => {
+    return cartItems.reduce((total, item) => {
+      const product = getProductInfo(item);
+      return total + (product.price * item.qty);
+    }, 0);
+  };
   
   return (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Cart">
       {/* Start Cart Page */}
       <section className="relative block bg-white py-[113px] pb-[120px]">
         <div className="container mx-auto px-4">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {/* Loading State */}
+          {loading && (
+            <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
+              Loading cart items...
+            </div>
+          )}
+
           {/* Gift Card Banner */}
           <div className="mb-8 p-4 bg-purple-50 border border-purple-200 rounded-lg flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -88,6 +239,23 @@ export default function Home() {
             </div>
           )}
 
+          {/* Empty Cart Message */}
+          {cartItems.length === 0 && !loading && (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🛒</div>
+              <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-2">Your cart is empty</h2>
+              <p className="text-fixnix-gray mb-6">Add some items to get started!</p>
+              <Link
+                href="/wall&artdecor"
+                className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple rounded"
+              >
+                Continue Shopping
+              </Link>
+            </div>
+          )}
+
+          {/* Cart Items Table */}
+          {cartItems.length > 0 && (
           <div className="overflow-x-auto w-full">
             <table className="w-full min-w-[1170px] border-collapse text-left">
               <thead>
@@ -100,12 +268,14 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {[1, 2].map((item, index) => (
+                {cartItems.map((item, index) => {
+                  const productInfo = getProductInfo(item);
+                  return (
                   <tr key={index} className="border-b border-gray-300">
                     <td className="flex items-center py-8 space-x-9">
                       <div className="w-[120px] border border-gray-300 overflow-hidden">
                       <Image
-                      src={`/assets/images/shop/cart-page-img-${item}.jpg`}
+                      src={productInfo.image}
                       alt="Product Image"
                       width={500} // Adjust based on your design requirements
                       height={300} // Adjust this height to fit your layout
@@ -117,27 +287,34 @@ export default function Home() {
                           href="product-details"
                           className="text-fixnix-lightpurple"
                         >
-                          {item === 1 ? "Comfy Chair" : "Classic Chair"}
+                          {productInfo.title}
                         </Link>
                       </h3>
                     </td>
-                    <td className="text-[18px] text-fixnix-gray">$10.99</td>
+                    <td className="text-[18px] text-fixnix-gray">${productInfo.price.toFixed(2)}</td>
                     <td>
                       <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
                         <input
                           type="number"
+                          value={item.qty}
+                          onChange={(e) => handleQuantityChange(item, parseInt(e.target.value) || 1)}
+                          disabled={updatingItem === item.id}
                           className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none"
                         />
                       </div>
                     </td>
-                    <td className="text-[18px] text-fixnix-gray">$10.99</td>
+                    <td className="text-[18px] text-fixnix-gray">${(productInfo.price * item.qty).toFixed(2)}</td>
                     <td className="text-right">
-                      <button className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple">
+                      <button 
+                        onClick={() => handleRemoveItem(item)}
+                        disabled={deletingItem === item.id}
+                        className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple disabled:opacity-50"
+                      >
                         <i className="fas fa-times"></i>
                       </button>
                     </td>
                   </tr>
-                ))}
+                )})}
                 
                 {/* Gift Card Row (Shown when added) */}
                 {showGiftCard && (
@@ -177,6 +354,7 @@ export default function Home() {
               </tbody>
             </table>
           </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
             <form className="w-full max-w-md">
@@ -196,7 +374,7 @@ export default function Home() {
                   <span className="font-bold text-fixnix-darkpurple">
                     Subtotal
                   </span>
-                  <span>${showGiftCard ? (20.98 + giftCardAmount).toFixed(2) : "20.98"} USD</span>
+                  <span>${showGiftCard ? (calculateSubtotal() + giftCardAmount).toFixed(2) : calculateSubtotal().toFixed(2)} USD</span>
                 </li>
                 <li className="flex justify-between">
                   <span className="font-bold text-fixnix-darkpurple">
@@ -209,12 +387,21 @@ export default function Home() {
                     Total
                   </span>
                   <span className="text-fixnix-lightpuple font-bold">
-                    ${showGiftCard ? (20.98 + giftCardAmount).toFixed(2) : "20.98"} USD
+                    ${showGiftCard ? (calculateSubtotal() + giftCardAmount).toFixed(2) : calculateSubtotal().toFixed(2)} USD
                   </span>
                 </li>
               </ul>
 
               <div className="flex justify-end mt-6 space-x-4">
+                {cartItems.length > 0 && (
+                  <button
+                    onClick={handleClearCart}
+                    disabled={loading}
+                    className="px-6 py-3 text-white bg-red-500 hover:bg-red-600 disabled:opacity-50"
+                  >
+                    Clear Cart
+                  </button>
+                )}
                 <Link
                   href="#"
                   className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-lightpurple"

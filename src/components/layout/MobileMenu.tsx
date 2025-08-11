@@ -569,7 +569,7 @@ const MobileMenu = ({
                 >
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/waystogive"
                       className="text-white text-sm font-medium"
                     >
                       Ways to Give
@@ -577,7 +577,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/volunteerwithus"
                       className="text-white text-sm font-medium"
                     >
                       Volunteer With Us
@@ -585,7 +585,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/collaboration"
                       className="text-white text-sm font-medium"
                     >
                       Collaborations

@@ -133,7 +133,7 @@ export default function Menu() {
           <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/beginyourjourney"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Begin Your Journey
@@ -141,7 +141,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/corelearningpaths"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Core Learning Paths
@@ -149,7 +149,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/growth&development"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Growth & Development
@@ -157,7 +157,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/leadership&teaching"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Leadership & Teaching
@@ -165,7 +165,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/submissionportal"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Abstract Submission Portal
@@ -173,7 +173,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/resources&support"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Resources & Support
@@ -423,7 +423,7 @@ export default function Menu() {
           <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] rounded-e-md overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/waystogive"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Ways to Give
@@ -431,7 +431,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/volunteerwithus"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Volunteer With Us
@@ -440,7 +440,7 @@ export default function Menu() {
 
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/collaboration"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Collaborations

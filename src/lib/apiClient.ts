@@ -5,10 +5,10 @@ const API_BASE_URL = "https://api.sufisciencecenter.info/v1";
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
-  withCredentials: false, // Your API uses tokens, not cookies
+  withCredentials: false, // Not using cookies
 });
 
-// Request interceptor: add access token
+// Request Interceptor: Attach token
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -17,24 +17,30 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor: handle token refresh on 401
+// Response Interceptor: Refresh token logic
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // prevent infinite loop
       const refreshToken = localStorage.getItem("refreshToken");
+
       if (refreshToken) {
         try {
           const refreshResponse = await axios.get(`${API_BASE_URL}/refresh-access-token`, {
             headers: { Authorization: `Bearer ${refreshToken}` },
           });
           const newAccessToken = refreshResponse.data.accessToken;
+
           localStorage.setItem("accessToken", newAccessToken);
-          error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-          return apiClient.request(error.config); // Retry
-        } catch {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+          return apiClient(originalRequest); // retry original request
+        } catch (err) {
           localStorage.clear();
-          window.location.href = "/login";
+          window.location.href = "/login"; // or use Next.js router.push("/login")
         }
       }
     }

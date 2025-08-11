@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/layout/Layout";
+import { createDonation, type DonationPayload } from "@/hooks/donation";
 
 export default function DonationForm() {
   const router = useRouter();
@@ -12,6 +13,9 @@ export default function DonationForm() {
   const [donationType, setDonationType] = useState<string>("");
   const [donationPool, setDonationPool] = useState<string[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Personal Info typed explicitly
   const [personalInfo, setPersonalInfo] = useState<{
@@ -39,18 +43,30 @@ export default function DonationForm() {
   // ---- Donation Options ----
   const donationOptions = ["$10", "$20", "$50", "$100", "Custom Amount"];
   const donationPools = [
-    "Donate to the Sufi Science Center",
-    "Sponsor a Sufi Scholar or Student",
-    "Contribute to the Preservation of Sacred Art and Craft",
-    "Sponsor Sacred Events and Gatherings",
+    { label: "Donate to the Sufi Science Center", value: "SUFI_SCIENCE_CENTER" },
+    { label: "Sponsor a Sufi Scholar or Student", value: "SPONSOR_SCHOLAR" },
+    { label: "Contribute to the Preservation of Sacred Art and Craft", value: "PRESERVE_ART_AND_CRAFT" },
+    { label: "Sponsor Sacred Events and Gatherings", value: "SPONSOR_EVENTS" },
   ];
 
+  // Map donation types to backend enum values
+  const donationTypeMap: { [key: string]: string } = {
+    "One-Time": "ONE_TIME",
+    "Monthly": "MONTHLY",
+    "GeneralDonations": "GENERAL_DONATIONS",
+    "SponsorshipDonations": "SPONSORSHIP_DONATIONS",
+    "PatronMembershipContributions": "PATRON_MEMBERSHIP_CONTRIBUTIONS",
+    "Educational&ScholarshipDonations": "EDUCATIONAL_SCHOLARSHIP_DONATIONS",
+    "Legacy&PlannedGiving": "LEGACY_PLANNED_GIVING",
+    "Recurring": "RECURRING"
+  };
+
   // ---- Handlers ----
-  const handlePoolChange = (pool: string) => {
+  const handlePoolChange = (poolLabel: string) => {
     setDonationPool((prev: string[]) =>
-      prev.includes(pool)
-        ? prev.filter((item) => item !== pool)
-        : [...prev, pool],
+      prev.includes(poolLabel)
+        ? prev.filter((item) => item !== poolLabel)
+        : [...prev, poolLabel],
     );
   };
 
@@ -74,6 +90,84 @@ export default function DonationForm() {
     setPaymentMethod(e.target.value);
   };
 
+  const validateForm = () => {
+    if (!amount && !customAmount) {
+      setError("Please select or enter a donation amount");
+      return false;
+    }
+    if (!donationType) {
+      setError("Please select a donation type");
+      return false;
+    }
+    if (donationPool.length === 0) {
+      setError("Please select at least one donation pool");
+      return false;
+    }
+    if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email) {
+      setError("Please fill in all required personal information");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      // Get the final amount (either selected or custom)
+      const finalAmount = amount === "Custom Amount" ? customAmount : amount.replace("$", "");
+      
+      // Map donation pools to backend enum values
+      const mappedPools = donationPool.map(pool => {
+        const poolOption = donationPools.find(p => p.label === pool);
+        return poolOption ? poolOption.value : pool;
+      });
+      
+      const payload: DonationPayload = {
+        amount: finalAmount,
+        pool: mappedPools,
+        type: donationTypeMap[donationType] || donationType,
+      };
+      
+      await createDonation(payload);
+      setSuccess("Thank you for your donation! Your contribution has been received.");
+      
+      // Reset form after successful submission
+      setTimeout(() => {
+        setAmount("");
+        setCustomAmount("");
+        setDonationType("");
+        setDonationPool([]);
+        setPersonalInfo({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
+          country: "",
+        });
+        setSuccess("");
+      }, 3000);
+      
+    } catch (err) {
+      console.error("Error creating donation:", err);
+      setError("Failed to process donation. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Product Details">
       {/* Back Button */}
@@ -87,6 +181,23 @@ export default function DonationForm() {
       </div>
 
       <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg my-4 rounded-xl">
+        <h1 className="text-3xl font-bold text-center text-fixnix-lightpurple mb-6">
+          Make a Donation
+        </h1>
+        
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
+        
+        {success && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            {success}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
         {/* Donation Amount Section */}
         <div className="mb-4">
           <label className="block text-fixnix-lightpurple text-xl font-bold">
@@ -152,15 +263,15 @@ export default function DonationForm() {
           </label>
           <div className="mt-2 space-y-2">
             {donationPools.map((pool) => (
-              <label key={pool} className="flex items-center space-x-2">
+              <label key={pool.value} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  value={pool}
-                  checked={donationPool.includes(pool)}
-                  onChange={() => handlePoolChange(pool)}
+                  value={pool.label}
+                  checked={donationPool.includes(pool.label)}
+                  onChange={() => handlePoolChange(pool.label)}
                   className="w-4 h-4"
                 />
-                <span>{pool}</span>
+                <span>{pool.label}</span>
               </label>
             ))}
           </div>
@@ -245,9 +356,14 @@ export default function DonationForm() {
         </div>
 
         
-        <button className="w-full bg-fixnix-lightpurple text-white p-3 rounded-lg font-semibold hover:bg-fixnix-darkpurple transition">
-          Proceed to Donate
+        <button 
+          type="submit"
+          disabled={loading}
+          className="w-full bg-fixnix-lightpurple text-white p-3 rounded-lg font-semibold hover:bg-fixnix-darkpurple transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "Processing Donation..." : "Proceed to Donate"}
         </button>
+        </form>
       </div>
     </Layout>
   );

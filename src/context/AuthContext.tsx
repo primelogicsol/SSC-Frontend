@@ -1,38 +1,105 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import { login as loginApi, googleAuth } from "@/hooks/authServices";
-
-interface User {
-  email: string;
-  fullName?: string;
-}
+import { getUserProfile, UserProfile } from "@/hooks/profileServices";
+import apiClient from "@/lib/apiClient";
+import { useRouter } from "next/navigation";
+import { getMembership, MembershipPayload } from "@/hooks/membershipServices";
 
 interface AuthContextType {
-  user: User | null;
+  user: UserProfile | null;
+  membership: MembershipPayload | null;
   isAuthenticated: boolean;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   googleLogin: (email: string, fullName: string) => Promise<void>;
   logout: () => void;
+  fetchUserProfile: () => Promise<void>;
+  setMembership: (membership: MembershipPayload | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [membership, setMembership] = useState<MembershipPayload | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  // Restore session on mount
+  // ✅ Restore session & fetch profile + membership on mount
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    const email = localStorage.getItem("userEmail");
-    const fullName = localStorage.getItem("userFullName");
-
-    if (accessToken && email) {
-      setUser({ email, fullName: fullName || "" });
+    if (accessToken) {
+      fetchUserProfile();
+      fetchMembership();
     }
   }, []);
 
+  // ✅ Axios Interceptor for Token Refresh
+  useEffect(() => {
+    const interceptor = apiClient.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          try {
+            const newAccessToken = await refreshAccessToken();
+            if (newAccessToken) {
+              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+              return apiClient(originalRequest);
+            }
+          } catch (err) {
+            logout();
+            router.push("/login");
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      apiClient.interceptors.response.eject(interceptor);
+    };
+  }, []);
+
+  // ✅ Fetch User Profile
+  const fetchUserProfile = async () => {
+    try {
+      const profile = await getUserProfile();
+      setUser(profile);
+    } catch {
+      logout();
+    }
+  };
+
+  // ✅ Fetch Membership
+  const fetchMembership = async () => {
+    try {
+      const membershipData = await getMembership();
+      setMembership(membershipData);
+    } catch (err) {
+      console.error("No membership found or error fetching", err);
+    }
+  };
+
+  // ✅ Refresh Access Token
+  const refreshAccessToken = async (): Promise<string | null> => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) return null;
+
+    try {
+      const res = await apiClient.get("/refresh-access-token", {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      });
+      const newAccessToken = res.data.accessToken;
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } catch {
+      return null;
+    }
+  };
+
+  // ✅ Login
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
@@ -40,39 +107,51 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (data.accessToken && data.refreshToken) {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-        setUser(data.user || { email });
+        await fetchUserProfile();
+        await fetchMembership();
       }
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  // Google Login
-  const googleLogin = async (email: string | undefined, fullName: string | undefined) => {
+  // ✅ Google Login
+  const googleLogin = async (email: string, fullName: string) => {
     setLoading(true);
     try {
-      const data = await googleAuth(email ?? "", fullName ?? "");
-      setUser(data.user || { email: email ?? "", fullName: fullName ?? "" });
-    } catch (err) {
-      console.error("Google Auth failed", err);
+      const data = await googleAuth(email, fullName);
+      if (data.accessToken && data.refreshToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        await fetchUserProfile();
+        await fetchMembership();
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Logout
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userFullName");
     setUser(null);
+    setMembership(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, loading, login, googleLogin, logout }}
+      value={{
+        user,
+        membership,
+        isAuthenticated: !!user,
+        loading,
+        login,
+        googleLogin,
+        logout,
+        fetchUserProfile,
+        setMembership,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -81,8 +160,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used inside AuthProvider");
   return context;
 };

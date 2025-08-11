@@ -43,6 +43,14 @@ export default function Register() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="mb-4 text-fixnix-darkpurple hover:underline text-sm"
+        >
+          ← Back
+        </button>
         <h2 className="text-center text-2xl font-semibold text-fixnix-lightpurple">
           Register SSC
         </h2>

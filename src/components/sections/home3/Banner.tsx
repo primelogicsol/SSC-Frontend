@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
 // Slide data type
@@ -21,7 +21,7 @@ interface BannerProps {
 
 // Swiper options
 const swiperOptions = {
-  modules: [Autoplay, Navigation],
+  modules: [Autoplay, Navigation, Pagination],
   slidesPerView: 1,
   spaceBetween: 0,
   loop: true,
@@ -32,6 +32,10 @@ const swiperOptions = {
   navigation: {
     nextEl: ".h1n",
     prevEl: ".h1p",
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
   },
 };
 
@@ -96,20 +100,8 @@ export default function Banner({ slides }: BannerProps) {
         </div>
       </Swiper>
 
-      {/* Custom Bullets */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => swiperRef.current?.slideToLoop(index)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              activeIndex === index
-                ? "bg-white"
-                : "border border-white bg-transparent hover:bg-white/30"
-            }`}
-          ></button>
-        ))}
-      </div>
+      {/* Swiper Pagination Bullets */}
+      <div className="swiper-pagination absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20"></div>
     </section>
   );
 }

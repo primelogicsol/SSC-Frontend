@@ -6,7 +6,47 @@ import { Loader } from 'lucide-react';
 import Image from "next/image";
 import Banner from "@/components/sections/home3/Banner";
 import { SetStateAction, useState } from "react";
-
+import { createConference, getConferences, updateConferenceStatus } from "@/hooks/conference";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+const CommunitySlides = [
+  {
+    subTitle: "Connect, Engage, Celebrate, Learn, Grow",
+    title: "Experience the Power of<br/> Sufi Community",
+    text: " Join a vibrant community of seekers, scholars, and spiritual guides<br/> through enriching events, shared wisdom, and collective growth.",
+    buttonText: "Read More",
+    buttonLink: "/membership",
+  },
+  {
+    subTitle: "Gather, Reflect, Celebrate, Inspire, Transform",
+    title: "Building Connections Through<br/> Sufi Gatherings",
+    text: "Engage in meaningful discussions, cultural events, and spiritual retreats that <br/>unite hearts and minds in the spirit of Kashmiri Sufism.",
+    buttonText: "Join Now",
+    buttonLink: "/membership",
+  },
+  {
+    subTitle: "Unite in Spirit, Learn Together",
+    title: "Join Events That <br/>Enrich & Inspire",
+    text: "Explore Sufi traditions through festivals, workshops, and gatherings that celebrate <br/>wisdom, culture, and the journey of self-discovery.",
+    buttonText: "Join Now",
+    buttonLink: "/membership",
+  },
+  {
+    subTitle: "Together in Faith, Growth, & Learning",
+    title: "Discover, Share, & Celebrate,<br/> Spiritual Wisdom",
+    text: " Be part of a thriving Sufi community where events, discussions, and<br/> experiences foster harmony, enlightenment, and personal transformation.",
+    buttonText: "Join Now",
+    buttonLink: "/membership",
+  },
+  {
+    subTitle: "Celebrate Spirituality, Embrace Community, Engage",
+    title: "A Gathering of <br/>Seekers & Thinkers",
+    text: " Connect with like-minded individuals in immersive events that honor Kashmiri Sufi<br/> heritage, inspire dialogue, and strengthen spiritual bonds.",
+    buttonText: "Join Now",
+    buttonLink: "/membership",
+  },
+];
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(1);
   const handleOnClick = (index: SetStateAction<number>) => {
@@ -41,7 +81,7 @@ export default function Home() {
     };
   
     // Handle form submission
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
       e.preventDefault();
       
       // Validate form
@@ -74,53 +114,62 @@ export default function Home() {
       // If no errors, submit form
       if (Object.keys(newErrors).length === 0) {
         setIsSubmitting(true);
-        
-        // Simulate API call
-        setTimeout(() => {
-          console.log('Form submitted:', formData);
+        try {
+          await createConference({
+            institution: formData.institution,
+            abstract: formData.abstract,
+            presentationType: formData.presentationType.toUpperCase(),
+            topic: formData.topic.replace("-", "_").toUpperCase()
+          });
+          // Optionally show a success message
+          setFormData({
+            name: '',
+            email: '',
+            institution: '',
+            abstract: '',
+            presentationType: '',
+            topic: ''
+          });
+          // Optionally show a success message here
+        } catch (error) {
+          // Optionally handle error
+          setErrors({ general: 'Submission failed. Please try again.' });
+        }
           setIsSubmitting(false);
-          // Reset form or show success message
-        }, 2000);
       }
     };
   
-  const CommunitySlides = [
-    {
-      subTitle: "Connect, Engage, Celebrate, Learn, Grow",
-      title: "Experience the Power of<br/> Sufi Community",
-      text: " Join a vibrant community of seekers, scholars, and spiritual guides<br/> through enriching events, shared wisdom, and collective growth.",
-      buttonText: "Read More",
-      buttonLink: "/membership",
-    },
-    {
-      subTitle: "Gather, Reflect, Celebrate, Inspire, Transform",
-      title: "Building Connections Through<br/> Sufi Gatherings",
-      text: "Engage in meaningful discussions, cultural events, and spiritual retreats that <br/>unite hearts and minds in the spirit of Kashmiri Sufism.",
-      buttonText: "Join Now",
-      buttonLink: "/membership",
-    },
-    {
-      subTitle: "Unite in Spirit, Learn Together",
-      title: "Join Events That <br/>Enrich & Inspire",
-      text: "Explore Sufi traditions through festivals, workshops, and gatherings that celebrate <br/>wisdom, culture, and the journey of self-discovery.",
-      buttonText: "Join Now",
-      buttonLink: "/membership",
-    },
-    {
-      subTitle: "Together in Faith, Growth, & Learning",
-      title: "Discover, Share, & Celebrate,<br/> Spiritual Wisdom",
-      text: " Be part of a thriving Sufi community where events, discussions, and<br/> experiences foster harmony, enlightenment, and personal transformation.",
-      buttonText: "Join Now",
-      buttonLink: "/membership",
-    },
-    {
-      subTitle: "Celebrate Spirituality, Embrace Community, Engage",
-      title: "A Gathering of <br/>Seekers & Thinkers",
-      text: " Connect with like-minded individuals in immersive events that honor Kashmiri Sufi<br/> heritage, inspire dialogue, and strengthen spiritual bonds.",
-      buttonText: "Join Now",
-      buttonLink: "/membership",
-    },
-  ];
+  
+  const [conferenceList, setConferenceList] = useState<any[]>([]);
+  const [conferenceLoading, setConferenceLoading] = useState(false);
+  const [conferenceError, setConferenceError] = useState("");
+  const [refreshConferences, setRefreshConferences] = useState(false);
+
+  // Fetch user's conference submissions
+  React.useEffect(() => {
+    const fetchConferences = async () => {
+      setConferenceLoading(true);
+      setConferenceError("");
+      try {
+        const data = await getConferences();
+        setConferenceList(data.data);
+      } catch (err) {
+        setConferenceError("Failed to load submissions.");
+      }
+      setConferenceLoading(false);
+    };
+    fetchConferences();
+  }, [refreshConferences]);
+
+  // Handle status update
+  const handleConferenceStatus = async (id: number, status: number) => {
+    try {
+      await updateConferenceStatus(id, status);
+      setRefreshConferences((prev) => !prev);
+    } catch (err) {
+      alert("Failed to update status.");
+    }
+  };
   return (
     <>
       <Layout headerStyle={2} footerStyle={1}>
@@ -304,7 +353,7 @@ export default function Home() {
               
           </div>
         </section>
-         <div id="conference-form" className="min-h-screen bg-white  px-4 sm:px-6 lg:px-8">
+         <div id="conference-form" className="min-h-screen bg-white px-4 sm:px-6 lg:px-8 sm:my-2 md:-mt-10 lg:-mt-20">
               <div className="max-w-6xl mx-auto">
                 <div className="bg-white rounded-xl shadow-xl overflow-hidden">
                   {/* Header */}
@@ -464,11 +513,102 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              <div className="max-w-6xl mx-auto my-6 bg-white px-2 sm:px-6 lg:px-8 py-6 rounded-xl shadow overflow-x-auto">
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-fixnix-lightpurple to-fixnix-darkpurple py-6 px-6 text-white">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white text-center">
+              Your Conference Submissions
+            </h2>
+          </div>
+          <div className="p-6">
+          {conferenceLoading ? (
+  <p>Loading submissions...</p>
+) : conferenceError ? (
+  <p className="text-red-500">{conferenceError}</p>
+) : (
+  <div className="overflow-x-auto">
+    <table className="min-w-[600px] w-full text-sm">
+      <thead>
+        <tr className="bg-gray-100">
+          <th className="p-2">Institution</th>
+          <th className="p-2">Topic</th>
+          <th className="p-2">Status</th>
+          <th className="p-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {conferenceList.map(conf => (
+          <tr key={conf.id} className="border-t">
+            <td className="p-2 whitespace-nowrap">{conf.institution}</td>
+            <td className="p-2 whitespace-nowrap">{conf.topic}</td>
+            <td className="p-2 whitespace-nowrap">
+              {conf.status === 0 ? "Pending" : conf.status === 1 ? "Approved" : "Rejected"}
+            </td>
+            <td className="p-2 whitespace-nowrap">
+              {conf.status === 0 && (
+                <button onClick={() => handleConferenceStatus(conf.id, 2)} className="bg-red-500 text-white px-2 py-1 rounded">
+                  Cancel
+                </button>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+          </div>
+        </div>
+      </div>
+
             </div>
 
-        
-
-       
+      {/* Conference Submissions List
+      <div className="max-w-6xl mx-auto mb-2 min-h-screen bg-white px-4 sm:px-6 lg:px-8 ">
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-fixnix-lightpurple to-fixnix-darkpurple py-6 px-6 text-white">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white text-center">
+              Your Conference Submissions
+            </h2>
+          </div>
+          <div className="p-6">
+          {conferenceLoading ? (
+  <p>Loading submissions...</p>
+) : conferenceError ? (
+  <p className="text-red-500">{conferenceError}</p>
+) : (
+  <table>
+    <thead>
+      <tr>
+        <th>Institution</th>
+        <th>Topic</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {conferenceList.map(conf => (
+        <tr key={conf.id}>
+          <td>{conf.institution}</td>
+          <td>{conf.topic}</td>
+          <td>
+            {conf.status === 0 ? "Pending" : conf.status === 1 ? "Approved" : "Rejected"}
+          </td>
+          <td>
+            {conf.status === 0 && (
+              <button onClick={() => handleConferenceStatus(conf.id, 2)} className="bg-red-500 text-white px-2 py-1">
+                Cancel
+              </button>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+          </div>
+        </div>
+      </div> */} 
       </Layout>
     </>
   );
