@@ -6,6 +6,7 @@ import Menu from "../Menu";
 import MobileMenu from "../MobileMenu";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 interface Header2Props {
   scroll: number;
@@ -26,8 +27,11 @@ const Header2: React.FC<Header2Props> = ({
 }: Header2Props) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, logout, user } = useAuth();
   const router = useRouter();
+  
+  // Debug logging to see what's happening
+  console.log("Header2 - isAuthenticated:", isAuthenticated, "user:", user);
 
   const handleScroll = () => {
     const currentScrollPosition = window.scrollY;
@@ -37,27 +41,23 @@ const Header2: React.FC<Header2Props> = ({
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    // Check login status
-    const checkLoginStatus = () => {
-      const loginStatus = localStorage.getItem("isLoggedIn") === "true";
-      setIsLoggedIn(loginStatus);
-    };
-
-    checkLoginStatus();
-    // Add event listener for storage changes
-    window.addEventListener("storage", checkLoginStatus);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("storage", checkLoginStatus);
     };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("returnUrl");
-    setIsLoggedIn(false);
+    logout();
     router.push("/");
+  };
+  const handleProfileClick = () => {
+    if (isAuthenticated) {
+      router.push("/profile");
+    } else {
+      alert("You have to log in first"); // ⚡ replace with toast if using a UI lib
+      router.push("/login"); // optional: redirect them to login
+    }
   };
 
   return (
@@ -67,42 +67,47 @@ const Header2: React.FC<Header2Props> = ({
         <div className="bg-fixnix-darkpurple py-2 lg:block hidden">
           <div className="container mx-auto flex items-center justify-between px-4">
             <p className="text-white text-base font-bold font-sans lg:ml-28 xl:-ml-4 2xl:-ml-[210px] ">
-              Kashmir Chapter
+              SSC | Kashmir Chapter
             </p>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/profile"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fas fa-user"></i>
-              </Link>
-              <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300 space-x-1">
-                {isLoggedIn ? (
-                  <button
-                    onClick={handleLogout}
+                         <button
+               onClick={handleProfileClick}
+               className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+             >
+               <i className="fas fa-user"></i>
+             </button>
+
+            {/* Login/Register OR Logout */}
+            <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300 space-x-1">
+              {isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
                     className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
                   >
-                    Logout
-                  </button>
-                ) : (
-                  <>
-                    <Link
-                      href="/awakening-soon"
-                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
-                    >
-                      Login
-                    </Link>
-                    <span>/</span>
-                    <Link
-                      href="/awakening-soon"
-                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
-                    >
-                      Register
-                    </Link>
-                  </>
-                )}
-              </div>
-              <div className="flex space-x-3">
+                    Login
+                  </Link>
+                  <span>/</span>
+                  <Link
+                    href="/Register"
+                    className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                  >
+                    Register
+                  </Link>
+                   </>
+                 )}
+                               </div>
+                
+              
+                
+               <div className="flex space-x-3">
               <Link
                 href="https://www.facebook.com"
                 target="_blank"
@@ -195,9 +200,9 @@ const Header2: React.FC<Header2Props> = ({
         3xl:text-[23px] 3xl:-mt-[75px] 3xl:ml-[210px] 3xl:pr-[380px]
         2xl:text-[13.5px] 2xl:-mt-[50px] 2xl:ml-[140px] 2xl:pr-[1200px]
         lg:text-[9.5px] lg:-mt-[45px] lg:ml-[100px] lg:pr-[380px]
-        md:text-[8.5px] md:-mt-[50px] md:ml-[100px] md:pr-[280px]
-        sm:text-[6px] sm:-mt-[60px] sm:ml-[60px] sm:pr-[70px]
-        smd:text-[6px] smd:-mt-[25px] smd:ml-[60px] smd:pr-[70px]
+        md:text-[8.5px] md:-mt-[70px] md:ml-[100px] md:pr-[280px]
+        sm:text-[6px] sm:-mt-[70px] sm:ml-[60px] sm:pr-[70px]
+        smd:text-[6px] smd:-mt-[55px] smd:ml-[60px] smd:pr-[70px]
         xs:text-[4.5px] xs:-mt-[55px] xs:ml-[52px]
         sxs:text-[5px] sxs:-mt-[20px] sxs:ml-[50px]
         2xs:text-[4px] 2xs:-mt-[22px] 2xs:ml-[50px]

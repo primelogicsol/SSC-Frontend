@@ -373,10 +373,10 @@ export default function Home() {
                 className="col-xl-4 col-lg-4 wow fadeInUp"
                 data-wow-delay="100ms"
               >
-                <div className=" relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
+                <div className=" relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
                 
                   <div className=" p-[22px] pb-[30px]">
-                    <h3 className=" text-[24px] text-white transition-all duration-[500ms]  font-semibold leading-[34px]">
+                    <h3 className=" text-[24px] text-white transition-all duration-500  font-semibold leading-[34px]">
                       A Sacred Purpose
                     </h3>
                     <p className=" mt-[15px] mb-[22px] text-white">
@@ -395,10 +395,10 @@ export default function Home() {
                 className="col-xl-4 col-lg-4 wow fadeInUp"
                 data-wow-delay="200ms"
               >
-                <div className="relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
+                <div className="relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
                  
                   <div className=" p-[22px] pb-[30px]">
-                    <h3 className=" text-[24px] text-white transition-all duration-[500ms] font-semibold leading-[34px]">
+                    <h3 className=" text-[24px] text-white transition-all duration-500 font-semibold leading-[34px]">
                       Platform for Transformation
                     </h3>
                     <p className=" mt-[15px] mb-[22px] text-white">
@@ -417,10 +417,10 @@ export default function Home() {
                 className="col-xl-4 col-lg-4 wow fadeInUp"
                 data-wow-delay="300ms"
               >
-                <div className="relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
+                <div className="relative block bg-fixnix-lightpurple shadow-light-purple mb-[30px] z-[2] transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-darkpurple">
                  
                   <div className="p-[22px] pb-[30px]">
-                    <h3 className=" text-[24px] text-white transition-all duration-[500ms]  font-semibold leading-[34px]">
+                    <h3 className=" text-[24px] text-white transition-all duration-500  font-semibold leading-[34px]">
                       Legacy of Enlightenment
                     </h3>
                     <p className="text-white mt-[15px] mb-[22px]">

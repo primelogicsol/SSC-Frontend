@@ -1,13 +1,30 @@
-import apiClient from "@/lib/apiClient"; // the Axios instance you created
+import apiClient from "../lib/apiClient";
+
+// Valid enum values according to backend schema
+export const PRESENTATION_TYPES = [
+  "ORAL",
+  "POSTER",
+  "WORKSHOP",
+  "PANEL_DICUSSION" // Note: Backend has typo "PANEL_DICUSSION"
+] as const;
+
+export const TOPIC_TYPES = [
+  "SUFI_PHILOSOPHY",
+  "QUANTUM_CONSCIOUSNESS",
+  "MYSTICAL_PRACTICES",
+  "HEALING_TRANSITIONS",
+  "INTER_APPROACHES",
+  "OTHER"
+] as const;
 
 // --------------------
 // Types
 // --------------------
 interface ConferencePayload {
-  institution?: string;
-  abstract: string;
-  presentationType: string;
-  topic: string;
+  institution?: string; // Optional in backend
+  abstract: string; // Required in backend
+  presentationType: typeof PRESENTATION_TYPES[number]; // Required in backend
+  topic: typeof TOPIC_TYPES[number]; // Required in backend
 }
 
 // --------------------
@@ -15,9 +32,12 @@ interface ConferencePayload {
 // --------------------
 export const createConference = async (payload: ConferencePayload) => {
   try {
-    const response = await apiClient.post("/conference", payload);
+    console.log("📤 Sending conference data:", payload);
+    // Backend route: POST /conference
+    const response = await apiClient.post("/user/conference", payload);
     return response.data;
   } catch (error: any) {
+    console.error("❌ Conference creation error:", error.response?.data);
     throw new Error(error.response?.data?.message || "Failed to create conference");
   }
 };
@@ -27,19 +47,21 @@ export const createConference = async (payload: ConferencePayload) => {
 // --------------------
 export const getConferences = async () => {
   try {
-    const response = await apiClient.get("/conference");
-    return response.data; // Make sure backend returns user-specific list
+    // Backend route: GET /conference
+    const response = await apiClient.get("/user/conference");
+    return response.data; // Ensure backend filters by logged-in user
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to fetch conferences");
   }
 };
 
 // --------------------
-// Update Conference Status (Admin or Moderator)
+// Update Conference Status
 // --------------------
 export const updateConferenceStatus = async (id: number, status: number) => {
   try {
-    const response = await apiClient.put(`/conference/${id}/status`, { status });
+    // Backend route: POST /conference/:id
+    const response = await apiClient.post(`/user/conference/${id}`, { status });
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to update status");

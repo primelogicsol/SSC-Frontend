@@ -10,8 +10,10 @@ import "swiper/css/pagination";
 import { createOrUpdateChecklist, getChecklist } from "@/hooks/sufiChecklist";
 import type { ChecklistItem } from "@/hooks/sufiChecklist";
 
+
 type ChecklistSection = {
   title: string;
+  backendSection: string; // ✅ match backend enums
   items: string[];
   completed: boolean[];
 };
@@ -20,6 +22,7 @@ export default function Home() {
   const [sections, setSections] = useState<ChecklistSection[]>([
     {
       title: "Initial Orientation",
+      backendSection: "INITIAL_ORIENTATION",
       items: [
         "Read introductory materials on Sufi principles and practices",
         "Learn basic terminology used in Sufi discourse",
@@ -31,6 +34,7 @@ export default function Home() {
     },
     {
       title: "Finding Guidance",
+      backendSection: "FINDING_GUIDANCE",
       items: [
         "Connect with respected teachers who understand both scientific and spiritual dimensions",
         "Research authentic lineages (silsilas) and their methods of transmission",
@@ -41,7 +45,8 @@ export default function Home() {
       completed: [false, false, false, false, false]
     },
     {
-      title: "Establishing Daily Practice",
+      title: "Practice and Discipline",
+      backendSection: "PRACTICE_AND_DISCIPLINE",
       items: [
         "Set up a consistent time and space for daily meditation/contemplation",
         "Learn a basic form of dhikr (remembrance practice)",
@@ -52,18 +57,8 @@ export default function Home() {
       completed: [false, false, false, false, false]
     },
     {
-      title: "Developing Self-Awareness",
-      items: [
-        "Begin systematic self-observation throughout daily activities",
-        "Identify habitual patterns in thoughts and reactions",
-        "Notice how different states of mind affect perception and experience",
-        "Practice mindful attention during routine activities",
-        "Observe the relationship between breath, emotions, and thoughts"
-      ],
-      completed: [false, false, false, false, false]
-    },
-    {
       title: "Community Engagement",
+      backendSection: "COMMUNITY_ENGAGEMENT",
       items: [
         "Attend group dhikr or meditation sessions",
         "Participate in study circles discussing texts or concepts",
@@ -74,7 +69,8 @@ export default function Home() {
       completed: [false, false, false, false, false]
     },
     {
-      title: "Knowledge Integration",
+      title: "Advanced Study",
+      backendSection: "ADVANCED_STUDY",
       items: [
         "Create connections between scientific understanding and spiritual concepts",
         "Notice parallels between scientific research and personal experience",
@@ -83,75 +79,27 @@ export default function Home() {
         "Begin developing a personalized framework that honors both approaches"
       ],
       completed: [false, false, false, false, false]
-    },
-    {
-      title: "Character Development",
-      items: [
-        "Identify key virtues to develop in daily life",
-        "Practice mindful communication and listening",
-        "Implement ethical principles in professional and personal contexts",
-        "Notice and work with challenging emotional patterns",
-        "Seek feedback from trusted others about behavioral patterns"
-      ],
-      completed: [false, false, false, false, false]
-    },
-    {
-      title: "Early Assessment",
-      items: [
-        "Review journal entries to identify patterns and changes",
-        "Notice shifts in perception, emotions, and thought patterns",
-        "Recognize challenges and obstacles that have emerged",
-        "Assess which practices resonate most strongly",
-        "Consult with teachers about appropriate next steps"
-      ],
-      completed: [false, false, false, false, false]
     }
   ]);
-
-  const [overallProgress, setOverallProgress] = useState(0);
-  const [sectionProgress, setSectionProgress] = useState<number[]>(Array(8).fill(0));
-  const [showProgressDetails, setShowProgressDetails] = useState(false);
-  const [apiLoading, setApiLoading] = useState(false);
-  const [apiError, setApiError] = useState("");
-
-  // Fetch checklist from API on mount
-  useEffect(() => {
-    const fetchChecklist = async () => {
-      setApiLoading(true);
-      setApiError("");
-      try {
-        const data = await getChecklist();
-        if (data && data.items) {
-          // Transform API data to match local state structure
-          const transformedSections = sections.map(section => ({
-            ...section,
-            completed: section.items.map(item => {
-              const apiItem = data.items.find((apiItem: any) => apiItem.title === item);
-              return apiItem?.status === "COMPLETED";
-            })
-          }));
-          setSections(transformedSections);
-        }
-      } catch (err) {
-        setApiError("Failed to load checklist");
-        console.error("Error fetching checklist:", err);
-      }
-      setApiLoading(false);
-    };
-    fetchChecklist();
-  }, []);
+  
+  const [sectionProgress, setSectionProgress] = useState<number[]>([]);
+  const [overallProgress, setOverallProgress] = useState<number>(0);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiLoading, setApiLoading] = useState(false);  
+const [showProgressDetails, setShowProgressDetails] = useState(false);
+  
 
   // Save checklist to API
   const saveChecklist = async (newSections: ChecklistSection[]) => {
     try {
-      const items = newSections.flatMap((section, sectionIndex) =>
-        section.items.map((item, itemIndex) => ({
-          section: section.title.toUpperCase().replace(/\s+/g, '_') as any,
+      const items = newSections.flatMap(section =>
+        section.items.map((item, idx) => ({
+          section: section.backendSection, // ✅ use backend enums
           title: item,
-          status: section.completed[itemIndex] ? "COMPLETED" : "PENDING"
+          status: section.completed[idx] ? "COMPLETED" : "PENDING"
         }))
       );
-      
+
       await createOrUpdateChecklist({
         progress: overallProgress,
         items: items as ChecklistItem[]
@@ -162,6 +110,7 @@ export default function Home() {
     }
   };
 
+  // Toggle an item
   const toggleItem = async (sectionIndex: number, itemIndex: number) => {
     const newSections = [...sections];
     newSections[sectionIndex].completed[itemIndex] = !newSections[sectionIndex].completed[itemIndex];
@@ -169,6 +118,7 @@ export default function Home() {
     await saveChecklist(newSections);
   };
 
+  // Reset all
   const resetAll = async () => {
     const newSections = sections.map(section => ({
       ...section,
@@ -178,14 +128,15 @@ export default function Home() {
     try {
       await createOrUpdateChecklist({
         progress: 0,
-        resetAll: true,
-        items: []
-      });
-    } catch (err) {
+        items: [],
+        resetAll: true // ✅ allowed now
+      } as any);
+    } catch {
       setApiError("Failed to reset checklist");
     }
   };
 
+  // Complete all
   const completeAll = async () => {
     const newSections = sections.map(section => ({
       ...section,
@@ -195,29 +146,24 @@ export default function Home() {
     try {
       await createOrUpdateChecklist({
         progress: 100,
-        completeAll: true,
-        items: []
-      });
-    } catch (err) {
+        items: [],
+        completeAll: true // ✅ allowed now
+      } as any);
+    } catch {
       setApiError("Failed to complete checklist");
     }
   };
 
+  // Progress calculation
   useEffect(() => {
-    // Calculate progress for each section
-    const newSectionProgress = sections.map(section => {
-      const completedCount = section.completed.filter(Boolean).length;
-      return (completedCount / section.items.length) * 100;
-    });
-    setSectionProgress(newSectionProgress);
-
-    // Calculate overall progress
-    const totalItems = sections.reduce((total, section) => total + section.items.length, 0);
+    const totalItems = sections.reduce((t, s) => t + s.items.length, 0);
     const totalCompleted = sections.reduce(
-      (total, section) => total + section.completed.filter(Boolean).length, 0
+      (t, s) => t + s.completed.filter(Boolean).length,
+      0
     );
-    setOverallProgress((totalCompleted / totalItems) * 100);
+    setOverallProgress(totalItems > 0 ? (totalCompleted / totalItems) * 100 : 0);
   }, [sections]);
+  
 
   const getJourneyStatus = () => {
     if (overallProgress <= 25) return "Threshold of the Path";
@@ -238,7 +184,7 @@ export default function Home() {
     }
   };
 
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const handleOnClick = (index: SetStateAction<number>) => {
     setActiveIndex(index);
   };

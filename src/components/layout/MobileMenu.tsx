@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 interface MobileMenuProps {
   isSidebar: boolean;
@@ -20,29 +21,15 @@ const MobileMenu = ({
     key: "",
     subMenuKey: "",
   });
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Check login status
-    const checkLoginStatus = () => {
-      const loginStatus = localStorage.getItem("isLoggedIn") === "true";
-      setIsLoggedIn(loginStatus);
-    };
-
-    checkLoginStatus();
-    // Add event listener for storage changes
-    window.addEventListener("storage", checkLoginStatus);
-
-    return () => {
-      window.removeEventListener("storage", checkLoginStatus);
-    };
+    // Mobile menu specific logic can go here if needed
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("returnUrl");
-    setIsLoggedIn(false);
+    logout();
     handleMobileMenu();
     router.push("/");
   };
@@ -642,22 +629,28 @@ const MobileMenu = ({
          {/* Contact */}
 <ul className="mobile-nav__contact list-unstyled space-y-3">
 <li className="flex items-center text-sm text-dark">
-    {isLoggedIn ? (
-      <button
-        onClick={handleLogout}
-        className="text-white flex items-center"
-      >
-        <i className="fa fa-sign-out-alt text-white bg-lightpurple p-2 rounded-full mr-2"></i>
-        Logout
-      </button>
+    {isAuthenticated ? (
+      <>
+        <Link href="/profile" className="text-white flex items-center mr-4">
+          <i className="fa fa-user text-white bg-lightpurple p-2 rounded-full mr-2"></i>
+          Profile
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="text-white flex items-center"
+        >
+          <i className="fa fa-sign-out-alt text-white bg-lightpurple p-2 rounded-full mr-2"></i>
+          Logout
+        </button>
+      </>
     ) : (
       <>
         <i className="fa fa-user-circle text-white bg-lightpurple p-2 rounded-full mr-2"></i>
-        <Link href="/awakening-soon" className="text-white">
+        <Link href="/login" className="text-white">
           Login
         </Link>
         <span className="mx-2 text-white">/</span>
-        <Link href="/awakening-soon" className="text-white">
+        <Link href="/Register" className="text-white">
           Register
         </Link>
       </>

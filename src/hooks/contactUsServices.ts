@@ -7,7 +7,7 @@ export interface ContactUsPayload {
 
 export const submitContactUs = async (data: ContactUsPayload) => {
   const token = localStorage.getItem("accessToken");
-  const res = await apiClient.post("/contact-us", data, {
+  const res = await apiClient.post("/user/contact-us", data, {
     headers: {
       Authorization: `Bearer ${token}`
     }

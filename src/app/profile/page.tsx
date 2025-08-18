@@ -9,9 +9,15 @@ export default function Profile() {
   const { user, fetchUserProfile, loading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [updating, setUpdating] = useState(false);
+  
+  // Debug logging to see the user object structure
+  console.log("Profile page - user object:", user);
+  
+  // Extract the actual profile data (handle nested structure)
+  const profileData = (user as any)?.profile || user || {};
 
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: user || {},
+    defaultValues: profileData || {},
   });
 
   const onSubmit = async (data: any) => {
@@ -56,7 +62,7 @@ export default function Profile() {
             <button
               onClick={() => {
                 setIsEditing(!isEditing);
-                reset(user);
+                reset(profileData);
               }}
               className="bg-fixnix-lightpurple text-white px-4 py-2 rounded"
             >
@@ -85,9 +91,9 @@ export default function Profile() {
             </form>
           ) : (
             <div>
-              {Object.entries(user).map(([key, value]) => (
+              {Object.entries(profileData).map(([key, value]) => (
                 <p key={key} className="border-b py-2">
-                  <strong>{key}:</strong> {value}
+                  <strong>{key}:</strong> {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                 </p>
               ))}
             </div>

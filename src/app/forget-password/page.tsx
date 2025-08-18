@@ -25,13 +25,15 @@ export default function ForgotPassword() {
     setLoading(true);
     setError(null);
     setSuccess(null);
+    
     try {
       await forgotPassword(data.email);
-      setSuccess("Reset link sent! Check your email.");
+      setSuccess("Password reset link sent! Check your email for the OTP.");
+      
+      // Redirect to OTP page with email parameter for password reset flow
       setTimeout(() => {
-        // After sending reset link, navigate to OTP screen
-        router.push("/otp");
-      }, 1000);
+        router.push(`/otp?email=${encodeURIComponent(data.email)}&flow=password-reset`);
+      }, 1500);
     } catch (err: any) {
       setError(err.message || "Failed to send reset link");
     } finally {
@@ -42,15 +44,30 @@ export default function ForgotPassword() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="mb-4 text-fixnix-darkpurple hover:underline text-sm"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-center text-2xl font-semibold text-fixnix-lightpurple mb-4">
           Forgot Password
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email Field */}
-          <label className="block">
+          <label className="relative block">
             <input
-              {...register("email", { required: "Email is required" })}
+              {...register("email", { 
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address"
+                }
+              })}
               type="email"
               placeholder="Enter your email"
               className="w-full p-2 border border-gray-300 rounded focus:border-blue-500 outline-none"
@@ -59,12 +76,13 @@ export default function ForgotPassword() {
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
           )}
+          
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
           <button
             type="submit"
-            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition"
+            className="w-full bg-fixnix-lightpurple text-white py-2 rounded hover:bg-fixnix-darkpurple transition disabled:opacity-50"
             disabled={loading}
           >
             {loading ? "Sending..." : "Send Reset Link"}

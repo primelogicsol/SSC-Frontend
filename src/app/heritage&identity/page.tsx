@@ -204,9 +204,9 @@ export default function Home() {
             {/* Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
               {/* Experience One Single */}
-              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
+              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
                 <div className="relative block">
-                  <span className="flex items-center justify-center w-[50px] sm:w-[60px] h-[50px] sm:h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-[500ms] transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
+                  <span className="flex items-center justify-center w-[50px] sm:w-[60px] h-[50px] sm:h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-500 transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
                     <i className="icon-service"></i>
                   </span>
                 </div>
@@ -214,7 +214,7 @@ export default function Home() {
                   <h3 className="text-[16px] sm:text-[20px] font-semibold leading-[24px] sm:leading-[30px] mb-[8px]">
                     <Link
                       href="services-details"
-                      className="text-fixnix-lightpurple transition-all duration-[500ms] group-hover:text-white"
+                      className="text-fixnix-lightpurple transition-all duration-500 group-hover:text-white"
                     >
                       Sufi Approach to Consciousness 
                     </Link>
@@ -226,9 +226,9 @@ export default function Home() {
               </div>
 
               {/* Experience Two Single */}
-              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
+              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
                 <div className="relative block">
-                  <span className="flex items-center justify-center w-[50px] sm:w-[60px] h-[50px] sm:h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-[500ms] transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
+                  <span className="flex items-center justify-center w-[50px] sm:w-[60px] h-[50px] sm:h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-500 transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
                     <i className="icon-service"></i>
                     <i className="icon-management"></i>
                   </span>
@@ -237,7 +237,7 @@ export default function Home() {
                   <h3 className="text-[16px] sm:text-[20px] font-semibold leading-[24px] sm:leading-[30px] mb-[8px]">
                     <Link
                       href="team"
-                      className="text-fixnix-lightpurple transition-all duration-[500ms] group-hover:text-white"
+                      className="text-fixnix-lightpurple transition-all duration-500 group-hover:text-white"
                     >
                       	Sacred Geometry in Islamic Art 
                     </Link>
@@ -249,9 +249,9 @@ export default function Home() {
               </div>
 
               {/* Experience Three Single */}
-              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-[500ms] hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
+              <div className="relative flex items-center bg-[#ffff]  p-[20px] sm:p-[26px] rounded-[6px] mb-[20px] lg:mb-[30px]  transition-transform duration-500 hover:-translate-y-[10px] group hover:bg-fixnix-lightpurple">
                 <div className="relative block">
-                  <span className="flex items-center justify-center w-[60px] h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-[500ms] transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
+                  <span className="flex items-center justify-center w-[60px] h-[60px] bg-fixnix-lightpurple text-white text-[30px] rounded-full transition-all duration-500 transform scale-[1] group-hover:bg-white group-hover:text-fixnix-lightpurple">
                     <i className="icon-headphones"></i>
                   </span>
                 </div>
@@ -259,7 +259,7 @@ export default function Home() {
                   <h3 className="text-[16px] sm:text-[20px] font-semibold leading-[24px] sm:leading-[30px] mb-[8px]">
                     <Link
                       href="contact"
-                      className="text-fixnix-lightpurple transition-all duration-[500ms] group-hover:text-white"
+                      className="text-fixnix-lightpurple transition-all duration-500 group-hover:text-white"
                     >
                       Healing Sciences and Herbal Medicine 
                     </Link>

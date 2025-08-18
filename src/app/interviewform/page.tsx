@@ -1,7 +1,7 @@
 "use client";
 import Layout from "@/components/layout/Layout";
 import React, { useState,useEffect, ChangeEvent, FormEvent } from "react";
-import { createInterview, getInterviews, cancelInterview, type Interview } from "@/hooks/interview";
+import { createInterview, getInterviews, cancelInterview, type Interview, AREAS_OF_IMPACT, SPIRITUAL_ORIENTATIONS, INTERVIEW_INTENTS, INTERVIEW_TIME_ZONES, type CreateInterviewPayload } from "@/hooks/interview";
 
 type InterviewFormState = {
   fullName: string;
@@ -217,6 +217,7 @@ const InterviewForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
@@ -228,18 +229,75 @@ const InterviewForm = () => {
         // Combine date and time into a single datetime string
         const scheduledAt = new Date(`${formState.interviewDate}T${formState.interviewTime}:00`);
         
-        const payload = {
-          profession: formState.profession,
-          institution: formState.affiliation,
-          website: formState.website || undefined,
-          areasOfImpact: formState.impactAreas,
-          spiritualOrientation: formState.tariqa,
-          publicVoice: formState.hasPublicVoice === "Yes",
-          interviewIntent: formState.interviewGoals,
-          interviewTimeZone: formState.tone,
-          scheduledAt: scheduledAt.toISOString(),
-          additionalNotes: formState.additionalNotes || undefined,
+        // Debug: Log the data being sent
+        console.log("Form state:", formState);
+        console.log("Scheduled At:", scheduledAt.toISOString());
+        
+        // Helper function to convert form values to backend enum values
+        const mapAreasOfImpact = (areas: string[]): typeof AREAS_OF_IMPACT[number][] => {
+          const mapping: { [key: string]: typeof AREAS_OF_IMPACT[number] } = {
+            "Spiritual Leadership": "SPRITUAL_LEADERSHIP",
+            "Transformative Education": "TRANS_EDUCATIVE", 
+            "Integrative Health": "INTEGRATIVE_HEALTH",
+            "Ethical Justice": "ETHICAL_JUSTICE",
+            "Scientific Consciousness": "SCIENTIFIC_CONCIOUSNESS",
+            "Cultural Expression": "CULTURAL_EXPRESSION",
+            "Eco Stewardship": "ECO_STEWARD",
+            "Unity Dialogue": "UNITY_DIALOGUE",
+            "Policy Reform": "POLICY_REFORM",
+            "Youth Empowerment": "YOUTH_EMPOWERMENT"
+          };
+          return areas.map(area => mapping[area]).filter(Boolean) as typeof AREAS_OF_IMPACT[number][];
         };
+
+        const mapSpiritualOrientation = (orientation: string): typeof SPIRITUAL_ORIENTATIONS[number] => {
+          const mapping: { [key: string]: typeof SPIRITUAL_ORIENTATIONS[number] } = {
+            "Sufi": "SUFI",
+            "Freethinker": "FREE_THINKER",
+            "Not Affiliated": "NOT_AFFLIATED"
+          };
+          return mapping[orientation];
+        };
+
+        const mapInterviewGoals = (goals: string[]): typeof INTERVIEW_INTENTS[number][] => {
+          const mapping: { [key: string]: typeof INTERVIEW_INTENTS[number] } = {
+            "Inspire Others": "INSPIRING_OTHERS",
+            "Share Knowledge": "SHARE_KNOWLEDGE",
+            "Network": "NETWORK",
+            "Promote Work": "PROMOTE_WORK",
+            "Document Experience": "DOCUMENT_EXPERIENCE",
+            "Spiritual Dialogue": "SPIRITUAL_DIALOGUE"
+          };
+          return goals.map(goal => mapping[goal]).filter(Boolean) as typeof INTERVIEW_INTENTS[number][];
+        };
+
+        const mapInterviewTone = (tone: string): typeof INTERVIEW_TIME_ZONES[number] => {
+          const mapping: { [key: string]: typeof INTERVIEW_TIME_ZONES[number] } = {
+            "Mystic": "MYSTIC",
+            "Scientific": "SCIENTIFIC", 
+            "Academic": "ACADEMIC"
+          };
+          return mapping[tone];
+        };
+
+        const payload: CreateInterviewPayload = {
+          // Required field
+          scheduledAt: scheduledAt.toISOString(),
+          
+          // Optional fields - only include if they have values
+          ...(formState.profession.trim() && { profession: formState.profession.trim() }),
+          ...(formState.affiliation.trim() && { institution: formState.affiliation.trim() }),
+          ...(formState.website.trim() && { website: formState.website.trim() }),
+          ...(formState.impactAreas.length > 0 && { areasOfImpact: mapAreasOfImpact(formState.impactAreas) }),
+          ...(formState.tariqa && { spiritualOrientation: mapSpiritualOrientation(formState.tariqa) }),
+          ...(formState.hasPublicVoice && { publicVoice: formState.hasPublicVoice === "Yes" }),
+          ...(formState.interviewGoals.length > 0 && { interviewIntent: mapInterviewGoals(formState.interviewGoals) }),
+          ...(formState.tone && { interviewTimeZone: mapInterviewTone(formState.tone) }),
+          ...(formState.additionalNotes.trim() && { additionalNotes: formState.additionalNotes.trim() }),
+        };
+        
+        // Debug: Log the final payload
+        console.log("Payload being sent:", payload);
         
         await createInterview(payload);
         setFormSubmitted(true);
@@ -250,9 +308,42 @@ const InterviewForm = () => {
         const interviews = await getInterviews();
         setExistingInterviews(interviews);
         
-      } catch (err) {
-        setApiError("Failed to book interview. Please try again.");
-        console.error("Error booking interview:", err);
+      } catch (err: any) {
+        // Better error handling
+        console.error("Full error object:", err);
+        console.error("Error response:", err.response?.data);
+        console.error("Error status:", err.response?.status);
+        console.error("Error details:", err.response?.data?.details);
+        
+        if (err.response?.status === 400) {
+          const errorData = err.response?.data;
+          let errorMessage = "Invalid data provided";
+          
+          // Check if backend provides specific validation errors
+          if (errorData?.details && Array.isArray(errorData.details)) {
+            const validationErrors = errorData.details
+              .map((detail: any) => {
+                if (detail.message) return detail.message;
+                if (detail.field && detail.error) return `${detail.field}: ${detail.error}`;
+                return JSON.stringify(detail);
+              })
+              .join(", ");
+            
+            errorMessage = `Validation errors: ${validationErrors}`;
+          } else if (errorData?.error) {
+            errorMessage = errorData.error;
+          } else if (errorData?.message) {
+            errorMessage = errorData.message;
+          }
+          
+          setApiError(`Bad Request: ${errorMessage}`);
+        } else if (err.response?.status === 401) {
+          setApiError("You need to be logged in to book an interview");
+        } else if (err.response?.status === 409) {
+          setApiError("You already have an interview scheduled for this time");
+        } else {
+          setApiError(err.response?.data?.message || err.message || "Failed to book interview. Please try again.");
+        }
       } finally {
         setLoading(false);
       }

@@ -286,7 +286,7 @@ export default function Footer() {
             Part of the Dr. Kumar Foundation USA, a global platform for Sufi healing and research and SufiPulse Studio, where sacred sound meets modern expression.
           </div>
           <div className="flex items-center justify-center gap-6">
-            <Image src="/assets/images/resources/drkumar-logo.png" alt="Dr. Kumar Foundation Logo" width={100} height={100} className="  " />
+            <Image src="/assets/images/resources/drkumar.png" alt="Dr. Kumar Foundation Logo" width={110} height={110} className="  " />
             <Image src="/assets/images/resources/sufipulse-logo.png" alt="SufiPulse Studio Logo" width={80} height={90} className="" />
           </div>
         </div>

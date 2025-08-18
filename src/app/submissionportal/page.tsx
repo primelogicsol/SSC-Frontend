@@ -6,7 +6,7 @@ import { Loader } from 'lucide-react';
 import Image from "next/image";
 import Banner from "@/components/sections/home3/Banner";
 import { SetStateAction, useState } from "react";
-import { createConference, getConferences, updateConferenceStatus } from "@/hooks/conference";
+import { createConference, getConferences, PRESENTATION_TYPES, TOPIC_TYPES, updateConferenceStatus } from "@/hooks/conference";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -81,63 +81,76 @@ export default function Home() {
     };
   
     // Handle form submission
-    const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-      
-      // Validate form
-      const newErrors: Record<string, string> = {};
-      
-      if (!formData.name.trim()) {
-        newErrors.name = 'Name is required';
+    const PRESENTATION_TYPES = ["ORAL", "POSTER", "WORKSHOP", "PANEL_DICUSSION"] as const;
+
+const TOPIC_TYPES = [
+  "SUFI_PHILOSOPHY",
+  "QUANTUM_CONSCIOUSNESS",
+  "MYSTICAL_PRACTICES",
+  "HEALING_TRANSITIONS",
+  "INTER_APPROACHES",
+  "OTHER"
+] as const;
+
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+
+  const newErrors: Record<string, string> = {};
+
+  if (!formData.abstract.trim()) {
+    newErrors.abstract = "Abstract is required";
+  }
+
+  if (!formData.presentationType) {
+    newErrors.presentationType = "Presentation type is required";
+  } else if (!PRESENTATION_TYPES.includes(formData.presentationType as any)) {
+    newErrors.presentationType = "Please select a valid presentation type";
+  }
+
+  if (!formData.topic) {
+    newErrors.topic = "Topic is required";
+  } else if (!TOPIC_TYPES.includes(formData.topic as any)) {
+    newErrors.topic = "Please select a valid topic";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length === 0) {
+    setIsSubmitting(true);
+    try {
+      // REPLACE THIS SECTION:
+      const payload: any = {
+        abstract: formData.abstract,
+        presentationType: formData.presentationType as typeof PRESENTATION_TYPES[number],
+        topic: formData.topic as typeof TOPIC_TYPES[number],
+      };
+
+      // Only add institution if it has a value
+      if (formData.institution.trim()) {
+        payload.institution = formData.institution.trim();
       }
-      
-      if (!formData.email.trim()) {
-        newErrors.email = 'Email is required';
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Email is invalid';
-      }
-      
-      if (!formData.abstract.trim()) {
-        newErrors.abstract = 'Abstract is required';
-      }
-      
-      if (!formData.presentationType) {
-        newErrors.presentationType = 'Presentation type is required';
-      }
-      
-      if (!formData.topic) {
-        newErrors.topic = 'Topic is required';
-      }
-      
-      setErrors(newErrors);
-      
-      // If no errors, submit form
-      if (Object.keys(newErrors).length === 0) {
-        setIsSubmitting(true);
-        try {
-          await createConference({
-            institution: formData.institution,
-            abstract: formData.abstract,
-            presentationType: formData.presentationType.toUpperCase(),
-            topic: formData.topic.replace("-", "_").toUpperCase()
-          });
-          // Optionally show a success message
-          setFormData({
-            name: '',
-            email: '',
-            institution: '',
-            abstract: '',
-            presentationType: '',
-            topic: ''
-          });
-          // Optionally show a success message here
-        } catch (error) {
-          // Optionally handle error
-          setErrors({ general: 'Submission failed. Please try again.' });
-        }
-          setIsSubmitting(false);
-      }
-    };
+
+      await createConference(payload);
+      // END OF REPLACEMENT SECTION
+
+      // reset form
+      setFormData({
+        name: "",
+        email: "",
+        institution: "",
+        abstract: "",
+        presentationType: "",
+        topic: "",
+      });
+
+      alert("Conference submission successful!");
+    } catch (error) {
+      console.error("Conference submission error:", error);
+      setErrors({ general: "Submission failed. Please try again." });
+    }
+    setIsSubmitting(false);
+  }
+};
   
   
   const [conferenceList, setConferenceList] = useState<any[]>([]);
@@ -187,11 +200,11 @@ export default function Home() {
                         <span className="absolute top-[10px] left-[-50px] w-[35px] sm:w-[45px] h-[2px] bg-fixnix-lightpurple"></span>
                       </span>
                       <h2 className="text-2xl uppercase sm:text-3xl md:text-4xl font-semibold mt-4 mb-6 leading-snug sm:leading-tight">
-                      Sufi Science Center Symposium 2025
+                      Sufi Science Center Symposium 2026-27
                       </h2>
                       <p className="text-base sm:text-lg text-gray-700">
                       
-                      The Sufi Science Symposium 2025 invites researchers, scholars, and practitioners to submit papers for presentation at this groundbreaking event. This symposium aims to foster dialogue on the convergence of Sufism, scientific inquiry, and technological advancements, exploring how spiritual wisdom can inform modern knowledge systems.
+                      The Sufi Science Symposium 2026 invites researchers, scholars, and practitioners to submit papers for presentation at this groundbreaking event. This symposium aims to foster dialogue on the convergence of Sufism, scientific inquiry, and technological advancements, exploring how spiritual wisdom can inform modern knowledge systems.
                       </p>
                     </div>
                   </div>
@@ -209,7 +222,7 @@ export default function Home() {
                   <div className=" pt-[123px] px-10 relative ">
                     <div className="mb-[24px] ">
                     <h4 className="text-[30px] font-semibold leading-[40px]  mb-[1px]">
-                    Symposium 2025 - Themes and Topics
+                    Symposium 2026-27 - Themes and Topics
                       </h4>
                       
                       <p>
@@ -338,7 +351,7 @@ export default function Home() {
                           </p>
                           <p className="pt-3 font-bold">
                           
-                          For inquiries, please contact [Insert Email].
+                          For inquiries, please contact info@sufisciencecenter.info
                           </p>
                           <p className="pt-3 font-bold">Join us in this transformative dialogue where mysticism meets modern science!</p>
                           
@@ -459,10 +472,10 @@ export default function Home() {
                                 className="w-full py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                               >
                                 <option value="">Select a presentation type</option>
-                                <option value="oral">Oral Presentation</option>
-                                <option value="poster">Poster Presentation</option>
-                                <option value="workshop">Workshop</option>
-                                <option value="panel">Panel Discussion</option>
+                                <option value="ORAL">Oral Presentation</option>
+                                <option value="POSTER">Poster Presentation</option>
+                                <option value="WORKSHOP">Workshop</option>
+                                <option value="PANEL_DICUSSION">Panel Discussion</option>
                               </select>
                               {errors.presentationType && <p className="mt-1 text-sm text-red-600">{errors.presentationType}</p>}
                             </div>
@@ -479,12 +492,12 @@ export default function Home() {
                                 className="w-full py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                               >
                                 <option value="">Select a topic</option>
-                                <option value="sufi-philosophy">Sufi Philosophy</option>
-                                <option value="quantum-consciousness">Quantum Consciousness</option>
-                                <option value="mystical-practices">Mystical Practices</option>
-                                <option value="healing-traditions">Healing Traditions</option>
-                                <option value="interdisciplinary">Interdisciplinary Approaches</option>
-                                <option value="other">Other</option>
+                                <option value="SUFI_PHILOSOPHY">Sufi Philosophy</option>
+                                <option value="QUANTUM_CONSCIOUSNESS">Quantum Consciousness</option>
+                                <option value="MYSTICAL_PRACTICES">Mystical Practices</option>
+                                <option value="HEALING_TRANSITIONS">Healing Traditions</option>
+                                <option value="INTER_APPROACHES">Interdisciplinary Approaches</option>
+                                <option value="OTHER">Other</option>
                               </select>
                               {errors.topic && <p className="mt-1 text-sm text-red-600">{errors.topic}</p>}
                             </div>

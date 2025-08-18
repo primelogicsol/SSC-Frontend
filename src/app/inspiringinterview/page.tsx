@@ -3,6 +3,9 @@ import Banner from "@/components/sections/home3/Banner";
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 const ResearchSlides=[
   {
     subTitle: "DIGITAL ACADEMY",

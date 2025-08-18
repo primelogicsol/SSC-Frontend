@@ -75,17 +75,17 @@ export default function Home() {
             data-wow-duration="2500ms"
           >
             <Image
-              src="/images/resources/about-1-1.jpg"
+              src="/assets/images/resources/waystogive.png"
               alt="About Image"
-              width={600}
-              height={600}
+              width={400}
+              height={400}
               className="w-full h-auto max-h-[600px] object-cover rounded-lg transition-all duration-500 delay-100 group-hover:scale-105"
             />
-            <div className="absolute bottom-0 left-0 right-0 md:right-[168px] bg-[color:var(--fixnix-lightpuple)] p-6 sm:p-8 md:p-12 rounded-bl-lg rounded-tr-lg z-[3]">
-              <p className="text-base md:text-lg font-semibold text-white pb-2 uppercase">
+            <div className="absolute bottom-0 left-0 right-0  bg-[color:var(--fixnix-lightpuple)] p-6 sm:p-8 md:p-4 rounded-bl-lg rounded-tr-lg z-[3]">
+              <p className="text-base md:text-md font-semibold text-white pb-1 uppercase">
                 Words of Rumi:
               </p>
-              <h3 className="text-xl md:text-3xl font-semibold text-white leading-snug md:leading-10">
+              <h3 className="text-lg md:text-xl font-semibold text-white leading-snug ">
                 "When you let go of what you are, you become what you might be."
               </h3>
             </div>

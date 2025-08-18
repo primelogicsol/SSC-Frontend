@@ -4,6 +4,17 @@ export enum ChecklistItemStatus {
   IN_PROGRESS = "IN_PROGRESS"
 }
 
+export interface ChecklistItem {
+  id?: string;
+  title: string;
+  description?: string;
+  status: ChecklistItemStatus;
+  section: ChecklistSection;
+  order?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export enum ChecklistSection {
   INITIAL_ORIENTATION = "INITIAL_ORIENTATION",
   FINDING_GUIDANCE = "FINDING_GUIDANCE",

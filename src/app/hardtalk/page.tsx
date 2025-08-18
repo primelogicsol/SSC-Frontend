@@ -2,6 +2,9 @@ import Banner from "@/components/sections/home3/Banner";
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 const ResearchSlides=[
   {
     subTitle:  "DIGITAL ACADEMY",
@@ -104,19 +107,16 @@ Are you prepared to face the raw, unapologetic conversations that redefine spiri
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Sidebar */}
+            
             <div className="md:col-span-1 space-y-6">
               <div className="p-4 border rounded-lg  bg-fixnix-lightpurple shadow-sm relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="w-full p-2 pr-10  border rounded-lg bg-fixnix-lightpurple "
-                />
-                <i className="fa fa-search absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-100"></i>
+              <h3 className="font-semibold text-center text-xl mb-2 text-white">Categories</h3>
               </div>
+
 
               
               <div className="p-4 border rounded-lg bg-gray-100 shadow-sm">
-                <h3 className="font-semibold mb-2">Categories</h3>
+                
                 <ul className="space-y-2">
                   <li >
                     <Link

@@ -1,25 +1,39 @@
-import apiClient from "@/lib/apiClient"; // make sure your apiClient is correctly configured
-import { ChecklistItemStatus, ChecklistSection } from "@/types/sufiChecklist"; // adjust the path to your enums or types
+import apiClient from "../lib/apiClient";
 
-export type ChecklistItem = {
-  section: ChecklistSection;
+// Valid enum values according to backend schema
+export const CHECKLIST_SECTIONS = [
+  "INITIAL_ORIENTATION",
+  "FINDING_GUIDANCE",
+  "PRACTICE_AND_DISCIPLINE",
+  "COMMUNITY_ENGAGEMENT",
+  "ADVANCED_STUDY"
+] as const;
+
+export const CHECKLIST_ITEM_STATUSES = [
+  "PENDING",
+  "COMPLETED",
+  "SKIPPED"
+] as const;
+
+export interface ChecklistItem {
+  section: typeof CHECKLIST_SECTIONS[number];
   title: string;
-  status?: ChecklistItemStatus;
-};
+  status: typeof CHECKLIST_ITEM_STATUSES[number];
+}
 
-export type SufiChecklistPayload = {
-  progress: number;
-  completeAll?: boolean;
-  resetAll?: boolean;
+export interface CreateOrUpdateChecklistPayload {
+  progress: number; // 0-100, required in backend
   items: ChecklistItem[];
-};
+}
 
-export const createOrUpdateChecklist = async (data: SufiChecklistPayload) => {
-  const response = await apiClient.post("/sufi-checklist", data);
+// Create or update checklist
+export const createOrUpdateChecklist = async (data: CreateOrUpdateChecklistPayload) => {
+  const response = await apiClient.post("/user/sufi-checklist", data);
   return response.data;
 };
 
+// Get checklist
 export const getChecklist = async () => {
-  const response = await apiClient.get("/sufi-checklist");
+  const response = await apiClient.get("/user/sufi-checklist");
   return response.data;
 };

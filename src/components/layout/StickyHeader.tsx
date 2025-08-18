@@ -31,8 +31,8 @@ export default function StickyHeader() {
           <Image
             src="/assets/images/resources/logo-4.png"
             alt="Logo"
-            width={60}
-            height={60}
+            width={50}
+            height={50}
             className="transition-all duration-300"
           />
         </Link>

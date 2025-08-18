@@ -35,40 +35,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // ✅ Axios Interceptor for Token Refresh
-  useEffect(() => {
-    const interceptor = apiClient.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-          try {
-            const newAccessToken = await refreshAccessToken();
-            if (newAccessToken) {
-              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-              return apiClient(originalRequest);
-            }
-          } catch (err) {
-            logout();
-            router.push("/login");
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-    return () => {
-      apiClient.interceptors.response.eject(interceptor);
-    };
-  }, []);
-
   // ✅ Fetch User Profile
   const fetchUserProfile = async () => {
     try {
+      console.log("Fetching user profile...");
       const profile = await getUserProfile();
-      setUser(profile);
-    } catch {
-      logout();
+      console.log("Profile fetched:", profile);
+      if (profile) {
+        setUser(profile);
+        console.log("User state updated successfully");
+      } else {
+        console.warn("Profile is null or undefined");
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+      // Only set user to null if we're sure there's no valid token
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        setUser(null);
+      }
+      throw error; // Re-throw to let the caller handle it
     }
   };
 
@@ -88,13 +75,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!refreshToken) return null;
 
     try {
-      const res = await apiClient.get("/refresh-access-token", {
+      const res = await apiClient.get("/user/refresh-access-token", {
         headers: { Authorization: `Bearer ${refreshToken}` },
       });
-      const newAccessToken = res.data.accessToken;
-      localStorage.setItem("accessToken", newAccessToken);
-      return newAccessToken;
-    } catch {
+      
+      // Handle the response structure properly
+      const newAccessToken = res.data?.data?.accessToken || res.data?.accessToken;
+      if (newAccessToken) {
+        localStorage.setItem("accessToken", newAccessToken);
+        return newAccessToken;
+      }
+      return null;
+    } catch (error) {
+      console.error("Token refresh failed:", error);
       return null;
     }
   };
@@ -104,12 +97,53 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       const data = await loginApi(email, password);
-      if (data.accessToken && data.refreshToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        await fetchUserProfile();
-        await fetchMembership();
+      console.log("Login response:", data);
+      
+      // Check if this is a verification response (user not verified)
+      if (data.message && data.message.includes("Verification link is sent to you email") && !data.data) {
+        // User needs to verify their account first
+        throw new Error("Please verify your email address first. A verification link has been sent to your email.");
       }
+      
+      // Check if the response has the expected structure with tokens
+      const accessToken = data.data?.accessToken;
+      const refreshToken = data.data?.refreshToken;
+      
+      console.log("Extracted tokens:", { accessToken: !!accessToken, refreshToken: !!refreshToken });
+      
+      if (accessToken && refreshToken) {
+        // Set tokens first
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        console.log("Tokens saved, fetching profile...");
+        
+        // Add a small delay to ensure tokens are saved
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Fetch profile and membership
+        try {
+          await fetchUserProfile();
+          console.log("Profile fetched successfully");
+        } catch (profileError) {
+          console.error("Profile fetch failed:", profileError);
+        }
+        
+        try {
+          await fetchMembership();
+          console.log("Membership fetched successfully");
+        } catch (membershipError) {
+          console.error("Membership fetch failed:", membershipError);
+        }
+        
+        console.log("Login process completed");
+      } else {
+        console.error("No access token or refresh token found in response");
+        console.log("Response structure:", JSON.stringify(data, null, 2));
+        throw new Error("Login failed. Please try again or contact support.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error; // Re-throw to let the login component handle it
     } finally {
       setLoading(false);
     }
@@ -120,12 +154,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       const data = await googleAuth(email, fullName);
-      if (data.accessToken && data.refreshToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+      if (data.data?.accessToken && data.data?.refreshToken) {
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("refreshToken", data.data.refreshToken);
         await fetchUserProfile();
         await fetchMembership();
+      } else {
+        throw new Error("Google login failed - missing tokens");
       }
+    } catch (error) {
+      console.error("Google login error:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -137,6 +176,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("refreshToken");
     setUser(null);
     setMembership(null);
+    // Redirect to login page
+    router.push("/login");
   };
 
   return (
@@ -144,7 +185,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         user,
         membership,
-        isAuthenticated: !!user,
+        isAuthenticated: !!user && !!localStorage.getItem("accessToken"),
         loading,
         login,
         googleLogin,

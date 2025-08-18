@@ -6,13 +6,18 @@ import {
   createMembership,
   updateMembership,
   deleteMembership,
+  ROLE_TYPES,
+  DONOR_TYPES,
+  VOLUNTEER_SUPPORT_TYPES,
+  VOLUNTEER_MODE_TYPES,
+  COLLABORATOR_INTENT_TYPES,
 } from "@/hooks/membershipServices";
 import { useAuth } from "@/context/AuthContext";
 
 interface MembershipFormData {
   phone: string;
   location: string;
-  roles: string[];
+  roles: string; // ✅ Change from string[] to string (single role)
   volunteerAreas?: string[];
   volunteerExperience?: string;
   volunteerTime?: string;
@@ -20,12 +25,13 @@ interface MembershipFormData {
   donorType?: string[];
   anonymous?: boolean;
   donorUpdates?: boolean;
-  collabType?: string[];
+  collabType?: string[]; // ✅ Keep this for form data
   collabOrg?: string;
   collabVision?: string;
   additional?: string;
   consent: boolean;
   communication?: boolean;
+
 }
 
 export default function MembershipForm() {
@@ -39,28 +45,31 @@ export default function MembershipForm() {
     formState: { errors, isSubmitting },
   } = useForm<MembershipFormData>({
     defaultValues: {
-      roles: [],
+      roles: "", // ✅ Initialize as empty string, not array
       anonymous: false,
       communication: false,
       consent: false,
+      volunteerAreas: [], // Keep arrays for multi-select fields
+      donorType: [],
+      collabType: [],
     },
   });
 
-  const roles = watch("roles") || [];
+  const roles = watch("roles") || "";
 
   // ✅ Prefill form if membership exists
   useEffect(() => {
     if (membership) {
       setValue("phone", membership.phone);
       setValue("location", membership.country);
-      setValue("roles", [membership.role]);
+      setValue("roles", membership.role[0]); // ✅ Take first role as string
       setValue("volunteerAreas", membership.volunteerSupport || []);
       setValue("volunteerExperience", membership.previousVolunteerExp || "");
       setValue("volunteerTime", membership.monthlyTime || "");
       setValue("volunteerMode", membership.volunteerMode || "");
       setValue("donorType", membership.donorType || []);
       setValue("additional", membership.additionalInfo || "");
-      setValue("collabType", membership.collabType || []);
+      setValue("collabType", membership.collaboratorIntent || []); // ✅ Map to form field
       setValue("collabOrg", membership.organization || "");
       setValue("collabVision", membership.intentCreation || "");
     }
@@ -69,30 +78,30 @@ export default function MembershipForm() {
   // ✅ Handle Submit (Create or Update)
   const onSubmit: SubmitHandler<MembershipFormData> = async (data) => {
     try {
-    const payload = {
+      const payload = {
         phone: data.phone,
-      country: data.location,
+        country: data.location,
         agreedToPrinciples: data.consent,
         consentedToUpdates: !!data.communication,
         additionalInfo: data.additional,
-      donorType: data.donorType || [],
-      volunteerSupport: data.volunteerAreas || [],
-        role: data.roles[0],
+        donorType: data.donorType as typeof DONOR_TYPES[number][] || [],
+        volunteerSupport: data.volunteerAreas as typeof VOLUNTEER_SUPPORT_TYPES[number][] || [],
+        role: [data.roles] as typeof ROLE_TYPES[number][], // ✅ Convert single string to array
         previousVolunteerExp: data.volunteerExperience || "",
         monthlyTime: data.volunteerTime || "",
-        volunteerMode: data.volunteerMode || "",
+        volunteerMode: data.volunteerMode as typeof VOLUNTEER_MODE_TYPES[number] || undefined,
         organization: data.collabOrg || "",
         intentCreation: data.collabVision || "",
-        collabType: data.collabType || [],
-    };
-
+        collaboratorIntent: data.collabType as typeof COLLABORATOR_INTENT_TYPES[number][] || [], // ✅ Map collabType to collaboratorIntent
+      };
+  
       let response;
       if (membership) {
         response = await updateMembership(payload);
       } else {
         response = await createMembership(payload);
       }
-
+  
       setMembership(response.data);
       alert("Membership saved successfully!");
     } catch (err) {
@@ -150,36 +159,42 @@ export default function MembershipForm() {
                 </div>
 
           {/* Membership Roles */}
-                <div>
-            <label className="block text-sm font-semibold text-fixnix-lightpurple mb-2">Choose Your Membership Role *</label>
-            <div className="space-y-2 text-gray-700">
-              {["volunteer", "donor", "collaborator"].map((role) => (
-                <label key={role} className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    value={role}
-                    {...register("roles", { required: "Select a role" })}
-                  />
-                  <span className="capitalize">{role}</span>
-                </label>
-              ))}
-            </div>
-            {errors.roles && <p className="text-red-500 text-sm">{errors.roles.message}</p>}
-          </div>
+          <div>
+  <label className="block text-sm font-semibold text-fixnix-lightpurple mb-2">Choose Your Membership Role *</label>
+  <div className="space-y-2 text-gray-700">
+    {["volunteer", "donor", "collaborator"].map((role) => (
+      <label key={role} className="flex items-center space-x-2">
+        <input
+          type="radio"
+          value={role}
+          {...register("roles", { required: "Select a role" })} // ✅ This will now be a single string
+        />
+        <span className="capitalize">{role}</span>
+      </label>
+    ))}
+  </div>
+  {errors.roles && <p className="text-red-500 text-sm">{errors.roles.message}</p>}
+</div>
 
           {/* Volunteer Section */}
-          {roles.includes("volunteer") && (
+          {roles === "volunteer" && (
             <div className="space-y-4 text-gray-700 border-t pt-6">
               <h3 className="text-lg font-semibold">Volunteer Details</h3>
               <label className="block text-sm">Areas of Support:</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {["Spiritual Programs", "Community Outreach", "Cultural Preservation", "Digital Media", "Craftsmanship"].map((item) => (
-                  <label key={item} className="flex items-center space-x-2">
-                    <input type="checkbox" value={item} {...register("volunteerAreas")} />
-                    <span>{item}</span>
-                  </label>
-                ))}
-              </div>
+              <div className="flex space-x-4">
+              {[
+    { value: "spiritualProgram", label: "Spiritual Programs" },
+    { value: "communityOutreach", label: "Community Outreach" },
+    { value: "culturalPreservation", label: "Cultural Preservation" },
+    { value: "digitalMedia", label: "Digital Media" },
+    { value: "craftsmanship", label: "Craftsmanship" }
+  ].map((item) => (
+    <label key={item.value} className="flex items-center space-x-2">
+      <input type="checkbox" value={item.value} {...register("volunteerAreas")} />
+      <span>{item.label}</span>
+    </label>
+  ))}
+</div>
               <input
                 {...register("volunteerExperience")}
                 placeholder="Previous volunteering experience"
@@ -203,16 +218,22 @@ export default function MembershipForm() {
               )}
 
           {/* Donor Section */}
-          {roles.includes("donor") && (
+          {roles === "donor" && (
             <div className="space-y-4 text-gray-700 border-t pt-6">
               <h3 className="text-lg font-semibold">Donor Preferences</h3>
               <label className="block text-sm">Type of support:</label>
-              {["One-time", "Monthly", "Sponsor", "Tools/Materials"].map((item) => (
-                <label key={item} className="flex items-center space-x-2">
-                  <input type="checkbox" value={item} {...register("donorType")} />
-                  <span>{item}</span>
-                </label>
-              ))}
+              {[
+  { value: "onetime", label: "One-time" },
+  { value: "monthly", label: "Monthly" },
+  { value: "sponsor", label: "Sponsor" },
+  { value: "tools", label: "Tools/Materials" }
+].map((item) => (
+  <label key={item.value} className="flex items-center space-x-2">
+    <input type="checkbox" value={item.value} {...register("donorType")} />
+    <span>{item.label}</span>
+  </label>
+))}
+
               <label className="flex items-center space-x-2">
                 <input type="checkbox" {...register("anonymous")} />
                 <span>Remain Anonymous</span>
@@ -225,16 +246,21 @@ export default function MembershipForm() {
           )}
 
           {/* Collaborator Section */}
-          {roles.includes("collaborator") && (
+          {roles === "collaborator" && (
             <div className="space-y-4 text-gray-700 border-t pt-6">
               <h3 className="text-lg font-semibold">Collaborator Intent</h3>
               <label className="block text-sm">Nature of collaboration:</label>
-              {["Institutional", "Cultural", "Interfaith Dialogue", "Program Co-creation"].map((item) => (
-                <label key={item} className="flex items-center space-x-2">
-                  <input type="checkbox" value={item} {...register("collabType")} />
-                  <span>{item}</span>
-                </label>
-              ))}
+              {[
+  { value: "institutional", label: "Institutional" },
+  { value: "cultural", label: "Cultural" },
+  { value: "interfaithDialogue", label: "Interfaith Dialogue" },
+  { value: "programCorrelation", label: "Program Co-creation" }
+].map((item) => (
+  <label key={item.value} className="flex items-center space-x-2">
+    <input type="checkbox" value={item.value} {...register("collabType")} />
+    <span>{item.label}</span>
+  </label>
+))}
               <input
                 {...register("collabOrg")}
                 placeholder="Organization (if applicable)"
