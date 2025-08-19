@@ -6,10 +6,12 @@ import { Loader } from 'lucide-react';
 import Image from "next/image";
 import Banner from "@/components/sections/home3/Banner";
 import { SetStateAction, useState } from "react";
-import { createConference, getConferences, PRESENTATION_TYPES, TOPIC_TYPES, updateConferenceStatus } from "@/hooks/conference";
+import { createConference, getConferences, PRESENTATION_TYPES, TOPIC_TYPES, updateConferenceStatus, ConferencePayload } from "@/hooks/conference";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
+
 const CommunitySlides = [
   {
     subTitle: "Connect, Engage, Celebrate, Learn, Grow",
@@ -52,111 +54,127 @@ export default function Home() {
   const handleOnClick = (index: SetStateAction<number>) => {
     setActiveIndex(index);
   };
+
+  // Form state
   const [formData, setFormData] = useState({
-      name: '',
-      email: '',
-      institution: '',
-      abstract: '',
-      presentationType: '',
-      topic: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-  
-    // Handle form input changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-      
-      // Clear error when field is changed
-      if (errors[name]) {
-        setErrors(prev => ({
-          ...prev,
-          [name]: ''
-        }));
-      }
-    };
-  
-    // Handle form submission
-    const PRESENTATION_TYPES = ["ORAL", "POSTER", "WORKSHOP", "PANEL_DICUSSION"] as const;
+    name: '',
+    email: '',
+    institution: '',
+    abstract: '',
+    presentationType: '',
+    topic: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-const TOPIC_TYPES = [
-  "SUFI_PHILOSOPHY",
-  "QUANTUM_CONSCIOUSNESS",
-  "MYSTICAL_PRACTICES",
-  "HEALING_TRANSITIONS",
-  "INTER_APPROACHES",
-  "OTHER"
-] as const;
-
-const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault();
-
-  const newErrors: Record<string, string> = {};
-
-  if (!formData.abstract.trim()) {
-    newErrors.abstract = "Abstract is required";
-  }
-
-  if (!formData.presentationType) {
-    newErrors.presentationType = "Presentation type is required";
-  } else if (!PRESENTATION_TYPES.includes(formData.presentationType as any)) {
-    newErrors.presentationType = "Please select a valid presentation type";
-  }
-
-  if (!formData.topic) {
-    newErrors.topic = "Topic is required";
-  } else if (!TOPIC_TYPES.includes(formData.topic as any)) {
-    newErrors.topic = "Please select a valid topic";
-  }
-
-  setErrors(newErrors);
-
-  if (Object.keys(newErrors).length === 0) {
-    setIsSubmitting(true);
-    try {
-      // REPLACE THIS SECTION:
-      const payload: any = {
-        abstract: formData.abstract,
-        presentationType: formData.presentationType as typeof PRESENTATION_TYPES[number],
-        topic: formData.topic as typeof TOPIC_TYPES[number],
-      };
-
-      // Only add institution if it has a value
-      if (formData.institution.trim()) {
-        payload.institution = formData.institution.trim();
-      }
-
-      await createConference(payload);
-      // END OF REPLACEMENT SECTION
-
-      // reset form
-      setFormData({
-        name: "",
-        email: "",
-        institution: "",
-        abstract: "",
-        presentationType: "",
-        topic: "",
-      });
-
-      alert("Conference submission successful!");
-    } catch (error) {
-      console.error("Conference submission error:", error);
-      setErrors({ general: "Submission failed. Please try again." });
-    }
-    setIsSubmitting(false);
-  }
-};
-  
-  
+  // Conference list state - ADD THESE MISSING VARIABLES
   const [conferenceList, setConferenceList] = useState<any[]>([]);
   const [conferenceLoading, setConferenceLoading] = useState(false);
   const [conferenceError, setConferenceError] = useState("");
   const [refreshConferences, setRefreshConferences] = useState(false);
+
+  // Handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear error when field is changed
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const newErrors: Record<string, string> = {};
+
+    // Add name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    // Add email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Validate institution (required by backend)
+    if (!formData.institution.trim()) {
+      newErrors.institution = "Institution is required";
+    } else if (formData.institution.trim().length < 3) {
+      newErrors.institution = "Institution must be at least 3 characters long";
+    }
+
+    // Validate abstract
+    if (!formData.abstract.trim()) {
+      newErrors.abstract = "Abstract is required";
+    } else if (formData.abstract.trim().length < 3) {
+      newErrors.abstract = "Abstract must be at least 3 characters long";
+    }
+
+    // Validate presentation type
+    if (!formData.presentationType) {
+      newErrors.presentationType = "Presentation type is required";
+    } else if (!PRESENTATION_TYPES.includes(formData.presentationType as any)) {
+      newErrors.presentationType = "Please select a valid presentation type";
+    }
+
+    // Validate topic
+    if (!formData.topic) {
+      newErrors.topic = "Topic is required";
+    } else if (!TOPIC_TYPES.includes(formData.topic as any)) {
+      newErrors.topic = "Please select a valid topic";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      setIsSubmitting(true);
+      try {
+        console.log("🔍 Form data before submission:", formData);
+
+        const payload: ConferencePayload = {
+          institution: formData.institution.trim(),
+          abstract: formData.abstract.trim(),
+          presentationType: formData.presentationType as typeof PRESENTATION_TYPES[number],
+          topic: formData.topic as typeof TOPIC_TYPES[number],
+        };
+
+        console.log("🚀 Submitting payload:", payload);
+
+        await createConference(payload);
+        
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          institution: "",
+          abstract: "",
+          presentationType: "",
+          topic: "",
+        });
+
+        alert("Conference submission successful!");
+        // Refresh the conference list
+        setRefreshConferences((prev: boolean) => !prev);
+      } catch (error) {
+        console.error("Conference submission error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Submission failed. Please try again.";
+        setErrors({ general: errorMessage });
+      }
+      setIsSubmitting(false);
+    }
+  };
 
   // Fetch user's conference submissions
   React.useEffect(() => {
@@ -174,15 +192,19 @@ const handleSubmit = async (e: FormEvent) => {
     fetchConferences();
   }, [refreshConferences]);
 
-  // Handle status update
+  // Handle status update - ADD THIS MISSING FUNCTION
   const handleConferenceStatus = async (id: number, status: number) => {
     try {
       await updateConferenceStatus(id, status);
-      setRefreshConferences((prev) => !prev);
+      setRefreshConferences((prev: boolean) => !prev);
     } catch (err) {
       alert("Failed to update status.");
     }
   };
+
+
+
+
   return (
     <>
       <Layout headerStyle={2} footerStyle={1}>
@@ -383,6 +405,11 @@ const handleSubmit = async (e: FormEvent) => {
                   <div className="p-6">
                     <form onSubmit={handleSubmit}>
                       <div className="space-y-6">
+                        {errors.general && (
+                          <div className="rounded-md bg-red-50 p-3 border border-red-200">
+                            <p className="text-sm text-red-700">{errors.general}</p>
+                          </div>
+                        )}
                         {/* Personal Information */}
                         <div>
                           <h3 className="text-xl font-semibold text-fixnix-lightpurple mb-4">Personal Information</h3>
@@ -449,10 +476,12 @@ const handleSubmit = async (e: FormEvent) => {
                             value={formData.abstract}
                             onChange={handleChange}
                             rows={6}
+                            maxLength={500}
                             className="w-full py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                             placeholder="Please provide a brief abstract of your paper (250-500 words)"
                           ></textarea>
                           {errors.abstract && <p className="mt-1 text-sm text-red-600">{errors.abstract}</p>}
+                          <p className="mt-1 text-xs text-gray-500 text-right">{formData.abstract.length}/500</p>
                         </div>
                         
                         {/* Presentation Type */}
@@ -475,7 +504,6 @@ const handleSubmit = async (e: FormEvent) => {
                                 <option value="ORAL">Oral Presentation</option>
                                 <option value="POSTER">Poster Presentation</option>
                                 <option value="WORKSHOP">Workshop</option>
-                                <option value="PANEL_DICUSSION">Panel Discussion</option>
                               </select>
                               {errors.presentationType && <p className="mt-1 text-sm text-red-600">{errors.presentationType}</p>}
                             </div>

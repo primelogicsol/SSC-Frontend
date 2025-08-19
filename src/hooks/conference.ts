@@ -1,11 +1,10 @@
 import apiClient from "../lib/apiClient";
 
-// Valid enum values according to backend schema
+// Presentation types supported by backend (excluding problematic panel option)
 export const PRESENTATION_TYPES = [
   "ORAL",
   "POSTER",
-  "WORKSHOP",
-  "PANEL_DICUSSION" // Note: Backend has typo "PANEL_DICUSSION"
+  "WORKSHOP"
 ] as const;
 
 export const TOPIC_TYPES = [
@@ -20,11 +19,11 @@ export const TOPIC_TYPES = [
 // --------------------
 // Types
 // --------------------
-interface ConferencePayload {
-  institution?: string; // Optional in backend
-  abstract: string; // Required in backend
-  presentationType: typeof PRESENTATION_TYPES[number]; // Required in backend
-  topic: typeof TOPIC_TYPES[number]; // Required in backend
+export interface ConferencePayload {
+  institution: string; // Required by backend (even though schema is confusing)
+  abstract: string; // Required - must be 3+ chars
+  presentationType: typeof PRESENTATION_TYPES[number]; // Required
+  topic: typeof TOPIC_TYPES[number]; // Required
 }
 
 // --------------------
@@ -32,24 +31,39 @@ interface ConferencePayload {
 // --------------------
 export const createConference = async (payload: ConferencePayload) => {
   try {
-    console.log("📤 Sending conference data:", payload);
-    // Backend route: POST /conference
-    const response = await apiClient.post("/user/conference", payload);
+    // Send both camelCase and snake_case to be compatible with any backend variant
+    const backendPayload = {
+      institution: payload.institution,
+      institution_name: payload.institution,
+      abstract: payload.abstract,
+      abstract_text: payload.abstract,
+      presentationType: payload.presentationType,
+      presentation_type: payload.presentationType,
+      topic: payload.topic,
+      topic_area: payload.topic
+    };
+
+    console.log("📤 Sending conference data:", backendPayload);
+    const response = await apiClient.post("/user/conference", backendPayload);
     return response.data;
   } catch (error: any) {
-    console.error("❌ Conference creation error:", error.response?.data);
-    throw new Error(error.response?.data?.message || "Failed to create conference");
+    const details = error.response?.data?.details;
+    if (Array.isArray(details)) {
+      console.error("❌ Conference creation error details:", details);
+    } else {
+      console.error("❌ Conference creation error:", error.response?.data);
+    }
+    const messageFromServer = details?.map((d: any) => d?.message).filter(Boolean).join("; ") || error.response?.data?.error;
+    throw new Error(messageFromServer || "Failed to create conference");
   }
 };
-
 // --------------------
 // Get All Conferences for Logged-in User
 // --------------------
 export const getConferences = async () => {
   try {
-    // Backend route: GET /conference
     const response = await apiClient.get("/user/conference");
-    return response.data; // Ensure backend filters by logged-in user
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to fetch conferences");
   }
@@ -60,7 +74,6 @@ export const getConferences = async () => {
 // --------------------
 export const updateConferenceStatus = async (id: number, status: number) => {
   try {
-    // Backend route: POST /conference/:id
     const response = await apiClient.post(`/user/conference/${id}`, { status });
     return response.data;
   } catch (error: any) {
