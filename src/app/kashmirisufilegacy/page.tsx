@@ -1,8 +1,13 @@
+"use client";
 import Layout from "../../components/layout/Layout";
 import CounterUp from "../../components/elements/CounterUp";
 import Link from "next/link";
 import Image from "next/image";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Banner from "@/components/sections/home3/Banner";
+import { useEffect, useMemo, useState } from "react";
 const LegacySlides = [
   {
     subTitle: "Legacy of Light, Love, Wisdom",
@@ -42,7 +47,63 @@ const LegacySlides = [
 ];
 
 
+type Saint = {
+  id: number;
+  name: string;
+  dates_raw: string | null;
+  period: string;
+  century: string;
+  summary: string;
+  tags: string[];
+};
+
 export default function Home() {
+  const [saints, setSaints] = useState<Saint[]>([]);
+  const [search, setSearch] = useState("");
+  const [century, setCentury] = useState<string>("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await fetch("/assets/data/sufi_saints.json", { cache: "no-store" });
+        const payload = await res.json();
+        const items = Array.isArray(payload?.data)
+          ? (payload.data as any[]).map((d, idx) => ({
+              id: idx + 1,
+              name: d.name ?? "",
+              dates_raw: d.dates_raw ?? null,
+              period: d.period ?? "",
+              century: d.century ?? "",
+              summary: d.summary ?? "",
+              tags: Array.isArray(d.tags) ? d.tags : []
+            }))
+          : [];
+        setSaints(items);
+      } catch (e) {
+        console.error("Failed to load saints data", e);
+      }
+    };
+    loadData();
+  }, []);
+
+  const filtered = useMemo(() => {
+    return saints.filter((s) => {
+      const matchesSearch = search
+        ? [s.name, s.summary, s.period, s.century, s.dates_raw ?? "", ...(s.tags || [])]
+            .join(" ")
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        : true;
+      const matchesCentury = century ? s.century === century : true;
+      return matchesSearch && matchesCentury;
+    });
+  }, [saints, search, century]);
+
+  // Show only 3 by default; when searching or filtering by century, show all matching
+  const displayed = useMemo(() => {
+    const isDefaultView = !search && !century;
+    return isDefaultView ? filtered.slice(0, 3) : filtered;
+  }, [filtered, search, century]);
   return (
     <>
       <Layout
@@ -118,58 +179,57 @@ export default function Home() {
                   </h1>
 
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-2 mb-8">
-  <input
-    type="text"
-    placeholder="Search saints..."
-    className="w-full md:w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none"
-  />
-  <select className="w-full md:w-1/4 px-4 py-2 border rounded-lg shadow-sm md:mx-2">
-    <option disabled selected>Century</option>
-    <option>14th Century</option>
-    <option>15th Century</option>
-    <option>16th Century</option>
-    <option>17th Century</option>
-    <option>18th Century</option>
-    <option>19th Century</option>
-    <option>20th Century</option>
-    <option>21st Century</option>
-  </select>
-  <button className="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 md:ml-2">
-    Reset
-  </button>
-</div>
+                    <input
+                      type="text"
+                      placeholder="Search saints..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      className="w-full md:w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none"
+                    />
+                    <select
+                      value={century}
+                      onChange={(e) => setCentury(e.target.value)}
+                      className="w-full md:w-1/4 px-4 py-2 border rounded-lg shadow-sm md:mx-2"
+                    >
+                      <option value="">Century</option>
+                      <option value="14th Century">14th Century</option>
+                      <option value="15th Century">15th Century</option>
+                      <option value="16th Century">16th Century</option>
+                      <option value="17th Century">17th Century</option>
+                      <option value="18th Century">18th Century</option>
+                      <option value="19th Century">19th Century</option>
+                      <option value="20th Century">20th Century</option>
+                      <option value="21st Century">21st Century</option>
+                    </select>
+                    <button
+                      onClick={() => {
+                        setSearch("");
+                        setCentury("");
+                      }}
+                      className="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 md:ml-2"
+                    >
+                      Reset
+                    </button>
+                  </div>
 
 
                   {/* Cards */}
                   <div className="space-y-6">
-                    {/* Lal Ded */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                      <h2 className="text-xl font-semibold">Lal Ded</h2>
-                      <p className="text-sm text-gray-600 mb-2">c. 1320–1392 | Formative Period</p>
-                      <p className="mb-4">
-                        Female mystic poet whose "Vakhs" established foundational principles for Kashmiri Sufism,
-                        bridging Hindu Shaivite traditions with Islamic mysticism.
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">Mysticism</span>
-                        <span className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">Poetry</span>
-                        <span className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">Cross-Traditional Spirituality</span>
+                    {displayed.map((s) => (
+                      <div key={s.id} className="bg-white rounded-lg shadow-md p-6">
+                        <h2 className="text-xl font-semibold">{s.name}</h2>
+                        <p className="text-sm text-gray-600 mb-2">{s.dates_raw ?? ""} | {s.period}</p>
+                        <p className="mb-4">{s.summary}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {s.tags?.map((t, i) => (
+                            <span key={i} className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">{t}</span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Mir Sayyid Ali Hamadani */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                      <h2 className="text-xl font-semibold">Mir Sayyid Ali Hamadani</h2>
-                      <p className="text-sm text-gray-600 mb-2">1314–1384 | Formative Period</p>
-                      <p className="mb-4">
-                        Persian Sufi master known as "Shah-e-Hamadan" who introduced formal Kubrawi Sufi practices
-                        to Kashmir and established an extensive network of khanqahs.
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">Institutional Development</span>
-                        <span className="bg-fixnix-lightpurple text-gray-100 text-xs font-medium px-2 py-1 rounded-full">Spiritual Transmission</span>
-                      </div>
-                    </div>
+                    ))}
+                    {displayed.length === 0 && (
+                      <p className="text-center text-gray-600">No results found.</p>
+                    )}
                   </div>
                 </div>
               </div>
