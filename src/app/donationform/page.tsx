@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { createDonation, type DonationPayload } from "@/hooks/donation";
+import PaymentButtons from "@/components/payments/PaymentButtons";
 
 export default function DonationForm() {
   const router = useRouter();
@@ -138,7 +139,7 @@ export default function DonationForm() {
       };
       
       await createDonation(payload);
-      setSuccess("Thank you for your donation! Your contribution has been received.");
+      setSuccess("Thank you! Please complete payment below.");
       
       // Reset form after successful submission
       setTimeout(() => {
@@ -361,8 +362,22 @@ export default function DonationForm() {
           disabled={loading}
           className="w-full bg-fixnix-lightpurple text-white p-3 rounded-lg font-semibold hover:bg-fixnix-darkpurple transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Processing Donation..." : "Proceed to Donate"}
+          {loading ? "Processing..." : "Confirm Details"}
         </button>
+
+        {/* Render payment buttons when form is valid and not loading */}
+        {success && (
+          <div className="mt-4">
+            <PaymentButtons
+              amount={Number(((amount === "Custom Amount" ? customAmount : amount.replace("$", "")) || "0"))}
+              currency="USD"
+              description={`Donation - ${donationType || "One-Time"}`}
+              payerEmail={personalInfo.email}
+              onSuccess={() => alert("Donation payment successful")}
+              onError={(_g, e) => alert("Payment error: " + ((e as any)?.message || e))}
+            />
+          </div>
+        )}
         </form>
       </div>
     </Layout>

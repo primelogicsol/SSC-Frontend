@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getCart, type CartItem } from "@/hooks/cart";
 import Image from "next/image";
+import PaymentButtons from "@/components/payments/PaymentButtons";
 
 export default function Home() {
   const [showShippingForm, setShowShippingForm] = useState(false);
@@ -364,12 +365,15 @@ export default function Home() {
                       </table>
                     </div>
 
-                    <Link
-                      href="/thankyou"
-                      className="block w-full text-center bg-fixnix-lightpurple hover:bg-fixnix-darkpurple text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200"
-                    >
-                      Proceed to Payment
-                    </Link>
+                    <div className="pt-2">
+                      <PaymentButtons
+                        amount={Number(calculateTotal().toFixed(2))}
+                        currency="USD"
+                        description="Cart Checkout"
+                        onSuccess={() => alert("Payment successful")}
+                        onError={(_g, e) => alert("Payment error: " + ((e as any)?.message || e))}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

@@ -60,6 +60,7 @@ type Saint = {
 export default function Home() {
   const [saints, setSaints] = useState<Saint[]>([]);
   const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
   const [century, setCentury] = useState<string>("");
 
   useEffect(() => {
@@ -89,8 +90,7 @@ export default function Home() {
   const filtered = useMemo(() => {
     return saints.filter((s) => {
       const matchesSearch = search
-        ? [s.name, s.summary, s.period, s.century, s.dates_raw ?? "", ...(s.tags || [])]
-            .join(" ")
+        ? (s.name || "")
             .toLowerCase()
             .includes(search.toLowerCase())
         : true;
@@ -182,10 +182,16 @@ export default function Home() {
                     <input
                       type="text"
                       placeholder="Search saints..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
                       className="w-full md:w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none"
                     />
+                    <button
+                      onClick={() => setSearch(query)}
+                      className="w-full md:w-auto px-4 py-2 bg-fixnix-lightpurple text-white rounded-lg hover:opacity-90 md:ml-2"
+                    >
+                      Search
+                    </button>
                     <select
                       value={century}
                       onChange={(e) => setCentury(e.target.value)}
@@ -204,6 +210,7 @@ export default function Home() {
                     <button
                       onClick={() => {
                         setSearch("");
+                        setQuery("");
                         setCentury("");
                       }}
                       className="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 md:ml-2"
