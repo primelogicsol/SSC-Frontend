@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export default function StickyHeader() {
   const [isSticky, setIsSticky] = useState(false);
+  const { explorerRoutes, academyRoutes, loading } = useNavigation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +24,11 @@ export default function StickyHeader() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isSticky ? "bg-fixnix-lightpurple shadow-lg py-3" : "bg-transparent py-5"}`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isSticky
+          ? "bg-fixnix-lightpurple shadow-lg py-3"
+          : "bg-transparent py-5"
+      }`}
     >
       <div className="max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl lg:mx-5 xl:mx-12 2xl:mx-[117px] flex items-center justify-start pl-4">
         {/* Aligning everything to the left */}
@@ -217,120 +223,31 @@ export default function StickyHeader() {
 
           {/* Programs & Events Dropdown */}
           <li className="relative group">
-  <Link
-    href="#"
-    className="text-white text-[15px] lg:text-[10px] xl:text-[15px] 2xl:text-[18px] font-bold hover:text-fixnix-darkpurple"
-  >
-    SUFI SCIENCE EXPLORER
-  </Link>
-  <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] hidden group-hover:block">
-    <li className="mb-2">
-      <Link
-        href="/foundationalmatrices"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Foundational Matrices
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/ecologicalintelligence"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Ecological Intelligence
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/consciousnessgeometries"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Consciousness Geometries
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/perceptualgateways"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Perceptual Gateways
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/realityframeworks"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Reality Frameworks
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/osmicharmonics"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Cosmic Harmonics
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/energeticarchitectures"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Energetic Architectures
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/characteralchemy"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Character Alchemy
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/unitysciences"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Unity Sciences
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/healingmysteries"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Healing Mysteries
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/wisdomtransmission"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Wisdom Transmission
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/sacredartistry"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Sacred Artistry
-      </Link>
-    </li>
-    <li className="mb-2">
-      <Link
-        href="/advancedtechnologies"
-        className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-      >
-        Advanced Technologies
-      </Link>
-    </li>
-  </ul>
-</li>
-
+            <Link
+              href="#"
+              className="text-white text-[15px] lg:text-[10px] xl:text-[15px] 2xl:text-[18px] font-bold hover:text-fixnix-darkpurple"
+            >
+              SUFI SCIENCE EXPLORER
+            </Link>
+            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple hidden group-hover:block">
+              {loading ? (
+                <li className="mb-2 p-4 text-center text-gray-500">
+                  Loading...
+                </li>
+              ) : (
+                explorerRoutes.map((route) => (
+                  <li key={route.slug} className="mb-2">
+                    <Link
+                      href={`/explore/${route.slug}`}
+                      className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                    >
+                      {route.title}
+                    </Link>
+                  </li>
+                ))
+              )}
+            </ul>
+          </li>
 
           {/* Knowledge Hub Dropdown */}
           <li className="relative group">
@@ -340,40 +257,23 @@ export default function StickyHeader() {
             >
               DIGITAL ACADEMY
             </Link>
-            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
-              <li className="mb-2">
-                <Link
-                  href="/dialogseries"
-                  className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-                >
-                  Dialog Series
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  href="/hardtalk"
-                  className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-                >
-                  Hard Talk Series
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  href="/sacredprofessions"
-                  className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-                >
-                  Sufi Professions
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  href="/inspiringinterview"
-                  className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-                >
-                  Inspiring Interviews
-                </Link>
-              </li>
-              
+            <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple hidden group-hover:block">
+              {loading ? (
+                <li className="mb-2 p-4 text-center text-gray-500">
+                  Loading...
+                </li>
+              ) : (
+                academyRoutes.map((route) => (
+                  <li key={route.slug} className="mb-2">
+                    <Link
+                      href={`/academy/${route.slug}`}
+                      className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                    >
+                      {route.title}
+                    </Link>
+                  </li>
+                ))
+              )}
             </ul>
           </li>
 
@@ -398,7 +298,7 @@ export default function StickyHeader() {
                 <Link
                   href="/jewelry&accessories"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-                > 
+                >
                   Jewelry & Accessories
                 </Link>
               </li>
@@ -432,18 +332,17 @@ export default function StickyHeader() {
                   href="/digitalbooks"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
-                  Digital Books 
+                  Digital Books
                 </Link>
               </li>
               <li className="mb-2">
                 <Link
-                href="/audiospectrums"
+                  href="/audiospectrums"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Audio Spectrum
                 </Link>
               </li>
-            
             </ul>
           </li>
 
@@ -482,9 +381,6 @@ export default function StickyHeader() {
               </li>
             </ul>
           </li>
-          
-
-         
         </ul>
       </div>
     </header>

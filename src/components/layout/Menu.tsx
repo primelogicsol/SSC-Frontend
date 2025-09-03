@@ -1,8 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export default function Menu() {
+  const { explorerRoutes, academyRoutes, loading } = useNavigation();
+  
   return (
     <>
       <ul className="main-menu__list lg:pl-[20px] xl:pl-[40px]  2xl:pl-[60px]  hidden lg:flex  lg:space-x-[25px] xl:space-x-[30px]  2xl:space-x-[55px]  ">
@@ -190,112 +193,21 @@ export default function Menu() {
           >
             SUFI SCIENCE EXPLORER
           </Link>
-          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px]   hidden group-hover:block">
-            <li className="mb-2">
-              <Link
-                href="/foundationalmatrices"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Foundational Matrices
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/ecologicalintelligence"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-               Ecological Intelligence
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/consciousnessgeometries"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Consciousness Geometries
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/perceptualgateways"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Perceptual Gateways
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/realityframeworks"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Reality Frameworks
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/cosmicharmonics"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Cosmic Harmonics
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/energeticarchitectures"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Energetic Architectures 
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/characteralchemy"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Character Alchemy 
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/unitysciences"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Unity Sciences
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/healingmysteries"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Healing Mysteries
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/wisdomtransmission"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Wisdom Transmission
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                    href="/sacredartistry"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Sacred Artistry
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/advancedtechnologies"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Advanced Technologies
-              </Link>
-            </li>
-
+          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple hidden group-hover:block">
+            {loading ? (
+              <li className="mb-2 p-4 text-center text-gray-500">Loading...</li>
+            ) : (
+              explorerRoutes.map((route) => (
+                <li key={route.slug} className="mb-2">
+                  <Link
+                    href={`/explore/${route.slug}`}
+                    className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                  >
+                    {route.title}
+                  </Link>
+                </li>
+              ))
+            )}
           </ul>
         </li>
 
@@ -307,40 +219,21 @@ export default function Menu() {
           >
             DIGITAL ACADEMY
           </Link>
-          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
-            <li className="mb-2">
-              <Link
-                href="/dialogseries"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                 Dialog Series
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/hardtalk"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Hard Talk Series
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/sacredprofessions"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Sufi Professions
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                href="/inspiringinterviews"
-                className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
-              >
-                Inspiring Interviews
-              </Link>
-            </li>
-            
+          <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple hidden group-hover:block">
+            {loading ? (
+              <li className="mb-2 p-4 text-center text-gray-500">Loading...</li>
+            ) : (
+              academyRoutes.map((route) => (
+                <li key={route.slug} className="mb-2">
+                  <Link
+                    href={`/academy/${route.slug}`}
+                    className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
+                  >
+                    {route.title}
+                  </Link>
+                </li>
+              ))
+            )}
           </ul>
         </li>
 
