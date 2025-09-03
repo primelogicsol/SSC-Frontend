@@ -1,4 +1,5 @@
-import apiClient from "@/lib/apiClient";
+import apiClient from "../lib/apiClient";
+import { contentServices } from "./contentServices";
 
 export interface NavigationItem {
   slug: string;
@@ -17,9 +18,9 @@ export const navigationServices = {
   async getExplorerRoutes(): Promise<NavigationItem[]> {
     try {
       console.log("Fetching explorer routes from:", `${apiClient.defaults.baseURL}/content/explorer`);
-      const response = await apiClient.get<NavigationData>("/content/explorer");
-      console.log("Explorer response:", response.data);
-      return response.data.data?.items || [];
+      const data = await contentServices.getContentList("explorer");
+      console.log("Explorer response:", data);
+      return data?.items || [];
     } catch (error) {
       console.error("Error fetching explorer routes:", error);
       // Fallback to default routes if API fails
@@ -45,9 +46,9 @@ export const navigationServices = {
   async getAcademyRoutes(): Promise<NavigationItem[]> {
     try {
       console.log("Fetching academy routes from:", `${apiClient.defaults.baseURL}/content/academy`);
-      const response = await apiClient.get<NavigationData>("/content/academy");
-      console.log("Academy response:", response.data);
-      return response.data.data?.items || [];
+      const data = await contentServices.getContentList("academy");
+      console.log("Academy response:", data);
+      return data?.items || [];
     } catch (error) {
       console.error("Error fetching academy routes:", error);
       // Fallback to default routes if API fails

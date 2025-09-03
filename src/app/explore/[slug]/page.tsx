@@ -10,6 +10,7 @@ import axios from "axios";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { contentServices, type ContentItem } from "@/hooks/contentServices";
 
 type Slide = {
   subTitle?: string;
@@ -217,7 +218,7 @@ function BlockRenderer({ block }: { block: Block }) {
 
 export default function ExplorerPage() {
   const pathname = usePathname();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -230,26 +231,11 @@ export default function ExplorerPage() {
         setLoading(true);
         setError(null);
 
-        // Use NEXT_PUBLIC_BACKEND_URL with localhost:8000 as fallback
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BACKEND_URL ||
-          "https://api.sufisciencecenter.info";
-        const res = await axios.get(`${baseUrl}/v1/content/explorer/${slug}`, {
-          headers: {
-            "Cache-Control": "no-cache",
-          },
-        });
-
-        if (res.data && res.data.data) {
-          setData(res.data.data);
-        } else {
-          setError("Invalid data structure received");
-        }
+        const content = await contentServices.getContent("explorer", slug);
+        setData(content);
       } catch (e: any) {
         console.error("Error fetching explorer data:", e);
-        setError(
-          e.response?.data?.message || e.message || "Failed to fetch data"
-        );
+        setError(e.message || "Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -278,19 +264,8 @@ export default function ExplorerPage() {
       <Layout headerStyle={2} footerStyle={1}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="text-red-500 text-6xl mb-4">⚠️</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Content Not Found
-            </h2>
-            <p className="text-gray-600 mb-4">
-              {error || "The requested explorer content could not be found."}
-            </p>
-            <Link
-              href="/explore"
-              className="inline-block bg-fixnix-lightpurple text-white px-6 py-3 rounded-lg hover:bg-fixnix-darkpurple transition-colors"
-            >
-              Back to Explorer
-            </Link>
+            <div className="text-red-500 text-xl mb-4">Error Loading Content</div>
+            <p className="text-gray-600">{error || "Content not found"}</p>
           </div>
         </div>
       </Layout>
@@ -298,9 +273,7 @@ export default function ExplorerPage() {
   }
 
   // Find the heroSlider block once
-  const heroSliderBlock = data.blocks?.find(
-    (b: any) => b.type === "heroSlider"
-  );
+  const heroSliderBlock = data.blocks.find((b: any) => b.type === "heroSlider");
   const sectionHeaderBlocks =
     data.blocks?.filter((b: any) => b.type === "sectionHeader") || [];
   const sidebarBlocks =
