@@ -200,7 +200,7 @@ const Header2: React.FC<Header2Props> = ({
         3xl:text-[23px] 3xl:-mt-[75px] 3xl:ml-[210px] 3xl:pr-[380px]
         2xl:text-[13.5px] 2xl:-mt-[50px] 2xl:ml-[140px] 2xl:pr-[1200px]
         lg:text-[9.5px] lg:-mt-[45px] lg:ml-[100px] lg:pr-[380px]
-        md:text-[8.5px] md:-mt-[70px] md:ml-[100px] md:pr-[280px]
+        md:text-[8.5px] md:-mt-[60px] md:ml-[10px] md:pr-[280px]
         sm:text-[6px] sm:-mt-[70px] sm:ml-[60px] sm:pr-[70px]
         smd:text-[6px] smd:-mt-[55px] smd:ml-[60px] smd:pr-[70px]
         xs:text-[4.5px] xs:-mt-[55px] xs:ml-[52px]

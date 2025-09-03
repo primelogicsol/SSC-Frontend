@@ -33,7 +33,7 @@ export default function Blog() {
             <div className="relative group">
               <Image src="/assets/images/dialogs/9.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center  bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700">
-                <Link href="/awakening-soon">
+                <Link href="/dialogseries">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -41,7 +41,7 @@ export default function Blog() {
             <div className="px-4 py-3 ">
              
               <h3 className="text-xl font-semibold mt-2 text-fixnix-darkpurple">
-                <Link href="/awakening-soon" className="text-white">Dialog Series</Link>
+                <Link href="/dialogseries" className="text-white">Dialog Series</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
                 Dive into timeless commentaries, Sufi manuscripts, and contemporary reflections merging  wisdom with modern inquiry.
@@ -54,7 +54,7 @@ export default function Blog() {
             <div className="relative group">
               <Image src="/assets/images/hardtalk/9.webp" alt="image" width={500} height={300}  className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 ">
-                <Link href="/awakening-soon">
+                <Link href="/hardtalk">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -62,7 +62,7 @@ export default function Blog() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon" className="text-white" >Hard Talk</Link>
+                <Link href="/hardtalk" className="text-white" >Hard Talk</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
                 Explore sacred diagrams, cosmic maps, and interactive infographics that visualize mystical concepts in scientifically resonant design.
@@ -75,7 +75,7 @@ export default function Blog() {
             <div className="relative group">
               <Image src="/assets/images/professions/1.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-                <Link href="/awakening-soon">
+                <Link href="/sacredprofessions">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -83,7 +83,7 @@ export default function Blog() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon"className="text-white"> Sufi Professions</Link>
+                <Link href="/sacredprofessions"className="text-white"> Sufi Professions</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               This series honors professionals who carry inner stillness into outer action. Success is measured not just in output, but in intention. 
@@ -96,7 +96,7 @@ export default function Blog() {
             <div className="relative group">
               <Image src="/assets/images/interview/1.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700">
-                <Link href="/awakening-soon">
+                <Link href="/inspiringinterview">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -104,7 +104,7 @@ export default function Blog() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon" className="text-white">Inspiring Interview</Link>
+                <Link href="/inspiringinterview" className="text-white">Inspiring Interview</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               In this series, you’ll meet individuals whose lives have been radically reshaped by the essence of Sufism.

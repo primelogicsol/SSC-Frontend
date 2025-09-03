@@ -322,67 +322,67 @@ const MobileMenu = ({
                   className="space-y-2 ml-4"
                 >
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/foundationalmatrices" className="text-white text-sm font-medium">
                       Foundational Matrices
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/ecologicalintelligence" className="text-white text-sm font-medium">
                       Ecological Intelligence
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/consciousnessgeometries" className="text-white text-sm font-medium">
                       Consciousness Geometries
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/perceptualgateways" className="text-white text-sm font-medium">
                       Perceptual Gateways
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/realityframeworks" className="text-white text-sm font-medium">
                       Reality Frameworks
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/cosmicharmonics" className="text-white text-sm font-medium">
                       Cosmic Harmonics
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/energeticarchitectures" className="text-white text-sm font-medium">
                       Energetic Architectures
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/characteralchemy" className="text-white text-sm font-medium">
                       Character Alchemy
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/unitysciences" className="text-white text-sm font-medium">
                       Unity Sciences
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/healingmysteries" className="text-white text-sm font-medium">
                       Healing Mysteries
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/wisdomtransmission" className="text-white text-sm font-medium">
                       Wisdom Transmission
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/sacredartistry" className="text-white text-sm font-medium">
                       Sacred Artistry
                     </Link>
                   </li>
                   <li>
-                    <Link href="/awakening-soon" className="text-white text-sm font-medium">
+                    <Link href="/advancedtechnologies" className="text-white text-sm font-medium">
                       Advanced Technologies
                     </Link>
                   </li>
@@ -414,7 +414,7 @@ const MobileMenu = ({
                 >
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/dialogseries"
                       className="text-white text-sm font-medium"
                     >
                        Dialog Series
@@ -422,7 +422,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/hardtalk"
                       className="text-white text-sm font-medium"
                     >
                       Hard Talk Series
@@ -430,7 +430,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/sacredprofessions"
                       className="text-white text-sm font-medium"
                     >
                       Sufi Professions
@@ -438,7 +438,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/inspiringinterview"
                       className="text-white text-sm font-medium"
                     >
                       Inspiring Interviews
@@ -473,7 +473,7 @@ const MobileMenu = ({
                 >
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/jewelry&accessories"
                       className="text-white text-sm font-medium"
                     >
                       Jewelry & Accessories
@@ -481,7 +481,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/wall&artdecor"
                       className="text-white text-sm font-medium"
                     >
                       Art & Wall Decor
@@ -489,7 +489,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/home&living"
                       className="text-white text-sm font-medium"
                     >
                       Home & Living
@@ -497,7 +497,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/fashion&apparel"
                       className="text-white text-sm font-medium"
                     >
                       Fashion & Apparel
@@ -505,15 +505,15 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/wellness&meditation"
                       className="text-white text-sm font-medium"
                     >
-                      Wellness & Medication
+                      Wellness & Meditation
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/digitalbooks"
                       className="text-white text-sm font-medium"
                     >
                       Digital Books
@@ -521,7 +521,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/awakening-soon"
+                      href="/audiospectrums"
                       className="text-white text-sm font-medium"
                     >
                       Audio Spectrum

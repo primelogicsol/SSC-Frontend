@@ -226,7 +226,7 @@ export default function StickyHeader() {
   <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[500px] hidden group-hover:block">
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/foundationalmatrices"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Foundational Matrices
@@ -234,7 +234,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/ecologicalintelligence"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Ecological Intelligence
@@ -242,7 +242,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/consciousnessgeometries"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Consciousness Geometries
@@ -250,7 +250,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/perceptualgateways"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Perceptual Gateways
@@ -258,7 +258,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/realityframeworks"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Reality Frameworks
@@ -266,7 +266,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/osmicharmonics"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Cosmic Harmonics
@@ -274,7 +274,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/energeticarchitectures"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Energetic Architectures
@@ -282,7 +282,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/characteralchemy"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Character Alchemy
@@ -290,7 +290,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/unitysciences"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Unity Sciences
@@ -298,7 +298,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/healingmysteries"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Healing Mysteries
@@ -306,7 +306,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/wisdomtransmission"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Wisdom Transmission
@@ -314,7 +314,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/sacredartistry"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Sacred Artistry
@@ -322,7 +322,7 @@ export default function StickyHeader() {
     </li>
     <li className="mb-2">
       <Link
-        href="/awakening-soon"
+        href="/advancedtechnologies"
         className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
       >
         Advanced Technologies
@@ -343,7 +343,7 @@ export default function StickyHeader() {
             <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/dialogseries"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Dialog Series
@@ -351,7 +351,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/hardtalk"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Hard Talk Series
@@ -359,7 +359,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/sacredprofessions"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Sufi Professions
@@ -367,7 +367,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/inspiringinterview"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Inspiring Interviews
@@ -388,7 +388,7 @@ export default function StickyHeader() {
             <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/wall&artdecor"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Art & Wall Decor
@@ -396,7 +396,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/jewelry&accessories"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 > 
                   Jewelry & Accessories
@@ -405,7 +405,7 @@ export default function StickyHeader() {
 
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/home&living"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Home & Living
@@ -413,7 +413,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/fashion&apparel"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Fashion & Apparel
@@ -421,7 +421,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/wellness&meditation"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Wellness & Meditation
@@ -429,7 +429,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                  href="/digitalbooks"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Digital Books 
@@ -437,7 +437,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/awakening-soon"
+                href="/audiospectrums"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Audio Spectrum

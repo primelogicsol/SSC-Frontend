@@ -371,7 +371,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/home&living"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Home & Living
@@ -379,7 +379,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/fashion&apparel"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Fashion & Apparel
@@ -387,7 +387,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/wellness&meditation"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Wellness & Meditation
@@ -395,7 +395,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/digitalbooks"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Digital Books
@@ -403,7 +403,7 @@ export default function Menu() {
             </li>
             <li className="mb-2">
               <Link
-                href="/awakening-soon"
+                href="/audiospectrums"
                 className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
               >
                 Audio Spectrum

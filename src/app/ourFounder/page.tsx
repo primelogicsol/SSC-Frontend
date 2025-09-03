@@ -1,6 +1,9 @@
 import Layout from "../../components/layout/Layout";
 import CounterUp from "../../components/elements/CounterUp";
 import Link from "next/link";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Image from "next/image";
 import Banner from "@/components/sections/home3/Banner";
 const LegacySlides = [

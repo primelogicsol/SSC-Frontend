@@ -1,6 +1,9 @@
 "use client";
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Image from "next/image";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { useState } from "react";

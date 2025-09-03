@@ -4,6 +4,9 @@ import Link from "next/link";
 import ProductCard from "@/components/sections/home3/ProductCard";
 import Banner from "@/components/sections/home3/Banner";
 import { useState } from "react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Breadcrumb from "@/components/sections/home3/Breadcrumb";
 const FashionSlides = [
   {

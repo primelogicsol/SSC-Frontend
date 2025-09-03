@@ -2,6 +2,9 @@
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
 import Image from "next/image";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";

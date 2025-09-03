@@ -33,7 +33,7 @@ export default function GiftShop() {
             <div className="relative group">
               <Image src="/assets/images/blog/artdecor.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 ">
-                <Link href="/awakening-soon">
+                <Link href="/wall&artdecor">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -41,7 +41,7 @@ export default function GiftShop() {
             <div className="px-4 py-3 ">
              
               <h3 className="text-xl font-semibold mt-2 text-fixnix-darkpurple">
-                <Link href="/awakening-soon" className="text-white">Art & Wall Decor</Link>
+                <Link href="/wall&artdecor" className="text-white">Art & Wall Decor</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               Infuse your space with sacred geometry, calligraphy, and celestial forms that echo divine remembrance in visual presence.
@@ -54,7 +54,7 @@ export default function GiftShop() {
             <div className="relative group">
               <Image src="/assets/images/blog/jewelry.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 ">
-                <Link href="/awakening-soon">
+                <Link href="/jewelry&accessories">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -62,7 +62,7 @@ export default function GiftShop() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon" className="text-white" >Jewelry & Accessories</Link>
+                <Link href="/jewelry&accessories" className="text-white" >Jewelry & Accessories</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               Wear the sacred crafted talismans, and symbolic adornments designed to harmonize inner states and intentions.
@@ -75,7 +75,7 @@ export default function GiftShop() {
             <div className="relative group">
               <Image src="/assets/images/blog/fashion.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 bg-fixnix-lightpurple">
-                <Link href="/awakening-soon">
+                <Link href="/fashion&apparel">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -83,7 +83,7 @@ export default function GiftShop() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon"className="text-white"> Fashion & Apparel</Link>
+                <Link href="/fashion&apparel"className="text-white"> Fashion & Apparel</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               Dress in garments of grace textiles rooted in tradition, infused with spiritual symbolism and ethical craftsmanship.
@@ -96,7 +96,7 @@ export default function GiftShop() {
             <div className="relative group">
               <Image src="/assets/images/blog/meditation.webp" alt="image" width={500} height={300} className="w-full h-64 object-cover rounded-t-xl" />
               <div className="absolute inset-0 flex items-center justify-center bg-white/20 opacity-0 group-hover:opacity-100 transition duration-700 ">
-                <Link href="/awakening-soon">
+                <Link href="/wellness&meditation">
                   <i className="fa fa-plus text-white text-2xl"></i>
                 </Link>
               </div>
@@ -104,7 +104,7 @@ export default function GiftShop() {
             <div className="px-4 py-3 ">
               
               <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                <Link href="/awakening-soon" className="text-white"> Wellness & Meditation</Link>
+                <Link href="/wellness&meditation" className="text-white"> Wellness & Meditation</Link>
               </h3>
               <p className="text-sm text-gray-100 mt-2">
               Equip your inner practice with mindful essentials from handcrafted mats to therapeutic blends.

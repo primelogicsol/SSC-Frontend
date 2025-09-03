@@ -2,6 +2,9 @@ import Layout from "../../components/layout/Layout";
 import CounterUp from "../../components/elements/CounterUp";
 import Link from "next/link";
 import Image from "next/image";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import Banner from "@/components/sections/home3/Banner";
 const KashmiriSlides = [
   {
