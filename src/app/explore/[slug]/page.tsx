@@ -232,7 +232,8 @@ export default function ExplorerPage() {
 
         // Use NEXT_PUBLIC_BACKEND_URL with localhost:8000 as fallback
         const baseUrl =
-          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+          process.env.NEXT_PUBLIC_BACKEND_URL ||
+          "https://api.sufisciencecenter.info";
         const res = await axios.get(`${baseUrl}/v1/content/explorer/${slug}`, {
           headers: {
             "Cache-Control": "no-cache",

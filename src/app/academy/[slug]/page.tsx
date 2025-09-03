@@ -48,7 +48,7 @@ function BlockRenderer({ block }: { block: Block }) {
         </div>
       );
     }
-    
+
     return <Banner slides={block.slides as any} />;
   }
   if (block.type === "sectionHeader") {
@@ -62,7 +62,9 @@ function BlockRenderer({ block }: { block: Block }) {
             <span className="absolute top-[6px] right-[-56px] w-[40px] h-[2px] bg-fixnix-lightpurple"></span>
           </span>
         )}
-        <h2 className="text-fixnix-darkpurple font-bold text-2xl py-2">{block.title}</h2>
+        <h2 className="text-fixnix-darkpurple font-bold text-2xl py-2">
+          {block.title}
+        </h2>
         {/* Section Text */}
         {block.html && (
           <p className="pt-[10px] text-left-mobile text-center text-gray-600 text-sm sm:text-base md:text-md lg:text-lg leading-[1.8] sm:leading-[2] md:leading-[1.5]">
@@ -90,9 +92,10 @@ function BlockRenderer({ block }: { block: Block }) {
               <li key={idx} className={c.active ? "font-bold" : undefined}>
                 <Link
                   href={c.href}
-                  className={c.active 
-                    ? "hover:text-fixnix-darkpurple" 
-                    : "text-fixnix-lightpurple font-semibold hover:underline hover:text-fixnix-darkpurple"
+                  className={
+                    c.active
+                      ? "hover:text-fixnix-darkpurple"
+                      : "text-fixnix-lightpurple font-semibold hover:underline hover:text-fixnix-darkpurple"
                   }
                 >
                   {c.label}
@@ -181,7 +184,8 @@ export default function AcademyPage() {
       try {
         // Use NEXT_PUBLIC_BACKEND_URL with localhost:8000 as fallback
         const baseUrl =
-          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+          process.env.NEXT_PUBLIC_BACKEND_URL ||
+          "https://api.sufisciencecenter.info";
         const res = await axios.get(`${baseUrl}/v1/content/academy/${slug}`, {
           headers: {
             "Cache-Control": "no-cache",
@@ -238,12 +242,10 @@ export default function AcademyPage() {
                 .map((b: Block, i: number) => (
                   <BlockRenderer key={`toolbar-${i}`} block={b} />
                 ))}
-              
+
               {data.blocks
                 .filter(
-                  (b: any) =>
-                    b.type === "richText" ||
-                    b.type === "cardGrid"
+                  (b: any) => b.type === "richText" || b.type === "cardGrid"
                 )
                 .map((b: Block, i: number) => (
                   <BlockRenderer key={`main-${i}`} block={b} />
