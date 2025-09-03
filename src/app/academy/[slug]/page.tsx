@@ -9,6 +9,7 @@ import axios from "axios";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { contentServices, type ContentItem } from "@/hooks/contentServices";
 
 type Slide = {
   subTitle?: string;
@@ -174,7 +175,7 @@ function BlockRenderer({ block }: { block: Block }) {
 
 export default function AcademyPage() {
   const pathname = usePathname();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -182,16 +183,8 @@ export default function AcademyPage() {
     const slug = parts[1];
     async function fetchData() {
       try {
-        // Use NEXT_PUBLIC_BACKEND_URL with localhost:8000 as fallback
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BACKEND_URL ||
-          "https://api.sufisciencecenter.info";
-        const res = await axios.get(`${baseUrl}/v1/content/academy/${slug}`, {
-          headers: {
-            "Cache-Control": "no-cache",
-          },
-        });
-        setData(res.data.data);
+        const content = await contentServices.getContent("academy", slug);
+        setData(content);
       } catch (e) {
         console.error(e);
       } finally {
