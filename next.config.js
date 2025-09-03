@@ -5,9 +5,11 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_API_URL:
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/v1",
+      process.env.NEXT_PUBLIC_API_URL ||
+      "https://api.sufisciencecenter.info/v1",
     NEXT_PUBLIC_BACKEND_URL:
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000",
+      process.env.NEXT_PUBLIC_BACKEND_URL ||
+      "https://api.sufisciencecenter.info",
   },
   async redirects() {
     return [
@@ -100,7 +102,8 @@ const nextConfig = {
   },
   async rewrites() {
     const backendUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      process.env.NEXT_PUBLIC_BACKEND_URL ||
+      "https://api.sufisciencecenter.info";
 
     return [
       // API proxy to backend
