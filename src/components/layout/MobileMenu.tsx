@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useNavigation } from "@/hooks/useNavigation";
 
 interface MobileMenuProps {
   isSidebar: boolean;
@@ -23,6 +24,7 @@ const MobileMenu = ({
   });
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const { explorerRoutes, academyRoutes, loading } = useNavigation();
 
   useEffect(() => {
     // Mobile menu specific logic can go here if needed
@@ -319,73 +321,19 @@ const MobileMenu = ({
                   style={{
                     display: `${isActive.key === "4" ? "block" : "none"}`,
                   }}
-                  className="space-y-2 ml-4"
+                  className="space-y-2 ml-4 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple"
                 >
-                  <li>
-                    <Link href="/foundationalmatrices" className="text-white text-sm font-medium">
-                      Foundational Matrices
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/ecologicalintelligence" className="text-white text-sm font-medium">
-                      Ecological Intelligence
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/consciousnessgeometries" className="text-white text-sm font-medium">
-                      Consciousness Geometries
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/perceptualgateways" className="text-white text-sm font-medium">
-                      Perceptual Gateways
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/realityframeworks" className="text-white text-sm font-medium">
-                      Reality Frameworks
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/cosmicharmonics" className="text-white text-sm font-medium">
-                      Cosmic Harmonics
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/energeticarchitectures" className="text-white text-sm font-medium">
-                      Energetic Architectures
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/characteralchemy" className="text-white text-sm font-medium">
-                      Character Alchemy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/unitysciences" className="text-white text-sm font-medium">
-                      Unity Sciences
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/healingmysteries" className="text-white text-sm font-medium">
-                      Healing Mysteries
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/wisdomtransmission" className="text-white text-sm font-medium">
-                      Wisdom Transmission
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/sacredartistry" className="text-white text-sm font-medium">
-                      Sacred Artistry
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/advancedtechnologies" className="text-white text-sm font-medium">
-                      Advanced Technologies
-                    </Link>
-                  </li>
+                  {loading ? (
+                    <li className="text-white text-sm font-medium">Loading...</li>
+                  ) : (
+                    explorerRoutes.map((route) => (
+                      <li key={route.slug}>
+                        <Link href={`/explore/${route.slug}`} className="text-white text-sm font-medium">
+                          {route.title}
+                        </Link>
+                      </li>
+                    ))
+                  )}
                 </ul>
                 <button
                   className={`absolute right-2 top-1 mt-2 transform -translate-y-1/2 text-white transition-transform duration-300 ${
@@ -410,41 +358,22 @@ const MobileMenu = ({
                   style={{
                     display: `${isActive.key === "5" ? "block" : "none"}`,
                   }}
-                  className="space-y-2 ml-4"
+                  className="space-y-2 ml-4 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpurple"
                 >
-                  <li>
-                    <Link
-                      href="/dialogseries"
-                      className="text-white text-sm font-medium"
-                    >
-                       Dialog Series
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/hardtalk"
-                      className="text-white text-sm font-medium"
-                    >
-                      Hard Talk Series
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/sacredprofessions"
-                      className="text-white text-sm font-medium"
-                    >
-                      Sufi Professions
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/inspiringinterview"
-                      className="text-white text-sm font-medium"
-                    >
-                      Inspiring Interviews
-                    </Link>
-                  </li>
-                  
+                  {loading ? (
+                    <li className="text-white text-sm font-medium">Loading...</li>
+                  ) : (
+                    academyRoutes.map((route) => (
+                      <li key={route.slug}>
+                        <Link
+                          href={`/academy/${route.slug}`}
+                          className="text-white text-sm font-medium"
+                        >
+                          {route.title}
+                        </Link>
+                      </li>
+                    ))
+                  )}
                 </ul>
                 <button
                   className={`absolute right-2 top-1 mt-2 transform -translate-y-1/2 text-white transition-transform duration-300 ${
