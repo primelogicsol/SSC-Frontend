@@ -32,7 +32,7 @@ type Block =
       type: "cardGrid";
       cards: { title: string; text?: string; image?: string; href?: string }[];
     }
-  | { type: "richText"; html: string };
+  | { type: "richText"; content: string };
 
 function BlockRenderer({ block }: { block: Block }) {
   if (block.type === "heroSlider") {
@@ -167,7 +167,7 @@ function BlockRenderer({ block }: { block: Block }) {
     return (
       <div
         className="prose max-w-none"
-        dangerouslySetInnerHTML={{ __html: block.html }}
+        dangerouslySetInnerHTML={{ __html: block.content }}
       />
     );
   return null;

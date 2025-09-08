@@ -23,7 +23,7 @@ type Slide = {
 type Block =
   | { type: "heroSlider"; slides: Slide[] }
   | { type: "featureList"; items: { text: string }[] }
-  | { type: "richText"; html: string }
+  | { type: "richText"; content: string }
   | {
       type: "cardGrid";
       cards: { title: string; text?: string; image?: string; href?: string }[];
@@ -208,7 +208,7 @@ function BlockRenderer({ block }: { block: Block }) {
     return (
       <div
         className="prose max-w-none text-gray-700 leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: block.html }}
+        dangerouslySetInnerHTML={{ __html: block.content }}
       />
     );
   }
