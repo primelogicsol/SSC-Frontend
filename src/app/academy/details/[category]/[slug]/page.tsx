@@ -1,6 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+// derive the interviewee name from data (prefer an explicit byline / answerBy)
+const getInterviewee = (d: ContentItem | null) => {
+  if (!d) return "";
+  // if you later add a top-level byline in JSON, this will use it
+  // @ts-ignore
+  if ((d as any).byline) return (d as any).byline as string;
+
+  // try to parse from title like: "Inspiring Interview: Layla Sabreen"
+  const title = d.title || d.blocks?.find?.((b: any) => b.type === "heroSection")?.title;
+  const m = title?.match(/Inspiring Interview:\s*(.+)$/i);
+  return m ? m[1].trim() : "";
+};
+
+const intervieweeName = getInterviewee(data);
+
 import { useParams } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
@@ -405,7 +420,7 @@ export default function AcademyDetailPage() {
                 {block.content && (
                   <p className="mt-4 leading-relaxed text-base sm:text-lg text-gray-700">
                     <span className="font-bold text-fixnix-darkpurple">
-                      Carter Nooruddin:
+                    {intervieweeName ? `${intervieweeName}:` : ""}
                     </span>{" "}
                     {block.content}
                   </p>
@@ -430,9 +445,9 @@ export default function AcademyDetailPage() {
                 {block.answer && (
                   <div className="space-y-4 sm:space-y-6">
                     <p className="leading-relaxed text-base sm:text-lg text-gray-700">
-                      <span className="font-semibold text-fixnix-darkpurple">
-                        Carter Nooruddin:
-                      </span>{" "}
+                      <span className="font-semiBold text-fixnix-darkpurple">
+                     {intervieweeName ? `${intervieweeName}:` : ""}
+                     </span>{" "}
                       {block.answer}
                     </p>
 
@@ -460,10 +475,10 @@ export default function AcademyDetailPage() {
 
                     {block.secondAnswer && (
                       <p className="mt-4 leading-relaxed text-lg ml-6">
-                        <span className="font-semibold text-fixnix-darkpurple">
-                          Carter Nooruddin:
-                        </span>{" "}
-                        {block.secondAnswer}
+                       <span className="font-semibold text-fixnix-darkpurple">
+                       {intervieweeName ? `${intervieweeName}:` : ""}
+                       </span>{" "}
+                       {block.secondAnswer}
                       </p>
                     )}
 
