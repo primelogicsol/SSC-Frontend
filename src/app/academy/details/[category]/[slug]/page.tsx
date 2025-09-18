@@ -562,8 +562,7 @@ const intervieweeName = getInterviewee(data);
                 <div className="space-y-6 bg-white bg-opacity-70 backdrop-blur-sm p-8 rounded-xl shadow-md">
                   <p className="leading-relaxed text-xl text-gray-800">
                   <span className="font-semibold text-fixnix-darkpurple">
-                  -   Carter Nooruddin:
-                  +   {intervieweeName ? `${intervieweeName}:` : ""}
+                  {intervieweeName ? `${intervieweeName}:` : ""}
                   </span>{" "}
                   {block.content}
                   </p>
