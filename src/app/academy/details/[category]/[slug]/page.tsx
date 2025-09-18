@@ -1,57 +1,56 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// derive the interviewee name from data (prefer an explicit byline / answerBy)
-const getInterviewee = (d: ContentItem | null) => {
-  if (!d) return "";
-  // if you later add a top-level byline in JSON, this will use it
-  // @ts-ignore
-  if ((d as any).byline) return (d as any).byline as string;
-
-  // try to parse from title like: "Inspiring Interview: Layla Sabreen"
-  const title = d.title || d.blocks?.find?.((b: any) => b.type === "heroSection")?.title;
-  const m = title?.match(/Inspiring Interview:\s*(.+)$/i);
-  return m ? m[1].trim() : "";
-};
-
-const intervieweeName = getInterviewee(data);
-
 import { useParams } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
-import { contentServices } from "@/hooks/contentServices";
-import { ContentItem } from "@/hooks/contentServices";
+import { contentServices, ContentItem } from "@/hooks/contentServices";
+
+// Helper ONLY (do not call it here)
+const getInterviewee = (d: ContentItem | null) => {
+if (!d) return "";
+// @ts-ignore
+if ((d as any).byline) return (d as any).byline as string;
+const title =
+d.title ||
+d.blocks?.find?.((b: any) => b.type === "heroSection")?.title;
+const m = title?.match(/Inspiring Interview:\s*(.+)$/i);
+return m ? m[1].trim() : "";
+};
+
 
 export default function AcademyDetailPage() {
-  const params = useParams();
-  const category = params.category as string;
-  const slug = params.slug as string;
-  const [data, setData] = useState<ContentItem | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const params = useParams();
+const category = params.category as string;
+const slug = params.slug as string;
+
+const [data, setData] = useState<ContentItem | null>(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
+
+
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await contentServices.getContent(
-          "academy-details",
-          slug
-        );
-        setData(response);
-      } catch (err) {
-        console.error("Error fetching academy details:", err);
-        setError("Failed to load content");
-      } finally {
-        setLoading(false);
-      }
-    };
+const fetchData = async () => {
+try {
+setLoading(true);
+const response = await contentServices.getContent("academy-details", slug);
+setData(response);
+} catch (err) {
+console.error("Error fetching academy details:", err);
+setError("Failed to load content");
+} finally {
+setLoading(false);
+}
+};
+if (slug) fetchData();
+}, [slug]);
 
-    if (slug) {
-      fetchData();
-    }
-  }, [slug]);
 
+ 
+
+const intervieweeName = getInterviewee(data);
   const renderDialogSeriesBlock = (block: any, index: number) => {
     switch (block.type) {
       case "heroSection":
@@ -562,10 +561,11 @@ export default function AcademyDetailPage() {
               <div className="pl-4 sm:pl-16">
                 <div className="space-y-6 bg-white bg-opacity-70 backdrop-blur-sm p-8 rounded-xl shadow-md">
                   <p className="leading-relaxed text-xl text-gray-800">
-                    <span className="font-semibold text-fixnix-darkpurple">
-                      Carter Nooruddin:
-                    </span>{" "}
-                    {block.content}
+                  <span className="font-semibold text-fixnix-darkpurple">
+                  -   Carter Nooruddin:
+                  +   {intervieweeName ? `${intervieweeName}:` : ""}
+                  </span>{" "}
+                  {block.content}
                   </p>
                 </div>
 
