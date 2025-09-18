@@ -1,9 +1,15 @@
-"use client"
+"use client";
 import Layout from "../../components/layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getCart, updateCartItem, deleteCartItem, clearCart, type CartItem } from "@/hooks/cart";
+import {
+  getCart,
+  updateCartItem,
+  deleteCartItem,
+  clearCart,
+  type CartItem,
+} from "@/hooks/cart";
 import type { CartCategory } from "@/hooks/cart";
 
 export default function Home() {
@@ -24,6 +30,7 @@ export default function Home() {
     try {
       setLoading(true);
       const items = await getCart();
+
       setCartItems(items);
     } catch (err) {
       console.error("Error fetching cart:", err);
@@ -35,10 +42,10 @@ export default function Home() {
 
   const handleQuantityChange = async (item: CartItem, newQty: number) => {
     if (newQty < 1) return;
-    
+
     try {
       setUpdatingItem(item.id);
-      
+
       // Determine the category based on which product field exists
       let category: CartCategory = "living"; // default
       if (item.music) category = "music";
@@ -47,23 +54,28 @@ export default function Home() {
       else if (item.meditation) category = "meditation";
       else if (item.decoration) category = "decoration";
       else if (item.accessories) category = "accessories";
-      
+
       // Get the product ID
-      const productId = item.music?.id || item.digitalBook?.id || item.fashion?.id || 
-                       item.meditation?.id || item.decoration?.id || item.living?.id || 
-                       item.accessories?.id;
-      
+      const productId =
+        item.music?.id ||
+        item.digitalBook?.id ||
+        item.fashion?.id ||
+        item.meditation?.id ||
+        item.decoration?.id ||
+        item.living?.id ||
+        item.accessories?.id;
+
       if (!productId) {
         setError("Product ID not found");
         return;
       }
-      
+
       await updateCartItem({
         category,
         productId,
-        qty: newQty
+        qty: newQty,
       });
-      
+
       // Refresh cart items
       await fetchCartItems();
     } catch (err) {
@@ -77,7 +89,7 @@ export default function Home() {
   const handleRemoveItem = async (item: CartItem) => {
     try {
       setDeletingItem(item.id);
-      
+
       // Determine the category based on which product field exists
       let category: CartCategory = "living"; // default
       if (item.music) category = "music";
@@ -86,22 +98,27 @@ export default function Home() {
       else if (item.meditation) category = "meditation";
       else if (item.decoration) category = "decoration";
       else if (item.accessories) category = "accessories";
-      
+
       // Get the product ID
-      const productId = item.music?.id || item.digitalBook?.id || item.fashion?.id || 
-                       item.meditation?.id || item.decoration?.id || item.living?.id || 
-                       item.accessories?.id;
-      
+      const productId =
+        item.music?.id ||
+        item.digitalBook?.id ||
+        item.fashion?.id ||
+        item.meditation?.id ||
+        item.decoration?.id ||
+        item.living?.id ||
+        item.accessories?.id;
+
       if (!productId) {
         setError("Product ID not found");
         return;
       }
-      
+
       await deleteCartItem({
         category,
-        productId
+        productId,
       });
-      
+
       // Refresh cart items
       await fetchCartItems();
     } catch (err) {
@@ -126,26 +143,47 @@ export default function Home() {
   };
 
   const getProductInfo = (item: CartItem) => {
-    const product = item.music || item.digitalBook || item.fashion || 
-                   item.meditation || item.decoration || item.living || 
-                   item.accessories;
-    
+    const product =
+      item.music ||
+      item.digitalBook ||
+      item.fashion ||
+      item.meditation ||
+      item.decoration ||
+      item.living ||
+      item.accessories;
+
     if (!product) return { title: "Unknown Product", price: 0, image: "" };
-    
+
     return {
       title: product.title || product.name || "Product",
       price: product.price || 0,
-      image: product.images?.[0] || product.coverImage || "/assets/images/shop/cart-page-img-1.jpg"
+      image:
+        product.images?.[0] ||
+        product.coverImage ||
+        "/assets/images/shop/cart-page-img-1.jpg",
     };
   };
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => {
-      const product = getProductInfo(item);
-      return total + (product.price * item.qty);
-    }, 0);
+    return cartItems.length
+      ? cartItems.reduce((total, item) => {
+          const product = getProductInfo(item);
+          return total + product.price * item.qty;
+        }, 0)
+      : 0;
   };
-  
+
+  const getCartCategory = (item: CartItem): string | undefined => {
+    if (item.music) return "MUSIC";
+    if (item.accessories) return "ACCESSORIES";
+    if (item.decoration) return "DECORATION";
+    if (item.digitalBook) return "DIGITAL_BOOK"; // special case
+    if (item.fashion) return "FASHION";
+    if (item.living) return "HOME_LIVING"; // special case
+    if (item.meditation) return "MEDITATION";
+    return undefined; // fallback if no match
+  };
+
   return (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Cart">
       {/* Start Cart Page */}
@@ -172,14 +210,15 @@ export default function Home() {
                 <i className="fas fa-gift text-2xl"></i>
               </div>
               <p className="text-fixnix-darkpurple font-medium">
-                <span className="font-bold">Last-minute gift?</span> Buy a voucher now!
+                <span className="font-bold">Last-minute gift?</span> Buy a
+                voucher now!
               </p>
             </div>
-            <button 
+            <button
               onClick={() => setShowGiftCard(!showGiftCard)}
               className="text-fixnix-lightpurple hover:text-fixnix-darkpurple font-bold"
             >
-              {showGiftCard ? 'Hide Options' : 'Add Gift Voucher'}
+              {showGiftCard ? "Hide Options" : "Add Gift Voucher"}
             </button>
           </div>
 
@@ -189,7 +228,7 @@ export default function Home() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="md:w-1/3">
                   <Image
-                    src="/assets/images/shop/giftvoucher.png" 
+                    src="/assets/images/shop/giftvoucher.png"
                     alt="Gift Voucher"
                     width={300}
                     height={200}
@@ -201,25 +240,32 @@ export default function Home() {
                     Gift Voucher
                   </h3>
                   <p className="text-fixnix-gray mb-4">
-                    Perfect for last-minute gifts! Your recipient can redeem this voucher on any items in our store.
+                    Perfect for last-minute gifts! Your recipient can redeem
+                    this voucher on any items in our store.
                   </p>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <div className="flex-1">
-                      <label className="block text-fixnix-darkpurple font-medium mb-2">Amount</label>
+                      <label className="block text-fixnix-darkpurple font-medium mb-2">
+                        Amount
+                      </label>
                       <div className="flex items-center">
                         <span className="text-fixnix-gray text-xl mr-2">$</span>
                         <input
                           type="number"
                           min="10"
                           value={giftCardAmount}
-                          onChange={(e) => setGiftCardAmount(Number(e.target.value))}
+                          onChange={(e) =>
+                            setGiftCardAmount(Number(e.target.value))
+                          }
                           className="w-full border border-gray-300 p-3 text-[16px] text-fixnix-darkpurple"
                         />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <label className="block text-fixnix-darkpurple font-medium mb-2">Recipient Email</label>
+                      <label className="block text-fixnix-darkpurple font-medium mb-2">
+                        Recipient Email
+                      </label>
                       <input
                         type="email"
                         placeholder="email@example.com"
@@ -227,11 +273,9 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-end">
-                    <button 
-                      className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple"
-                    >
+                    <button className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple">
                       Add to Cart
                     </button>
                   </div>
@@ -244,8 +288,12 @@ export default function Home() {
           {cartItems.length === 0 && !loading && (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🛒</div>
-              <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-2">Your cart is empty</h2>
-              <p className="text-fixnix-gray mb-6">Add some items to get started!</p>
+              <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-2">
+                Your cart is empty
+              </h2>
+              <p className="text-fixnix-gray mb-6">
+                Add some items to get started!
+              </p>
               <Link
                 href="/wall&artdecor"
                 className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple rounded"
@@ -257,104 +305,122 @@ export default function Home() {
 
           {/* Cart Items Table */}
           {cartItems.length > 0 && (
-          <div className="overflow-x-auto w-full">
-            <table className="w-full min-w-[1170px] border-collapse text-left">
-              <thead>
-                <tr className="text-[20px] font-bold text-fixnix-darkpurple border-b border-gray-300">
-                  <th className="pb-5">Item</th>
-                  <th className="pb-5">Price</th>
-                  <th className="pb-5">Quantity</th>
-                  <th className="pb-5">Total</th>
-                  <th className="pb-5 text-right">Remove</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cartItems.map((item, index) => {
-                  const productInfo = getProductInfo(item);
-                  return (
-                  <tr key={index} className="border-b border-gray-300">
-                    <td className="flex items-center py-8 space-x-9">
-                      <div className="w-[120px] border border-gray-300 overflow-hidden">
-                      <Image
-                      src={productInfo.image}
-                      alt="Product Image"
-                      width={500} // Adjust based on your design requirements
-                      height={300} // Adjust this height to fit your layout
-                      className="w-full"
-                    />
-                      </div>
-                      <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
-                        <Link
-                          href="product-details"
-                          className="text-fixnix-lightpurple"
-                        >
-                          {productInfo.title}
-                        </Link>
-                      </h3>
-                    </td>
-                    <td className="text-[18px] text-fixnix-gray">${productInfo.price.toFixed(2)}</td>
-                    <td>
-                      <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
-                        <input
-                          type="number"
-                          value={item.qty}
-                          onChange={(e) => handleQuantityChange(item, parseInt(e.target.value) || 1)}
-                          disabled={updatingItem === item.id}
-                          className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none"
-                        />
-                      </div>
-                    </td>
-                    <td className="text-[18px] text-fixnix-gray">${(productInfo.price * item.qty).toFixed(2)}</td>
-                    <td className="text-right">
-                      <button 
-                        onClick={() => handleRemoveItem(item)}
-                        disabled={deletingItem === item.id}
-                        className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple disabled:opacity-50"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </td>
+            <div className="overflow-x-auto w-full">
+              <table className="w-full min-w-[900px] border-collapse text-left">
+                <thead>
+                  <tr className="text-[20px] font-bold text-fixnix-darkpurple border-b border-gray-300">
+                    <th className="pb-5">Item</th>
+                    <th className="pb-5">Price</th>
+                    <th className="pb-5">Quantity</th>
+                    <th className="pb-5">Total</th>
+                    <th className="pb-5 text-right">Remove</th>
                   </tr>
-                )})}
-                
-                {/* Gift Card Row (Shown when added) */}
-                {showGiftCard && (
-                  <tr className="border-b border-gray-300 bg-purple-50">
-                    <td className="flex items-center py-8 space-x-9">
-                      <div className="w-[120px] border border-gray-300 overflow-hidden">
-                        <div className="bg-fixnix-lightpurple h-full flex items-center justify-center">
-                          <i className="fas fa-gift text-white text-3xl"></i>
+                </thead>
+                <tbody>
+                  {cartItems.map((item, index) => {
+                    const productInfo = getProductInfo(item);
+                    return (
+                      <tr key={index} className="border-b border-gray-300">
+                        <td className="flex items-center py-8 space-x-9">
+                          <div className="w-[120px] border border-gray-300 overflow-hidden">
+                            <Image
+                              src={productInfo.image}
+                              alt="Product Image"
+                              width={500} // Adjust based on your design requirements
+                              height={300} // Adjust this height to fit your layout
+                              className="w-full"
+                            />
+                          </div>
+                          <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
+                            <Link
+                              href={`/productdetails/${getCartCategory(item)}/${
+                                item.id
+                              }`}
+                              className="text-fixnix-lightpurple"
+                            >
+                              {productInfo.title}
+                            </Link>
+                          </h3>
+                        </td>
+                        <td className="text-[18px] text-fixnix-gray">
+                          ${productInfo.price.toFixed(2)}
+                        </td>
+                        <td>
+                          <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
+                            <input
+                              type="number"
+                              value={item.qty}
+                              onChange={(e) =>
+                                handleQuantityChange(
+                                  item,
+                                  parseInt(e.target.value) || 1
+                                )
+                              }
+                              disabled={updatingItem === item.id}
+                              className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none"
+                            />
+                          </div>
+                        </td>
+                        <td className="text-[18px] text-fixnix-gray">
+                          ${(productInfo.price * item.qty).toFixed(2)}
+                        </td>
+                        <td className="text-right">
+                          <button
+                            onClick={() => handleRemoveItem(item)}
+                            disabled={deletingItem === item.id}
+                            className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple disabled:opacity-50"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+
+                  {/* Gift Card Row (Shown when added) */}
+                  {showGiftCard && (
+                    <tr className="border-b border-gray-300 bg-purple-50">
+                      <td className="flex items-center py-8 space-x-9">
+                        <div className="w-[120px] border border-gray-300 overflow-hidden">
+                          <div className="bg-fixnix-lightpurple h-full flex items-center justify-center">
+                            <i className="fas fa-gift text-white text-3xl"></i>
+                          </div>
                         </div>
-                      </div>
-                      <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
-                        <span className="text-fixnix-lightpurple">Gift Voucher</span>
-                      </h3>
-                    </td>
-                    <td className="text-[18px] text-fixnix-gray">${giftCardAmount.toFixed(2)}</td>
-                    <td>
-                      <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
-                        <input
-                          type="number"
-                          value="1"
-                          readOnly
-                          className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none bg-white"
-                        />
-                      </div>
-                    </td>
-                    <td className="text-[18px] text-fixnix-gray">${giftCardAmount.toFixed(2)}</td>
-                    <td className="text-right">
-                      <button 
-                        onClick={() => setShowGiftCard(false)}
-                        className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                        <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
+                          <span className="text-fixnix-lightpurple">
+                            Gift Voucher
+                          </span>
+                        </h3>
+                      </td>
+                      <td className="text-[18px] text-fixnix-gray">
+                        ${giftCardAmount.toFixed(2)}
+                      </td>
+                      <td>
+                        <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
+                          <input
+                            type="number"
+                            value="1"
+                            readOnly
+                            className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none bg-white"
+                          />
+                        </div>
+                      </td>
+                      <td className="text-[18px] text-fixnix-gray">
+                        ${giftCardAmount.toFixed(2)}
+                      </td>
+                      <td className="text-right">
+                        <button
+                          onClick={() => setShowGiftCard(false)}
+                          className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
@@ -375,7 +441,13 @@ export default function Home() {
                   <span className="font-bold text-fixnix-darkpurple">
                     Subtotal
                   </span>
-                  <span>${showGiftCard ? (calculateSubtotal() + giftCardAmount).toFixed(2) : calculateSubtotal().toFixed(2)} USD</span>
+                  <span>
+                    $
+                    {showGiftCard
+                      ? (calculateSubtotal() + giftCardAmount).toFixed(2)
+                      : calculateSubtotal().toFixed(2)}{" "}
+                    USD
+                  </span>
                 </li>
                 <li className="flex justify-between">
                   <span className="font-bold text-fixnix-darkpurple">
@@ -388,7 +460,11 @@ export default function Home() {
                     Total
                   </span>
                   <span className="text-fixnix-lightpuple font-bold">
-                    ${showGiftCard ? (calculateSubtotal() + giftCardAmount).toFixed(2) : calculateSubtotal().toFixed(2)} USD
+                    $
+                    {showGiftCard
+                      ? (calculateSubtotal() + giftCardAmount).toFixed(2)
+                      : calculateSubtotal().toFixed(2)}{" "}
+                    USD
                   </span>
                 </li>
               </ul>

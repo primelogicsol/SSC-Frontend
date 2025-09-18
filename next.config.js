@@ -3,23 +3,35 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // accept all https domains
+      },
+      {
+        protocol: "http",
+        hostname: "**", // also allow http if needed
+      },
+    ],
+  },
   // Disable caching for API routes
   async headers() {
     return [
       {
-        source: '/v1/:path*',
+        source: "/v1/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
           },
           {
-            key: 'Pragma',
-            value: 'no-cache',
+            key: "Pragma",
+            value: "no-cache",
           },
           {
-            key: 'Expires',
-            value: '0',
+            key: "Expires",
+            value: "0",
           },
         ],
       },

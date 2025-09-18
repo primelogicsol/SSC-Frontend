@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner";
 import { Roboto, Source_Code_Pro } from "next/font/google";
 // s
 import "../styles/fixnix.css";
 import { AuthProvider } from "@/context/AuthContext";
+import NextjsTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 
 // Define fonts with their respective CSS variables
 const roboto = Roboto({
@@ -20,7 +21,6 @@ const sourceCodePro = Source_Code_Pro({
 
 export const metadata: Metadata = {
   title: "Sufi Science Center",
- 
 };
 
 export default function RootLayout({
@@ -40,10 +40,9 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${sourceCodePro.variable} antialiased`}
       >
-        <Toaster />
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <NextjsTopLoader color="#ffffff" />
+        <Toaster position="bottom-right" />
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

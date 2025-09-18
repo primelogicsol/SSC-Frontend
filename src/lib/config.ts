@@ -12,6 +12,10 @@ export const config = {
 
   // App URLs
   APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:6020",
+
+  //stripe
+  STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };
 
 // Helper function to get API URL

@@ -108,11 +108,11 @@ const Layout: React.FC<LayoutProps> = ({
         <Sidebar isSidebar={isSidebar} handleSidebar={handleSidebar} />
         <SearchPopup isPopup={isPopup} handlePopup={handlePopup} />
 
-        {breadcrumbTitle && <Breadcrumb breadcrumbTitle={breadcrumbTitle} />}
+        {/* {breadcrumbTitle && <Breadcrumb breadcrumbTitle={breadcrumbTitle} />} */}
 
         {/* Applying Animation based on scroll */}
         <div
-          className={`animate__animated ${scroll === 1 ? "animate__fadeIn" : ""}`}
+          className={`animate__animated }`}
         >
           {children}
         </div>

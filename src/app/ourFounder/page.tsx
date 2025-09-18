@@ -307,7 +307,7 @@ export default function Home() {
 
                           <div className="flex items-center space-x-4  -mb-12">
   <a 
-    href="https://maps.app.goo.gl/Z7WtC8dtsGrcLBmn8" 
+    href="https://www.google.com/maps/place/Faqeer+Dr.+Ghulam+Mohammad+Kumar+Saeb/@34.2392628,74.7889849,19.9z/data=!4m12!1m5!3m4!2zMzTCsDE0JzIxLjYiTiA3NMKwNDcnMjIuMCJF!8m2!3d34.23932!4d74.78944!3m5!1s0x38e183005b8004d5:0x63e85c5fd2255412!8m2!3d34.239245!4d74.788959!16s%2Fg%2F11wjlkjvbf?entry=ttu&g_ep=EgoyMDI1MDkxNS4wIKXMDSoASAFQAw%3D%3D" 
     target="_blank" 
     rel="noopener noreferrer"
     className="flex-shrink-0"
@@ -319,13 +319,13 @@ export default function Home() {
       height={50} 
       className=" hover:opacity-90 transition"
     />
-  </a>
   <div className="flex items-center space-x-2">
     <i className="fas fa-arrow-right text-fixnix-darkpurple text-xl"></i>
     <p className="font-bold text-fixnix-darkpurple whitespace-nowrap text-base sm:text-lg md:text-xl">
       Get Spiritual Direction
     </p>
   </div>
+  </a>
 </div>
 
 

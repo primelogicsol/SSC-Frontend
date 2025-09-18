@@ -2,7 +2,8 @@ import axios from "axios";
 import { config } from "./config";
 
 const apiClient = axios.create({
-  baseURL: config.API_BASE_URL,
+  // baseURL: config.API_BASE_URL,
+  baseURL:'http://localhost:6015/v1',
   headers: { 
     "Content-Type": "application/json",
     "Cache-Control": "no-cache, no-store, must-revalidate",
