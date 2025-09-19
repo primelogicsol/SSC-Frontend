@@ -69,7 +69,7 @@ export default function Footer() {
                         <span className="absolute top-0 left-0 right-0 h-full bg-[var(--fixnix-lightpuple)] transition-all delay-100 duration-400 ease-in-out opacity-100 origin-top transform scale-y-0 z-[-1] group-hover:scale-y-100"></span>
                       </Link>
                       <Link
-                        href="https://www.youtube.com/@SufiPulse-Studio-USA"
+                        href="https://www.youtube.com/@SufiPulse-USA"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="relative flex items-center justify-center h-10 w-10 text-center text-[var(--fixnix-white)] bg-[#272a2d] text-sm rounded overflow-hidden transition-all duration-500 ease-in-out z-10 hover:text-[var(--fixnix-white)] hover:bg-[var(--fixnix-lightpuple)] group ml-2.5"
@@ -162,14 +162,7 @@ export default function Footer() {
                         YOUR JOURNEY
                       </h3>
                     </div>
-                    <li className="relative block mb-3 md:mb-4">
-                      <Link
-                        href="/vendor-registration"
-                        className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
-                      >
-                        Become a vendor
-                      </Link>
-                    </li>{" "}
+
                     <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/beginyourjourney"
@@ -280,21 +273,36 @@ export default function Footer() {
                         Advanced Technologies
                       </Link>
                     </li>
-
                     <div className="relative block mb-6 md:mb-8 lg:my-8 ">
                       <h3 className="text-xl md:text-2xl text-[var(--fixnix-white)] font-semibold leading-6">
                         SSC SUPPORT
                       </h3>
                     </div>
-
                     <li className="relative block mb-3 md:mb-4">
+                      <Link
+                        target="_blank"
+                        href="https://vendor.sufisciencecenter.info/login"
+                        className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
+                      >
+                        Access dashboard
+                      </Link>
+                    </li>
+                    <li className="relative block mb-3 md:mb-4">
+                      <Link
+                        href="/vendor-registration"
+                        className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
+                      >
+                        Become a vendor
+                      </Link>
+                    </li>{" "}
+                    {/* <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/resources&support"
                         className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
                       >
                         Resources & Guidance
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/membership"
@@ -303,7 +311,6 @@ export default function Footer() {
                         Membership
                       </Link>
                     </li>
-
                     <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/submissionportal#conference-form"
@@ -312,14 +319,14 @@ export default function Footer() {
                         Conference Registration
                       </Link>
                     </li>
-                    <li className="relative block mb-3 md:mb-4">
+                    {/* <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/corelearningpaths#checklist-form"
                         className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
                       >
                         Checklist for Sufi Journey
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/resources&support#techical-assistance"
@@ -490,33 +497,50 @@ export default function Footer() {
                 meets modern expression.
               </div>
               <div className="flex items-center justify-center gap-6">
-                <Image
-                  src="/assets/images/resources/drkumar.png"
-                  alt="Dr. Kumar Foundation Logo"
-                  width={110}
-                  height={110}
-                  className="  "
-                />
-                <Image
-                  src="/assets/images/resources/sufipulse-logo.png"
-                  alt="SufiPulse Studio Logo"
-                  width={80}
-                  height={90}
-                  className=""
-                />
+                <Link
+                  href={"http://dkf.sufisciencecenter.info"}
+                  target="_blank"
+                >
+                  <div className="w-[200px] h-[200px] relative">
+                    <Image
+                      src="/assets/images/resources/drkumar.png"
+                      alt="Dr. Kumar Foundation Logo"
+                      width={200}
+                      height={200}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </Link>
+                <Link href="https://sufipulse.com/" target="_blank">
+                  <div className="w-[150px] h-[150px] relative">
+                    <Image
+                      src="/assets/images/resources/sufipulse-logo.png"
+                      alt="SufiPulse Studio Logo"
+                      width={150}
+                      height={200}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
         {/* Copyright Section */}
-        <div className="border-t border-[var(--fixnix-lightpuple)] -mt-16  py-6">
+        <div className="border-t border-[var(--fixnix-lightpuple)]  py-6">
           <div className="container px-4 md:px-6 mx-auto flex flex-col md:flex-row justify-between items-center text-[var(--fixnix-white)] text-sm space-y-4 md:space-y-0">
             <p>
               &copy; {new Date().getFullYear()} Sufi Science Center. All Rights
               Reserved. <br />
-              Developed by Prime Logic Solutions with devotion in USA & guided
-              by the wisdom of the cosmos.
+              <Link
+                href={"https://primelogicsol.com/"}
+                target="_blank"
+                className="text-white"
+              >
+                Developed by Prime Logic Solutions
+              </Link>{" "}
+              with devotion in USA & guided by the wisdom of the cosmos.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
