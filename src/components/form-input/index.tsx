@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 
-interface FormInputProps {
+interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   type?: string;
@@ -25,6 +25,7 @@ export function FormInput({
   placeholder,
   min,
   max,
+  ...props
 }: FormInputProps) {
   const {
     control,
@@ -52,6 +53,7 @@ export function FormInput({
               {...field}
               minLength={min}
               maxLength={max}
+              {...props}
             />
           )}
         />

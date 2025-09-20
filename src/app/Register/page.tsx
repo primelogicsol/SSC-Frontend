@@ -46,7 +46,7 @@ export default function Register() {
         );
       }, 1500);
     } catch (err: any) {
-      toast.error("Registration failed", {
+      toast.error(err.message || "Registration failed", {
         position: "top-center",
         richColors: true,
       });

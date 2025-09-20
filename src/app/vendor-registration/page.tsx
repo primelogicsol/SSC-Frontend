@@ -21,6 +21,7 @@ const VendorRegistration = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const fetchVendorData = useCallback(async () => {
+    setIsEditing(false)
     try {
       setLoading(true);
       const data = await getVendorLoginStepsData();
@@ -49,7 +50,13 @@ const VendorRegistration = () => {
               <div className="p-6 md:p-8">
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col items-center text-center">
-                    <h1 className="text-2xl font-bold">{vendorData?.isCompleted ? "Request submitted": isEditing ? "Edit request details" :`Start your journey`}</h1>
+                    <h1 className="text-2xl font-bold">
+                      {vendorData?.isCompleted
+                        ? "Request submitted"
+                        : isEditing
+                        ? "Edit request details"
+                        : `Start your journey`}
+                    </h1>
                     <p className="text-balance text-muted-foreground">
                       Vendor Registration
                     </p>
@@ -80,6 +87,7 @@ const VendorRegistration = () => {
                   ) : (
                     // ✅ Form
                     <VendorStepperForm
+                      successCallback={fetchVendorData}
                       defaultValues={vendorData! as VendorFormValues}
                     />
                   )}

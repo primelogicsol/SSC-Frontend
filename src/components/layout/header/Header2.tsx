@@ -29,14 +29,11 @@ const Header2: React.FC<Header2Props> = ({
   const [isSticky, setIsSticky] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
   const router = useRouter();
-  
-  // Debug logging to see what's happening
-  console.log("Header2 - isAuthenticated:", isAuthenticated, "user:", user);
 
   const handleScroll = () => {
     const currentScrollPosition = window.scrollY;
     setScrollPosition(currentScrollPosition);
-    setIsSticky(currentScrollPosition > 100); 
+    setIsSticky(currentScrollPosition > 100);
   };
 
   useEffect(() => {
@@ -70,87 +67,85 @@ const Header2: React.FC<Header2Props> = ({
               SSC | Kashmir Chapter
             </p>
             <div className="flex items-center space-x-4">
-                         <button
-               onClick={handleProfileClick}
-               className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-             >
-               <i className="fas fa-user"></i>
-             </button>
-
-            {/* Login/Register OR Logout */}
-            <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300 space-x-1">
-              {isAuthenticated ? (
+              <Link href={"/myprofile"}>
                 <button
-                  onClick={handleLogout}
-                  className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                  onClick={handleProfileClick}
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-md transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
                 >
-                  Logout
+                  <i className="fas fa-user"></i>
                 </button>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
+              </Link>
+
+              {/* Login/Register OR Logout */}
+              <div className="flex items-center justify-center py-2 px-4 hover:bg-fixnix-lightpurple bg-fixnix-white text-fixnix-darkpurple rounded-lg text-sm font-bold transition-all duration-300 space-x-1">
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleLogout}
                     className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
                   >
-                    Login
-                  </Link>
-                  <span>/</span>
-                  <Link
-                    href="/Register"
-                    className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
-                  >
-                    Register
-                  </Link>
-                   </>
-                 )}
-                               </div>
-                
-              
-                
-               <div className="flex space-x-3">
-              <Link
-                href="https://www.facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fab fa-facebook"></i>
-              </Link>
-              <Link
-                href="https://www.linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fab fa-linkedin-in"></i>
-              </Link>
-              <Link
-                href="https://www.youtube.com/@SufiPulse-Studio-USA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fab fa-youtube"></i>
-              </Link>
-              <Link
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fab fa-twitter"></i>
-              </Link>
-              <Link
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
-              >
-                <i className="fab fa-instagram"></i>
-              </Link>
-            </div>
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                    >
+                      Login
+                    </Link>
+                    <span>/</span>
+                    <Link
+                      href="/Register"
+                      className="hover:underline text-fixnix-darkpurple hover:text-fixnix-white"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </div>
 
-
+              <div className="flex space-x-3">
+                <Link
+                  href="https://www.facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+                >
+                  <i className="fab fa-facebook"></i>
+                </Link>
+                <Link
+                  href="https://www.linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+                >
+                  <i className="fab fa-linkedin-in"></i>
+                </Link>
+                <Link
+                  href="https://www.youtube.com/@SufiPulse-Studio-USA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+                >
+                  <i className="fab fa-youtube"></i>
+                </Link>
+                <Link
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+                >
+                  <i className="fab fa-twitter"></i>
+                </Link>
+                <Link
+                  href="https://www.instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-9 w-9 bg-fixnix-white text-fixnix-darkpurple rounded-full text-sm transition-all duration-300 hover:bg-fixnix-lightpurple hover:text-fixnix-white"
+                >
+                  <i className="fab fa-instagram"></i>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -175,28 +170,27 @@ const Header2: React.FC<Header2Props> = ({
           xs:w-[40px] xs:h-[40px]"
                   />
                 </Link>
-                <span className="text-fixnix-darkpurple  leading-none font-serif whitespace-nowrap responsive-website-name  text-[1.8rem] font-bold truncate transition-all duration-300 ease-in-out text-center
+                <span
+                  className="text-fixnix-darkpurple  leading-none font-serif whitespace-nowrap responsive-website-name  text-[1.8rem] font-bold truncate transition-all duration-300 ease-in-out text-center
                3xl:text-[5.5rem]
                2xl:text-[3.2rem]
                lg:text-[2.3rem]
                md:text-[2rem]
                sm:text-[23px]
                xs:text-[19px]
-               2xs:text-[16px]">
+               2xs:text-[16px]"
+                >
                   Sufi Science Center
                 </span>
               </div>
               <div className="flex items-center  ml-auto">
-                <Link
-                  href="/membership"
-                  className="membership-btn "
-                >
+                <Link href="/membership" className="membership-btn ">
                   Get Membership
                 </Link>
-                
               </div>
 
-              <p className="italic text-gray-600  responsive-tagline text-base mt-[5px] text-center
+              <p
+                className="italic text-gray-600  responsive-tagline text-base mt-[5px] text-center
         3xl:text-[23px] 3xl:-mt-[75px] 3xl:ml-[210px] 3xl:pr-[380px]
         2xl:text-[13.5px] 2xl:-mt-[50px] 2xl:ml-[140px] 2xl:pr-[1200px]
         lg:text-[9.5px] lg:-mt-[45px] lg:ml-[100px] lg:pr-[380px]
@@ -206,7 +200,8 @@ const Header2: React.FC<Header2Props> = ({
         xs:text-[4.5px] xs:-mt-[55px] xs:ml-[52px]
         sxs:text-[5px] sxs:-mt-[20px] sxs:ml-[50px]
         2xs:text-[4px] 2xs:-mt-[22px] 2xs:ml-[50px]
-        3xs:text-[4px] 3xs:-mt-[22px] 3xs:ml-[53px]">
+        3xs:text-[4px] 3xs:-mt-[22px] 3xs:ml-[53px]"
+              >
                 A Harmony of Knowledge and Inner Peace: The Next Generation Sufi
                 Way Forward
               </p>
@@ -231,7 +226,6 @@ const Header2: React.FC<Header2Props> = ({
                 </div>
 
                 {/* Search Icon */}
-                
               </div>
             </div>
           </div>

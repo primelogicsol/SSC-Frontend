@@ -41,7 +41,7 @@ export default function RootLayout({
         className={`${roboto.variable} ${sourceCodePro.variable} antialiased`}
       >
         <NextjsTopLoader color="#ffffff" />
-        <Toaster position="bottom-right" />
+        <Toaster position="top-center" richColors />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

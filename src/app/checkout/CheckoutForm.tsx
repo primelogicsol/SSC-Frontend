@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutSchema, CheckoutFormValues } from "./Schema";
@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { checkoutSubmit } from "@/hooks/cart";
 import { toast } from "sonner";
-import Link from "next/link";
-import Confetti from "react-confetti";
 
-const CheckoutForm = () => {
+interface Props {
+  onSuccess: (value: boolean) => void;
+}
+
+const CheckoutForm: FC<Props> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const methods = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: { country: "4" },
@@ -31,46 +32,16 @@ const CheckoutForm = () => {
       const res = await checkoutSubmit(data);
       console.log(res.data);
       toast.success("Thanks for your order we'll get back to you soon");
-      setSuccess(true);
+      onSuccess(true);
     } catch (err: any) {
       console.error("Checkout error:", err);
       toast.error("Error processing request");
-      setSuccess(false);
+      onSuccess(false);
     } finally {
       setLoading(false);
     }
   };
 
-  if (success) {
-    return (
-      <div className="relative bg-white p-8 rounded-xl shadow-lg text-center">
-        {/* 🎉 Confetti */}
-        <Confetti numberOfPieces={300} recycle={false} />
-
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="space-y-4"
-        >
-          <h2 className="text-3xl font-bold text-fixnix-darkpurple">
-            🎉 Order Confirmed!
-          </h2>
-          <p className="text-gray-600">
-            Thanks for your order. We’ll send you an email confirmation shortly.
-          </p>
-          <Link href="/wall&artdecor">
-            <Button
-              onClick={() => setSuccess(false)}
-              className="bg-fixnix-lightpurple mt-3"
-            >
-              Place Another Order
-            </Button>
-          </Link>
-        </motion.div>
-      </div>
-    );
-  }
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm">
       <h2 className="text-2xl font-semibold text-fixnix-darkpurple mb-6">

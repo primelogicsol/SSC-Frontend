@@ -28,11 +28,14 @@ import { registerVendor } from "@/hooks/vendorRegistration";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FormDatePicker } from "@/components/datepicker";
+import AttachmentUploader from "./AttachmentUploader";
 
 export default function StepperProgress({
   defaultValues,
+  successCallback,
 }: {
   defaultValues: VendorFormValues;
+  successCallback: () => void;
 }) {
   const steps = [1, 2, 3, 4];
 
@@ -119,9 +122,7 @@ export default function StepperProgress({
       );
       if (currentStep === 4) {
         methods.reset();
-        setTimeout(() => {
-          router.push("/");
-        }, 500);
+        successCallback();
       }
     } catch (error) {
       toast.error(
@@ -249,6 +250,15 @@ export default function StepperProgress({
                     name="signatureDate"
                     control={methods.control}
                     label="Signature Date"
+                  />
+
+                  <AttachmentUploader
+                    name="attachments"
+                    label="Upload PDF"
+                    placeholder="Drop your PDF here"
+                    accept={{ "application/pdf": [] }} // restrict to PDFs
+                    maxFiles={3}
+                    maxSize={1024 * 1024 * 10} // 10MB
                   />
 
                   <FormCheckbox

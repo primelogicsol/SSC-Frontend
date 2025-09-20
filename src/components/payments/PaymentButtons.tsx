@@ -165,13 +165,13 @@ export default function PaymentButtons(props: PaymentButtonsProps) {
     <div className={className}>
       {/* stripe */}
       <PaymentMethodList />
-      {clientSecret && (
+      {/* {clientSecret && (
         <StripePaymentMethod
           show={openStripeModal}
           setShow={setOpenStripeModal}
           clientSecret={clientSecret}
         />
-      )}
+      )} */}
       {/* PayPal */}
       {paypalClientId && (
         <>
