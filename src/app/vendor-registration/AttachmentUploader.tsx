@@ -18,19 +18,22 @@ interface AttachmentUploaderProps {
   maxFiles?: number;
   maxSize?: number;
   minSize?: number;
+  description?: string; // 👈 custom description
 }
 
 const AttachmentUploader: React.FC<AttachmentUploaderProps> = ({
   name,
   label = "Upload Attachment",
   placeholder = "Drag & drop files here or click to browse",
-  accept = { "image/*": [] },
+  accept = { "image/*": [] }, // ✅ default images
   maxFiles = 5,
   maxSize = 1024 * 1024 * 5, // 5MB
   minSize = 1024, // 1KB
+  description,
 }) => {
   const [progress, setProgress] = useState<number>(0);
   const { control } = useFormContext();
+
   // fake upload progress for demo purposes
   const simulateUpload = (files: File[]) => {
     setProgress(0);
@@ -54,6 +57,15 @@ const AttachmentUploader: React.FC<AttachmentUploaderProps> = ({
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <div className="space-y-2">
           {label && <Label htmlFor={name}>{label}</Label>}
+
+          {/* 📌 Description (dynamic or custom) */}
+          <p className="text-sm text-gray-500">
+            {description
+              ? description
+              : accept["image/*"]
+              ? "Please upload a clear photo (JPEG, PNG). e.g: NIC, Driving Licence, Passport"
+              : "Please upload the required document"}
+          </p>
 
           <Dropzone
             accept={accept}

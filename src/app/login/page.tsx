@@ -14,6 +14,7 @@ import { LoginFormInputs, loginSchema } from "./Schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
+import { config } from "@/lib/config";
 
 export default function Login() {
   const methods = useForm<LoginFormInputs>({
@@ -92,7 +93,7 @@ export default function Login() {
     if (typeof window !== "undefined" && (window as any).google?.accounts?.id) {
       const google = (window as any).google;
       google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        client_id: config.GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
       });
       google.accounts.id.renderButton(document.getElementById("google-btn"), {

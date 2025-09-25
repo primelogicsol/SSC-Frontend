@@ -23,7 +23,8 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import apiClient from "@/lib/apiClient";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PaymentMethodList from "@/components/stripe-payment/PaymentMethodsList";
 
 const profileSchema = z.object({
   fullName: z.string().nonempty({ message: "First name is required" }),
@@ -57,6 +58,12 @@ export default function ProfileContent() {
       setUpdateLoading(false);
     }
   };
+  useEffect(() => {
+    if (user) {
+      methods.reset(user);
+    }
+  }, [user]);
+
   if (loading) {
     return (
       <div className="w-full flex items-center justify-center mt-5">
@@ -69,6 +76,9 @@ export default function ProfileContent() {
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="personal" className="focus-visible:ring-0">
           Personal
+        </TabsTrigger>
+        <TabsTrigger value="banking" className="focus-visible:ring-0">
+          Payment methods
         </TabsTrigger>
         <TabsTrigger value="products" className=" focus-visible:ring-0">
           My Products
@@ -134,6 +144,67 @@ export default function ProfileContent() {
                 </Button>
               </form>
             </FormProvider>
+          </CardContent>
+        </Card>
+      </TabsContent>
+      {/* payment methods */}
+      <TabsContent value="banking" className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-fixnix-lightpurple">
+              Payment Methods
+            </CardTitle>
+            <CardDescription>Update your payment details.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <PaymentMethodList />
+            {/* <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(handleSubmit)}>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <FormInput
+                      name="fullName"
+                      label="First Name"
+                      defaultValue={user?.fullName}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <FormInput
+                      name="lastName"
+                      label="Last Name"
+                      defaultValue={user?.lastName}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <FormInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      readOnly
+                      value={user?.email}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <FormInput
+                      name="phone"
+                      label="Phone"
+                      type="tel"
+                      defaultValue={user?.phone}
+                    />
+                  </div>
+                </div>
+                <Button
+                  className="bg-fixnix-lightpurple mt-2 block ml-auto"
+                  type="submit"
+                >
+                  {updateLoading ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    "Update"
+                  )}
+                </Button>
+              </form>
+            </FormProvider> */}
           </CardContent>
         </Card>
       </TabsContent>

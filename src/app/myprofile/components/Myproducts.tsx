@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -26,64 +26,61 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Music, Book } from "lucide-react";
+import apiClient from "@/lib/apiClient";
 
-type Product = {
-  id: number;
-  title: string;
-  type: "music" | "ebook";
-  description: string;
+type OrderItem = {
+  orderId: number;
+  orderStatus: string;
+  paymentStatus: string;
+  orderCreatedAt: string;
+  item: {
+    id: number;
+    category: string;
+    price: number;
+    quantity: number;
+    product: {
+      id: number;
+      title: string;
+      price: number;
+      images: string[];
+    };
+  };
 };
 
-const dummyProducts: Product[] = [
-  {
-    id: 1,
-    title: "Relaxing Beats",
-    type: "music",
-    description: "Calm instrumental tracks.",
-  },
-  {
-    id: 2,
-    title: "Jazz Essentials",
-    type: "music",
-    description: "Classic jazz collection.",
-  },
-  {
-    id: 3,
-    title: "Learn React Quickly",
-    type: "ebook",
-    description: "Beginner friendly React guide.",
-  },
-  {
-    id: 4,
-    title: "Advanced Next.js",
-    type: "ebook",
-    description: "Deep dive into Next.js 15.",
-  },
-  {
-    id: 5,
-    title: "Meditation Sounds",
-    type: "music",
-    description: "Ambient tracks for focus.",
-  },
-  {
-    id: 6,
-    title: "Mastering TypeScript",
-    type: "ebook",
-    description: "Level up your TS skills.",
-  },
-  // add more dummy items...
-];
-
 export default function ProductsTab() {
-  const [filter, setFilter] = useState<"all" | "music" | "ebook">("all");
+  const [filter, setFilter] = useState<"all" | string>("all");
+  const [products, setProducts] = useState<OrderItem[]>([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const perPage = 4;
+  const perPage = 6;
 
+  const fetchMyProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await apiClient.get(`/user/purchases/${filter}`);
+      const data = res.data;
+      setProducts(data.data.orderItems || []);
+    } catch (error) {
+      setError(
+        (error instanceof Error && error.message) || "Something went wrong"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMyProducts();
+  }, [fetchMyProducts]);
+
+  // Filter
   const filtered =
     filter === "all"
-      ? dummyProducts
-      : dummyProducts.filter((p) => p.type === filter);
+      ? products
+      : products.filter((p) => p.item.category === filter);
+
+  // Pagination
   const totalPages = Math.ceil(filtered.length / perPage);
   const paginated = filtered.slice((page - 1) * perPage, page * perPage);
 
@@ -100,52 +97,71 @@ export default function ProductsTab() {
           <div className="flex justify-between items-center">
             <Select
               value={filter}
-              onValueChange={(val: "all" | "music" | "ebook") => {
+              onValueChange={(val) => {
                 setPage(1);
                 setFilter(val);
               }}
             >
               <SelectTrigger className="w-40 focus-visible:ring-0 ring-fixnix-lightpurple">
-                <SelectValue placeholder="Filter by type" />
+                <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="music">Music</SelectItem>
-                <SelectItem value="ebook">E-Books</SelectItem>
+                {/* Dynamically render categories */}
+                {[...new Set(products.map((p) => p.item.category))].map(
+                  (cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  )
+                )}
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {loading && <p>Loading products...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+
           {/* Product Grid */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {paginated.map((product) => (
-              <Card key={product.id} className="flex flex-col">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-lg font-semibold">
-                    {product.title}
-                  </CardTitle>
-                  {product.type === "music" ? (
-                    <Music className="h-5 w-5 text-blue-500" />
-                  ) : (
-                    <Book className="h-5 w-5 text-green-500" />
-                  )}
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-between">
-                  <p className="text-sm text-muted-foreground">
-                    {product.description}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <Badge variant="outline" className="capitalize">
-                      {product.type}
-                    </Badge>
-                    <Button size="sm" variant="default" className="bg-fixnix-lightpurple">
-                      Download
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {paginated.map((order) => {
+              const product = order.item.product;
+              return (
+                <Card key={order.item.id} className="flex flex-col">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-lg font-semibold line-clamp-1">
+                      {product.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col justify-between">
+                    <img
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      className="rounded-lg h-32 w-full object-cover mb-3"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Category: {order.item.category}
+                    </p>
+                    <p className="text-sm font-medium mt-1">
+                      Price: ${order.item.price}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <Badge variant="outline" className="capitalize">
+                        {order.paymentStatus}
+                      </Badge>
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="bg-fixnix-lightpurple"
+                      >
+                        Download
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {/* Pagination */}

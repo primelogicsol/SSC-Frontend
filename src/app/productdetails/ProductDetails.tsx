@@ -130,6 +130,7 @@ export default function ProductDetails({
   const [cartError, setCartError] = useState("");
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   // Ref for scrolling back to top
   const topRef = useRef(null);
   const router = useRouter();
@@ -141,6 +142,7 @@ export default function ProductDetails({
         const res = await getProductDetails(category, productId);
         setProduct(res.data || null); // adjust if backend returns differently
       } catch (err) {
+        setError(true);
         console.error("Failed to load products", err);
       } finally {
         setLoading(false);
@@ -369,7 +371,11 @@ export default function ProductDetails({
   if (loading) {
     return <ProductDetailsSkeleton />;
   }
-
+  if (error) {
+    return (
+      <div className="w-full flex items-center">Something went wrong!</div>
+    );
+  }
   return product ? (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Product Details">
       {/* Main product section */}
@@ -385,6 +391,8 @@ export default function ProductDetails({
               >
                 <Image
                   src={
+                    product.images &&
+                    product.images.length &&
                     product?.images[selectedImageIndex].startsWith("http")
                       ? product?.images[selectedImageIndex]
                       : "/assets/images/loader.png"
@@ -403,30 +411,31 @@ export default function ProductDetails({
 
             {/* Thumbnail Gallery */}
             <div className="grid grid-cols-4 gap-2">
-              {product.images.map((image, index) => (
-                <div
-                  key={index}
-                  className={`border cursor-pointer ${
-                    selectedImageIndex === index
-                      ? "border-fixnix-lightpurple"
-                      : "border-gray-300"
-                  }`}
-                  onClick={() => setSelectedImageIndex(index)}
-                >
-                  <div className="relative h-20">
-                    <Image
-                      src={
-                        image.startsWith("http")
-                          ? image
-                          : "/assets/images/loader.png"
-                      }
-                      alt={`Thumbnail ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+              {product.images &&
+                product.images.map((image, index) => (
+                  <div
+                    key={index}
+                    className={`border cursor-pointer ${
+                      selectedImageIndex === index
+                        ? "border-fixnix-lightpurple"
+                        : "border-gray-300"
+                    }`}
+                    onClick={() => setSelectedImageIndex(index)}
+                  >
+                    <div className="relative h-20">
+                      <Image
+                        src={
+                          image.startsWith("http")
+                            ? image
+                            : "/assets/images/loader.png"
+                        }
+                        alt={`Thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             {/* Preview Message */}
@@ -484,7 +493,9 @@ export default function ProductDetails({
             <h1 className="text-3xl font-bold text-fixnix-darkpurple mb-2">
               {product?.title}
             </h1>
-            <p className="text-fixnix-gray mb-4">{product.tags.join(", ")}</p>
+            <p className="text-fixnix-gray mb-4">
+              {product.tags && product.tags.join(", ")}
+            </p>
             {/* Rating summary */}
             <div className="flex items-center gap-2 mb-6">
               <RatingStars rating={5} />
@@ -730,13 +741,36 @@ export default function ProductDetails({
                     <h3 className="text-xl font-bold text-fixnix-darkpurple mb-3">
                       Shipping Information
                     </h3>
-                    {/* <p className="text-fixnix-gray mb-4">{product.shipping}</p> */}
+                    <p className="text-fixnix-gray mb-4">
+                      At Sufi Science Center, we are committed to delivering
+                      every order with care, intention, and professionalism.
+                      Whether you're ordering sacred texts, artisan goods, or
+                      digital spiritual tools, your journey with us continues
+                      from checkout to delivery.{" "}
+                      <Link
+                        href={"/shipping-policy"}
+                        className="text-fixnix-lightpurple underline underline-offset-2"
+                      >
+                        Read more
+                      </Link>
+                    </p>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-fixnix-darkpurple mb-3">
                       Return Policy
                     </h3>
-                    {/* <p className="text-fixnix-gray mb-4">{product.returns}</p> */}
+                    <p className="text-fixnix-gray mb-4">
+                      We honor every exchange as sacred — a reflection of trust
+                      and mutual growth. If something doesn't meet your
+                      expectations, we'll do our best to make it right. Please
+                      read our policy carefully.{" "}
+                      <Link
+                        href={"/return-policy"}
+                        className="text-fixnix-lightpurple underline underline-offset-2"
+                      >
+                        Read more
+                      </Link>
+                    </p>
                   </div>
                 </div>
               </div>

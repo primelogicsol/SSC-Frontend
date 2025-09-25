@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { checkoutSubmit } from "@/hooks/cart";
 import { toast } from "sonner";
-
+import { loadStripe } from "@stripe/stripe-js";
+import { config } from "@/lib/config";
+const stripePromise = loadStripe(config.STRIPE_PUBLIC_KEY!);
 interface Props {
   onSuccess: (value: boolean) => void;
 }
@@ -30,12 +32,48 @@ const CheckoutForm: FC<Props> = ({ onSuccess }) => {
     setLoading(true);
     try {
       const res = await checkoutSubmit(data);
-      console.log(res.data);
-      toast.success("Thanks for your order we'll get back to you soon");
+      const { clientSecret, paymentIntentStatus, order } = res.data;
+
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Stripe failed to initialize");
+
+      // ✅ Case 1: Payment already succeeded (rare, but possible)
+      if (paymentIntentStatus === "succeeded") {
+        toast.success("Payment confirmed! Your order has been placed.");
+        onSuccess(true);
+        return;
+      }
+
+      // ⚠️ Case 2: Requires authentication (3DSecure / OTP)
+      if (paymentIntentStatus === "requires_action") {
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+          clientSecret
+        );
+
+        if (error) {
+          toast.error(
+            error.message || "Authentication failed. Please try again."
+          );
+          onSuccess(false);
+          return;
+        }
+
+        if (paymentIntent?.status === "succeeded") {
+          toast.success("Payment confirmed! Your order has been placed.");
+          onSuccess(true);
+        } else {
+          toast.error("Payment not completed. Please try again.");
+          onSuccess(false);
+        }
+        return;
+      }
+
+      // ⏳ Case 3: Pending (normal flow) — wait for webhook to update order
+      toast.info("Your order is created and pending payment confirmation.");
       onSuccess(true);
     } catch (err: any) {
       console.error("Checkout error:", err);
-      toast.error("Error processing request");
+      toast.error(err.response?.data?.error || "Error processing request");
       onSuccess(false);
     } finally {
       setLoading(false);

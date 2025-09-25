@@ -7,6 +7,7 @@ import {
   PaymentElement,
   LinkAuthenticationElement,
   Elements,
+  AddressElement,
 } from "@stripe/react-stripe-js";
 import { Button } from "../ui/button";
 import {
@@ -22,6 +23,7 @@ import { config } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { ScrollArea } from "../ui/scroll-area";
 import { setDefaultPaymentMethod } from "@/hooks/stripeServices";
+import { toast } from "sonner";
 const stripePromise = loadStripe(config.STRIPE_PUBLIC_KEY!);
 
 interface Props {
@@ -29,12 +31,14 @@ interface Props {
   customerId?: string;
   show: boolean;
   setShow: (value: boolean) => void;
+  successCallback: () => void;
 }
 
 const StripePaymentMethod: React.FC<Props> = ({
   clientSecret,
   customerId,
   show,
+  successCallback,
   setShow,
 }) => {
   return (
@@ -51,6 +55,7 @@ const StripePaymentMethod: React.FC<Props> = ({
         show={show}
         setShow={setShow}
         clientSecret={clientSecret}
+        successCallback={successCallback}
       />
     </Elements>
   );
@@ -60,6 +65,7 @@ const StripePaymentElementForm: React.FC<Props> = ({
   clientSecret,
   show,
   setShow,
+  successCallback,
 }) => {
   const stripe = useStripe();
   const [loading, setLoading] = useState(false);
@@ -75,45 +81,53 @@ const StripePaymentElementForm: React.FC<Props> = ({
 
     if (!stripe || !elements) {
       setError("Stripe is not initialized.");
+      toast.error("Stripe is not initialized.");
       setLoading(false);
       return;
     }
+
     try {
+      // Validate form first
       const { error: submitError } = await elements.submit();
       if (submitError) {
         setError(submitError.message || "Validation failed.");
+        toast.error(submitError.message || "Validation failed.");
         setLoading(false);
         return;
       }
-      //  Confirm Setup Intent (Correctly handling result)
-      const result = await stripe?.confirmSetup({
-        elements: elements ?? undefined,
+
+      // Confirm Setup Intent
+      const result = await stripe.confirmSetup({
+        elements,
         clientSecret,
         confirmParams: {
-          return_url: window.location.href, // Use current URL to avoid page reload
+          return_url: window.location.href,
         },
-        redirect: "if_required", // Prevents automatic redirection
+        redirect: "if_required",
       });
 
-      // Check for error properly
-      if (result && result.error) {
+      if (result?.error) {
         setError(result.error.message || "Failed to set up payment method.");
+        toast.error(result.error.message || "Failed to set up payment method.");
         setLoading(false);
         return;
       }
 
-      //  Ensure setupIntent exists and check its status
-      if (result && result.error) {
-        setError("Setup Intent failed.");
-      } else {
+      if (result?.setupIntent) {
         const paymentMethodId = result.setupIntent.payment_method as string;
+
         await setDefaultPaymentMethod(paymentMethodId);
+
         setSuccess(true);
         router.refresh();
         setShow(false);
+        successCallback();
+
+        toast.success("Payment method saved successfully 🎉");
       }
     } catch (err) {
       setError("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -135,6 +149,15 @@ const StripePaymentElementForm: React.FC<Props> = ({
 
           <form onSubmit={handleSubmit}>
             <LinkAuthenticationElement />
+            <AddressElement
+              options={{
+                mode: "billing",
+                // allowedCountries: ["US", "CA", "GB", "AU"], // ✅ restrict if needed
+                fields: {
+                  phone: "always", // force phone required
+                },
+              }}
+            />
             <PaymentElement />
             {stripe && (
               <Button
@@ -142,7 +165,7 @@ const StripePaymentElementForm: React.FC<Props> = ({
                 // loading={loading}
                 id="submit"
                 type="submit"
-                className="ml-auto mt-3 block"
+                className="ml-auto mt-3 block bg-fixnix-lightpurple"
               >
                 Add
               </Button>

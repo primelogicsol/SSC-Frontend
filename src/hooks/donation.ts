@@ -19,11 +19,11 @@ export interface Donation {
 // Valid donation types according to backend schema
 export const DONATION_TYPES = [
   "onetime",
-  "monthly", 
+  "monthly",
   "sponsor",
   "tools",
   "remainAnonymous",
-  "receiveUpdates"
+  "receiveUpdates",
 ] as const;
 
 // Valid pool types according to backend schema
@@ -31,11 +31,11 @@ export const POOL_TYPES = [
   "SUFI_SCIENCE_CENTER",
   "SPONSOR_SCHOLAR",
   "PRESERVE_ART_AND_CRAFT",
-  "SPONSOR_EVENTS"
+  "SPONSOR_EVENTS",
 ] as const;
 
 export const createDonation = async (data: DonationPayload) => {
-  const response = await apiClient.post("/user/donation", data);
+  const response = await apiClient.post("/stripe/donation-intent", data);
   return response.data;
 };
 
@@ -44,7 +44,10 @@ export const getDonations = async (): Promise<Donation[]> => {
   return response.data;
 };
 
-export const updateDonation = async (id: number, data: Partial<DonationPayload>) => {
+export const updateDonation = async (
+  id: number,
+  data: Partial<DonationPayload>
+) => {
   const response = await apiClient.patch(`/user/donation/${id}`, data);
   return response.data;
 };

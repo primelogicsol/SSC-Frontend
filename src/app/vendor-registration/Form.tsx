@@ -47,9 +47,43 @@ export default function StepperProgress({
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  const {
+    accountNumber,
+    bankAddress,
+    bankName,
+    businessName,
+    businessType,
+    contactPerson,
+    einNumber,
+    email,
+    fullName,
+    phone,
+    routingNumber,
+    signatoryName,
+    signatureDate,
+    tinNumber,
+    vendoraccepted,
+    vendorNic,
+  } = defaultValues;
   const methods = useForm<VendorFormValues>({
-    defaultValues: defaultValues,
+    defaultValues: {
+      accountNumber,
+      bankAddress,
+      bankName,
+      businessName,
+      businessType,
+      contactPerson,
+      einNumber,
+      email,
+      fullName,
+      phone,
+      routingNumber,
+      signatoryName,
+      signatureDate,
+      tinNumber,
+      vendoraccepted,
+      vendorNic,
+    },
     resolver: zodResolver(vendorRegistrationSchema),
     mode: "all",
   });
@@ -82,57 +116,61 @@ export default function StepperProgress({
         "bankAddress",
       ];
     if (currentStep === 4)
-      fieldsToValidate = ["signatoryName", "signatureDate", "vendoraccepted"];
+      fieldsToValidate = [
+        "signatoryName",
+        "signatureDate",
+        "vendoraccepted",
+        "vendorNic",
+      ];
 
-    // ✅ Validate current step
+    // ✅ validate only step fields
     const isValid = await trigger(fieldsToValidate);
+    console.log(methods.getValues("vendorNic"));
+    
     if (!isValid) return;
 
-    // ✅ Build object with key-value pairs
-    const stepData: any = {};
+    const formData = new FormData();
+    const values: Record<string, any> = {};
+
     fieldsToValidate.forEach((field) => {
-      stepData[field] = methods.getValues(field);
+      values[field] = methods.getValues(field);
     });
 
-    // ✅ If step 4, add isCompleted
-    if (currentStep === 4) {
-      stepData.isCompleted = true;
-    }
+    Object.entries(values).forEach(([key, value]) => {
+      if (key === "vendorNic") {
+        if (Array.isArray(value)) {
+          value.forEach((file: File) => formData.append("vendorNic", file));
+        } else if (value instanceof File) {
+          formData.append("vendorNic", value);
+        }
+      } else {
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, String(value));
+        }
+      }
+    });
 
-    console.log(stepData);
-    // Output example:
-    // { fullName: "Adi", email: "wiviton805@poesd.com", password: "adminadmin" }
-    // Step 4 will include isCompleted: true
+    if (currentStep === 4) {
+      formData.append("isCompleted", "true");
+    }
 
     try {
       setLoading(true);
-      await registerVendor(stepData); // create or update
-      if (currentStep !== 4) {
+      await registerVendor(formData); // 👈 only step-specific data sent
+      if (currentStep < 4) {
         setCurrentStep((prev) => prev + 1);
-      }
-      Cookies.set("vendorStep", "1");
-      toast.success(
-        currentStep < 4
-          ? `Step ${currentStep} completed`
-          : "Request has been submitted",
-        {
+        toast.success(`Step ${currentStep} completed`, {
           position: "top-center",
-          richColors: true,
-        }
-      );
-      if (currentStep === 4) {
+        });
+      } else {
         methods.reset();
+        Cookies.set("vendorStep", "1");
+        toast.success("Request has been submitted", { position: "top-center" });
         successCallback();
       }
-    } catch (error) {
-      toast.error(
-        (error instanceof Error && error.message) || "Something went wrong",
-        {
-          position: "top-center",
-          richColors: true,
-        }
-      );
-      console.error(error);
+    } catch (err) {
+      toast.error("Something went wrong", { position: "top-center" });
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -253,12 +291,9 @@ export default function StepperProgress({
                   />
 
                   <AttachmentUploader
-                    name="attachments"
-                    label="Upload PDF"
-                    placeholder="Drop your PDF here"
-                    accept={{ "application/pdf": [] }} // restrict to PDFs
-                    maxFiles={3}
-                    maxSize={1024 * 1024 * 10} // 10MB
+                    name="vendorNic"
+                    label="Identity Document"
+                    placeholder="Upload your ID photo"
                   />
 
                   <FormCheckbox

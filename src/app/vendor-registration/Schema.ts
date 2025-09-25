@@ -1,6 +1,12 @@
 // lib/schemas/vendorSchema.ts
 import { z } from "zod";
-
+const MAX_FILE_SIZE = 5_000_000; // 5MB
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 export const vendorRegistrationSchema = z.object({
   fullName: z
     .string({ message: "fullName is required!!" })
@@ -60,6 +66,24 @@ export const vendorRegistrationSchema = z.object({
   vendoraccepted: z.literal(true, {
     errorMap: () => ({ message: "You must accept the terms & conditions" }),
   }),
+  vendorNic: z
+    .any()
+    .transform((val) => {
+      // Normalize to a single File
+      if (val instanceof FileList) return val[0];
+      if (Array.isArray(val) && val.length > 0 && val[0] instanceof File)
+        return val[0];
+      return val;
+    })
+    .refine((file) => {
+      if (!file) return true; // optional
+      return file.size <= MAX_FILE_SIZE;
+    }, "Max image size is 5MB.")
+    .refine((file) => {
+      if (!file) return true;
+      return ACCEPTED_IMAGE_TYPES.includes(file.type);
+    }, "Only .jpg, .jpeg, .png and .webp formats are supported.")
+    .optional(),
 });
 
 export type VendorFormValues = z.infer<typeof vendorRegistrationSchema>;

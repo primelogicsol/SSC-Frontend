@@ -4,13 +4,23 @@ import { config } from "./config";
 const apiClient = axios.create({
   baseURL: config.API_BASE_URL,
   // baseURL:'http://localhost:6015/v1',
-  headers: { 
+  headers: {
     "Content-Type": "application/json",
     "Cache-Control": "no-cache, no-store, must-revalidate",
-    "Pragma": "no-cache",
-    "Expires": "0"
+    Pragma: "no-cache",
+    Expires: "0",
   },
   withCredentials: false, // Not using cookies
+});
+
+export const uploadClient = axios.create({
+  baseURL: config.API_BASE_URL,
+  withCredentials: false,
+  headers: {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+  },
 });
 
 // Request Interceptor: Attach token
@@ -34,10 +44,13 @@ apiClient.interceptors.response.use(
 
       if (refreshToken) {
         try {
-          const refreshResponse = await axios.get(`${config.API_BASE_URL}/user/refresh-access-token`, {
-            headers: { Authorization: `Bearer ${refreshToken}` },
-          });
-          
+          const refreshResponse = await axios.get(
+            `${config.API_BASE_URL}/user/refresh-access-token`,
+            {
+              headers: { Authorization: `Bearer ${refreshToken}` },
+            }
+          );
+
           if (refreshResponse.data?.data?.accessToken) {
             const newAccessToken = refreshResponse.data.data.accessToken;
             localStorage.setItem("accessToken", newAccessToken);

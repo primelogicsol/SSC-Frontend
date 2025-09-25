@@ -8,9 +8,11 @@ import {
 } from "@/hooks/stripeServices";
 import { useEffect, useState } from "react";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa6";
-import { CreditCardIcon, LoaderCircle } from "lucide-react";
+import { CreditCardIcon, LoaderCircle, Trash2Icon } from "lucide-react";
 import StripePaymentMethod from "./StripeAddPaymentMethod";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
+import apiClient from "@/lib/apiClient";
 
 export default function PaymentMethodList() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -65,14 +67,37 @@ export default function PaymentMethodList() {
     }
   };
 
-  // When modal closes after adding new card, refetch
-  useEffect(() => {
-    if (!openStripeModal && clientSecret) {
-      fetchPaymentMethodsItems();
-    }
-  }, [openStripeModal, clientSecret]);
+  if (loading) {
+    return (
+      <div className="space-y-3 max-w-[95%] mx-auto">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between p-4 border rounded-2xl shadow-sm animate-pulse"
+          >
+            {/* Left side: brand + info */}
+            <div className="flex items-center gap-3">
+              {/* Fake radio */}
+              <div className="h-4 w-4 rounded-full border bg-gray-200" />
 
-  if (loading) return <p className="text-gray-500">Loading payment methods…</p>;
+              {/* Fake brand icon */}
+              <div className="h-6 w-10 bg-gray-200 rounded" />
+
+              {/* Fake text */}
+              <div className="space-y-2">
+                <div className="h-4 w-40 bg-gray-200 rounded" />
+                <div className="h-3 w-32 bg-gray-200 rounded" />
+              </div>
+            </div>
+
+            {/* Fake delete button */}
+            <div className="h-8 w-8 bg-gray-200 rounded-full" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
@@ -115,6 +140,10 @@ export default function PaymentMethodList() {
                 </p>
               </div>
             </div>
+            <DeletePaymentMethodButton
+              paymentMethodId={method.id}
+              callbck={fetchPaymentMethodsItems}
+            />
           </div>
         );
       })}
@@ -124,6 +153,7 @@ export default function PaymentMethodList() {
           show={openStripeModal}
           setShow={setOpenStripeModal}
           clientSecret={clientSecret}
+          successCallback={fetchPaymentMethodsItems}
         />
       )}
 
@@ -136,7 +166,7 @@ export default function PaymentMethodList() {
           <LoaderCircle className="animate-spin" />
         ) : (
           <>
-            <CreditCardIcon className="w-5 h-5" />
+            <CreditCardIcon className="w-5 h-5 " />
             <span className="font-medium text-gray-700">
               Add new payment method
             </span>
@@ -146,3 +176,47 @@ export default function PaymentMethodList() {
     </div>
   );
 }
+
+const DeletePaymentMethodButton = ({
+  paymentMethodId,
+  callbck,
+}: {
+  paymentMethodId: string;
+  callbck: () => void;
+}) => {
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const deleteMethod = async () => {
+    try {
+      setDeleteLoading(true);
+      const res = await apiClient.delete("/stripe/delete-payment-method", {
+        data: { paymentMethodId },
+      });
+      if (res.data) {
+        toast.success(res.data.message || "Payment method deleted");
+        callbck();
+      }
+    } catch (error) {
+      toast.error(
+        (error instanceof Error && error.message) ||
+          "Error deleting payment method"
+      );
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+  return (
+    <Button
+      variant="ghost"
+      className="hover:shadow-md group"
+      size="icon"
+      onClick={deleteMethod}
+    >
+      {deleteLoading ? (
+        <LoaderCircle className="animate-spin" />
+      ) : (
+        <Trash2Icon className="text-destructive group-hover:rotate-12 group-hover:scale-105 transition-all duration-75 ease-linear" />
+      )}
+    </Button>
+  );
+};

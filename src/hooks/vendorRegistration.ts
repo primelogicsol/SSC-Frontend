@@ -1,4 +1,4 @@
-import apiClient from "@/lib/apiClient";
+import apiClient, { uploadClient } from "@/lib/apiClient";
 import Cookies from "js-cookie";
 
 export const saveUserId = (id: string) => {
@@ -74,21 +74,20 @@ interface VendorResponse {
   data: VendorData;
 }
 
-export const registerVendor = async (
-  data: Record<string, any>
-): Promise<AuthResponse> => {
+export const registerVendor = async (data: FormData): Promise<AuthResponse> => {
   try {
     // get id from cookies (if exists)
     const id = getUserId();
 
     // Remove undefined fields to prevent backend issues
-    const cleanedData = Object.fromEntries(
-      Object.entries(data).filter(([_, v]) => v !== undefined)
-    );
+    // const cleanedData = Object.fromEntries(
+    //   Object.entries(data).filter(([_, v]) => v !== undefined)
+    // );
 
     const url = id ? `/vendor-register/${id}` : "/vendor-register";
+    console.log("<><><ccc", data.getAll("fullName"));
 
-    const res = await apiClient.post<AuthResponse>(url, cleanedData);
+    const res = await uploadClient.post<AuthResponse>(url, data);
 
     console.log("dadadada", res.data);
 

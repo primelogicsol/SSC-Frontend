@@ -159,6 +159,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("refreshToken", data.data.refreshToken);
         await fetchUserProfile();
         await fetchMembership();
+        router.push("/")
       } else {
         throw new Error("Google login failed - missing tokens");
       }
