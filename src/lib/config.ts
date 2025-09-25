@@ -2,11 +2,12 @@
 export const config = {
   // API Base URL - Change this to match your backend URL
   API_BASE_URL:
-    // process.env.NEXT_PUBLIC_API_URL || "https://api.sufisciencecenter.info/v1",
-    "http://localhost:6015/v1",
+    process.env.NEXT_PUBLIC_API_URL || "https://api.sufisciencecenter.info/v1",
 
   // Google OAuth Client ID
-  GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+  GOOGLE_CLIENT_ID:
+    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+    "1057933844118-p7d72js5jlith3qi0ut68op8a5iou623.apps.googleusercontent.com",
 
   // Environment
   NODE_ENV: process.env.NODE_ENV || "development",
@@ -15,8 +16,12 @@ export const config = {
   APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:6020",
 
   //stripe
-  STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "",
+  STRIPE_PUBLIC_KEY:
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+    "",
+  STRIPE_SECRET_KEY:
+    process.env.STRIPE_SECRET_KEY ||
+    "",
 };
 
 // Helper function to get API URL
