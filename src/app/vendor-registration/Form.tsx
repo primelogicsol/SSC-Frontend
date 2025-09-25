@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FormDatePicker } from "@/components/datepicker";
 import AttachmentUploader from "./AttachmentUploader";
+import { RHFSelect } from "@/components/form-select";
 
 export default function StepperProgress({
   defaultValues,
@@ -126,7 +127,7 @@ export default function StepperProgress({
     // ✅ validate only step fields
     const isValid = await trigger(fieldsToValidate);
     console.log(methods.getValues("vendorNic"));
-    
+
     if (!isValid) return;
 
     const formData = new FormData();
@@ -169,7 +170,15 @@ export default function StepperProgress({
         successCallback();
       }
     } catch (err) {
-      toast.error("Something went wrong", { position: "top-center" });
+      if (err instanceof Error && err.message === "Invalid ID") {
+        Cookies.remove("vendorUserId");
+      }
+      toast.error(
+        (err instanceof Error && err.message) || "Something went wrong",
+        {
+          position: "top-center",
+        }
+      );
       console.error(err);
     } finally {
       setLoading(false);
@@ -242,9 +251,31 @@ export default function StepperProgress({
                 </CardHeader>
                 <div className="grid md:grid-cols-2 gap-4 px-6">
                   <FormInput name="businessName" label="Business Name" />
-                  <FormInput name="businessType" label="Business Type" />
-                  <FormInput name="einNumber" label="EIN Number" />
-                  <FormInput name="tinNumber" label="TIN Number" />
+                  <RHFSelect
+                    name="businessType"
+                    label="Business Type"
+                    placeholder="Select business type"
+                    options={[
+                      { label: "Manufacturer", value: "manufacturer" },
+                      { label: "Wholesaler", value: "wholesaler" },
+                      { label: "Retailer", value: "retailer" },
+                      { label: "Distributor", value: "distributor" },
+                      { label: "Exporter", value: "exporter" },
+                      { label: "Importer", value: "importer" },
+                      { label: "Service Provider", value: "service-provider" },
+                    ]}
+                  />{" "}
+                  {/* <FormInput name="businessType" label="Business Type" /> */}
+                  <FormInput
+                    name="einNumber"
+                    label="EIN Number"
+                    type="number"
+                  />
+                  <FormInput
+                    name="tinNumber"
+                    label="TIN Number"
+                    type="number"
+                  />
                 </div>
               </div>
             </StepperContent>
@@ -260,11 +291,19 @@ export default function StepperProgress({
                 </CardHeader>
                 <div className="grid md:grid-cols-2 gap-4 px-6">
                   <FormInput name="contactPerson" label="Contact Person" />
-                  <FormInput name="phone" label="Phone" />
+                  <FormInput name="phone" label="Phone" type="tel" />
                   <FormInput name="bankName" label="Bank Name" />
-                  <FormInput name="accountNumber" label="Account Number" />
+                  <FormInput
+                    name="accountNumber"
+                    label="Account Number"
+                    type="number"
+                  />
                   <div className="col-span-2">
-                    <FormInput name="routingNumber" label="Routing Number" />
+                    <FormInput
+                      name="routingNumber"
+                      label="Routing Number"
+                      type="number"
+                    />
                   </div>
                   <div className="col-span-2">
                     <FormInput name="bankAddress" label="Bank Address" />

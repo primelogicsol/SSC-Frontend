@@ -47,7 +47,7 @@ export function FormInput({
           render={({ field }) => (
             <Input
               id={name}
-              type={isPassword && showPassword ? type : "text"}
+              type={isPassword && showPassword ? "text" : type}
               placeholder={placeholder || label}
               className="focus-visible:ring-1 focus-visible:ring-fixnix-lightpurple pr-10"
               {...field}

@@ -35,12 +35,9 @@ export const vendorRegistrationSchema = z.object({
   businessType: z
     .string()
     .min(2, { message: "Business type is required (min 2 characters)" }),
-  einNumber: z
-    .string()
-    .min(5, { message: "EIN number must be at least 5 characters" }),
+  einNumber: z.string().optional().nullable(),
   tinNumber: z
-    .string()
-    .min(5, { message: "TIN number must be at least 5 characters" }),
+    .string().optional().nullable(),
   contactPerson: z
     .string()
     .min(2, { message: "Contact person name is required (min 2 characters)" }),

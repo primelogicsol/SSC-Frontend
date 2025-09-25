@@ -89,18 +89,25 @@ export default function Login() {
 
   // ✅ Google Auth Initialization
   useEffect(() => {
-    // Check if Google API is available
-    if (typeof window !== "undefined" && (window as any).google?.accounts?.id) {
-      const google = (window as any).google;
-      google.accounts.id.initialize({
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      (window as any).google.accounts.id.initialize({
         client_id: config.GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
       });
-      google.accounts.id.renderButton(document.getElementById("google-btn"), {
-        theme: "outline",
-        size: "large",
-      });
-    }
+      (window as any).google.accounts.id.renderButton(
+        document.getElementById("google-btn"),
+        { theme: "outline", size: "large", width: 350 }
+      );
+    };
+
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
   const handleGoogleResponse = async (response: any) => {
