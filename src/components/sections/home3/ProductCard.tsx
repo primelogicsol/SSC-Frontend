@@ -6,7 +6,9 @@ import Link from "next/link";
 type Product = {
   id: number;
   title: string;
-  images: string[]; // updated to match backend
+  images?: string[]; // updated to match backend
+  coverImage?: string | null;
+  overviewImages?: string[];
   description: string;
   price: number;
   oldPrice?: number | null;
@@ -28,7 +30,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
   };
 
   // Pick first image, validate URL
-  const firstImage = product.images?.[0];
+  const firstImage = product.images
+    ? product.images?.[0]
+    : product.coverImage
+    ? product.coverImage
+    : product.overviewImages
+    ? product.overviewImages[0]
+    : "/assets/images/loader.png";
   const displayImage =
     firstImage && firstImage.startsWith("http")
       ? firstImage

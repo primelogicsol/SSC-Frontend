@@ -54,7 +54,9 @@ export type Product = {
   price: number;
   tags: string[];
   sku: string;
-  images: string[];
+  images?: string[];
+  coverImage?: string | null;
+  overviewImages?: string[];
   createdAt: string; // ISO string from backend
   updatedAt: string; // ISO string from backend
   isDelete: boolean;
@@ -376,6 +378,14 @@ export default function ProductDetails({
       <div className="w-full flex items-center">Something went wrong!</div>
     );
   }
+
+  const imagesList = product?.images?.length
+    ? product.images
+    : product?.overviewImages?.length
+    ? product.overviewImages
+    : product?.coverImage
+    ? [product.coverImage]
+    : ["/assets/images/loader.png"];
   return product ? (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Product Details">
       {/* Main product section */}
@@ -391,10 +401,9 @@ export default function ProductDetails({
               >
                 <Image
                   src={
-                    product.images &&
-                    product.images.length &&
-                    product?.images[selectedImageIndex].startsWith("http")
-                      ? product?.images[selectedImageIndex]
+                    imagesList.length &&
+                    imagesList[selectedImageIndex].startsWith("http")
+                      ? imagesList[selectedImageIndex]
                       : "/assets/images/loader.png"
                   }
                   alt={product?.title}
@@ -411,31 +420,30 @@ export default function ProductDetails({
 
             {/* Thumbnail Gallery */}
             <div className="grid grid-cols-4 gap-2">
-              {product.images &&
-                product.images.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`border cursor-pointer ${
-                      selectedImageIndex === index
-                        ? "border-fixnix-lightpurple"
-                        : "border-gray-300"
-                    }`}
-                    onClick={() => setSelectedImageIndex(index)}
-                  >
-                    <div className="relative h-20">
-                      <Image
-                        src={
-                          image.startsWith("http")
-                            ? image
-                            : "/assets/images/loader.png"
-                        }
-                        alt={`Thumbnail ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
+              {imagesList.map((image, index) => (
+                <div
+                  key={index}
+                  className={`border cursor-pointer ${
+                    selectedImageIndex === index
+                      ? "border-fixnix-lightpurple"
+                      : "border-gray-300"
+                  }`}
+                  onClick={() => setSelectedImageIndex(index)}
+                >
+                  <div className="relative h-20">
+                    <Image
+                      src={
+                        image.startsWith("http")
+                          ? image
+                          : "/assets/images/loader.png"
+                      }
+                      alt={`Thumbnail ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
 
             {/* Preview Message */}
@@ -462,8 +470,13 @@ export default function ProductDetails({
                 <div className="relative w-full max-w-4xl h-[80vh]">
                   <Image
                     src={
+                      product.images &&
                       product.images[selectedImageIndex].startsWith("http")
                         ? product.images[selectedImageIndex]
+                        : product.coverImage
+                        ? product.coverImage
+                        : product.overviewImages
+                        ? product.overviewImages[0]
                         : "/assets/images/loader.png"
                     }
                     alt={product.title}
@@ -472,7 +485,7 @@ export default function ProductDetails({
                   />
                 </div>
                 <div className="absolute bottom-10 left-0 right-0 flex justify-center gap-2">
-                  {product.images.map((image, index) => (
+                  {imagesList.map((image, index) => (
                     <button
                       key={index}
                       className={`w-3 h-3 rounded-full ${
