@@ -27,6 +27,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import apiClient from "@/lib/apiClient";
+import Link from "next/link";
 
 type OrderItem = {
   orderId: number;
@@ -42,7 +43,11 @@ type OrderItem = {
       id: number;
       title: string;
       price: number;
-      images: string[];
+      images?: string[];
+      coverImage?: string;
+      url?: string;
+      mp4Url?: string;
+      mp3Url?: string;
     };
   };
 };
@@ -55,10 +60,15 @@ export default function ProductsTab() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const fetchMyProducts = useCallback(async () => {
+  const fetchMyProducts = useCallback(async (filter?: string | null) => {
     try {
       setLoading(true);
-      const res = await apiClient.get(`/user/purchases/${filter}`);
+      const url = filter
+        ? `/user/purchases?category=${filter}`
+        : `/user/purchases`;
+      console.log(url);
+
+      const res = await apiClient.get(url);
       const data = res.data;
       setProducts(data.data.orderItems || []);
     } catch (error) {
@@ -75,14 +85,14 @@ export default function ProductsTab() {
   }, [fetchMyProducts]);
 
   // Filter
-  const filtered =
-    filter === "all"
-      ? products
-      : products.filter((p) => p.item.category === filter);
+  // const filtered =
+  //   filter === "all"
+  //     ? products
+  //     : products.filter((p) => p.item.category === filter);
 
   // Pagination
-  const totalPages = Math.ceil(filtered.length / perPage);
-  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
+  const totalPages = Math.ceil(products.length / perPage);
+  const paginated = products.slice((page - 1) * perPage, page * perPage);
 
   return (
     <TabsContent value="products" className="space-y-6">
@@ -99,6 +109,8 @@ export default function ProductsTab() {
               value={filter}
               onValueChange={(val) => {
                 setPage(1);
+                console.log(val);
+                fetchMyProducts(val !== "all" ? val : null);
                 setFilter(val);
               }}
             >
@@ -108,13 +120,19 @@ export default function ProductsTab() {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 {/* Dynamically render categories */}
-                {[...new Set(products.map((p) => p.item.category))].map(
-                  (cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  )
-                )}
+                {[
+                  "MUSIC",
+                  "DIGITAL_BOOK",
+                  "MEDITATION",
+                  "FASHION",
+                  "HOME_LIVING",
+                  "DECORATION",
+                  "ACCESSORIES",
+                ].map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -136,7 +154,13 @@ export default function ProductsTab() {
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col justify-between">
                     <img
-                      src={product.images?.[0]}
+                      src={
+                        product.images
+                          ? product.images?.[0]
+                          : product.coverImage
+                          ? product.coverImage
+                          : "/assets/images/loader.png"
+                      }
                       alt={product.title}
                       className="rounded-lg h-32 w-full object-cover mb-3"
                     />
@@ -150,13 +174,23 @@ export default function ProductsTab() {
                       <Badge variant="outline" className="capitalize">
                         {order.paymentStatus}
                       </Badge>
-                      <Button
-                        size="sm"
-                        variant="default"
-                        className="bg-fixnix-lightpurple"
-                      >
-                        Download
-                      </Button>
+                      {product.url ? (
+                        <a
+                          href={product.url.replace(
+                            "/upload/",
+                            "/upload/fl_attachment:myproduct/"
+                          )}
+                          download="myproduct"
+                        >
+                          <Button
+                            size="sm"
+                            variant="default"
+                            className="bg-fixnix-lightpurple"
+                          >
+                            Download
+                          </Button>
+                        </a>
+                      ) : null}
                     </div>
                   </CardContent>
                 </Card>

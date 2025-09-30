@@ -24,7 +24,7 @@ interface RHFSelectProps {
   disabled?: boolean;
 }
 
-export const RHFSelect = ({
+export const ShadcnSelect = ({
   name,
   label,
   placeholder,

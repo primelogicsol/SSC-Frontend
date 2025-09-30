@@ -7,8 +7,7 @@ import { FormMessage } from "@/components/ui/form";
 import { useFormContext, Controller } from "react-hook-form";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { Button } from "../ui/button";
-
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
@@ -32,13 +31,13 @@ export function FormInput({
     formState: { errors },
   } = useFormContext();
 
+  const [parent] = useAutoAnimate<HTMLDivElement>();
   const [showPassword, setShowPassword] = useState(false);
   const fieldError = errors[name]?.message as string | undefined;
 
   const isPassword = type === "password";
-
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" ref={parent}>
       <Label htmlFor={name}>{label}</Label>
       <div className="relative">
         <Controller

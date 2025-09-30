@@ -280,6 +280,14 @@ export default function Footer() {
                     </div>
                     <li className="relative block mb-3 md:mb-4">
                       <Link
+                        href="/vendor-registration"
+                        className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
+                      >
+                        Become a vendor
+                      </Link>
+                    </li>
+                    <li className="relative block mb-3 md:mb-4">
+                      <Link
                         target="_blank"
                         href="https://vendor.sufisciencecenter.info/login"
                         className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
@@ -287,14 +295,6 @@ export default function Footer() {
                         Access dashboard
                       </Link>
                     </li>
-                    <li className="relative block mb-3 md:mb-4">
-                      <Link
-                        href="/vendor-registration"
-                        className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
-                      >
-                        Become a vendor
-                      </Link>
-                    </li>{" "}
                     {/* <li className="relative block mb-3 md:mb-4">
                       <Link
                         href="/resources&support"
@@ -413,10 +413,10 @@ export default function Footer() {
 
                     <li className="relative block mb-3 md:mb-4">
                       <Link
-                        href="/collaboration"
+                        href="/interviewform"
                         className="relative flex items-center text-base text-[var(--fixnix-white)] pl-4 transition-all duration-500 ease-in-out hover:text-[var(--fixnix-lightpuple)] before:content-['\f0da'] before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:font-['Font_Awesome_5_free'] before:font-bold before:text-sm before:text-[var(--fixnix-lightpuple)] before:transition-all before:duration-500 before:ease-in-out"
                       >
-                        Educational Partnerships
+                        Share you journey
                       </Link>
                     </li>
                     <li className="relative block mb-3 md:mb-4">

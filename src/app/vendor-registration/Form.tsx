@@ -5,7 +5,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Cookies from "js-cookie";
-
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Button } from "@/components/ui/button";
 import {
   Stepper,
@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FormDatePicker } from "@/components/datepicker";
 import AttachmentUploader from "./AttachmentUploader";
-import { RHFSelect } from "@/components/form-select";
+import { ShadcnSelect } from "@/components/form-select";
 
 export default function StepperProgress({
   defaultValues,
@@ -54,6 +54,7 @@ export default function StepperProgress({
     bankName,
     businessName,
     businessType,
+    businessLegalStructure,
     contactPerson,
     einNumber,
     email,
@@ -66,13 +67,14 @@ export default function StepperProgress({
     vendoraccepted,
     vendorNic,
   } = defaultValues;
-  const methods = useForm<VendorFormValues>({
+  const methods = useForm({
     defaultValues: {
       accountNumber,
       bankAddress,
       bankName,
       businessName,
       businessType,
+      businessLegalStructure,
       contactPerson,
       einNumber,
       email,
@@ -104,6 +106,7 @@ export default function StepperProgress({
       fieldsToValidate = [
         "businessName",
         "businessType",
+        "businessLegalStructure",
         "einNumber",
         "tinNumber",
       ];
@@ -250,8 +253,10 @@ export default function StepperProgress({
                   </p>
                 </CardHeader>
                 <div className="grid md:grid-cols-2 gap-4 px-6">
-                  <FormInput name="businessName" label="Business Name" />
-                  <RHFSelect
+                  <div className=" col-span-2">
+                    <FormInput name="businessName" label="Business Name" />
+                  </div>
+                  <ShadcnSelect
                     name="businessType"
                     label="Business Type"
                     placeholder="Select business type"
@@ -264,7 +269,33 @@ export default function StepperProgress({
                       { label: "Importer", value: "importer" },
                       { label: "Service Provider", value: "service-provider" },
                     ]}
-                  />{" "}
+                  />
+                  <ShadcnSelect
+                    name="businessLegalStructure"
+                    label="Business Legal Structure"
+                    placeholder="Select legal structure"
+                    options={[
+                      {
+                        label: "Sole Proprietorship",
+                        value: "sole-proprietorship",
+                      },
+                      { label: "Partnership", value: "partnership" },
+                      {
+                        label: "Private Limited Company",
+                        value: "private-limited",
+                      },
+                      {
+                        label: "Public Limited Company",
+                        value: "public-limited",
+                      },
+                      { label: "Limited Liability Partnership", value: "llp" },
+                      {
+                        label: "One Person Company",
+                        value: "one-person-company",
+                      },
+                    ]}
+                  />
+
                   {/* <FormInput name="businessType" label="Business Type" /> */}
                   <FormInput
                     name="einNumber"
@@ -282,6 +313,7 @@ export default function StepperProgress({
 
             {/* Step 3: Contact & Banking */}
             <StepperContent value={3} className="w-full flex justify-center">
+              {/* <StepperContentWrapper> */}
               <div className="w-full max-w-2xl">
                 <CardHeader>
                   <CardTitle>Banking & Contact</CardTitle>
@@ -310,6 +342,7 @@ export default function StepperProgress({
                   </div>
                 </div>
               </div>
+              {/* </StepperContentWrapper> */}
             </StepperContent>
 
             {/* Step 4: Agreement */}
@@ -380,5 +413,14 @@ export default function StepperProgress({
         </Stepper>
       </form>
     </FormProvider>
+  );
+}
+
+function StepperContentWrapper({ children }: { children: React.ReactNode }) {
+  const [parent] = useAutoAnimate(); // auto detects height/child changes
+  return (
+    <div ref={parent} className="w-full flex justify-center transition-all">
+      {children}
+    </div>
   );
 }

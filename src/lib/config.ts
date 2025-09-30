@@ -2,8 +2,8 @@
 export const config = {
   // API Base URL - Change this to match your backend URL
   API_BASE_URL:
-    process.env.NEXT_PUBLIC_API_URL || "https://api.sufisciencecenter.info/v1",
-    // "http://localhost:6015/v1",
+  "http://localhost:6015/v1",
+    // process.env.NEXT_PUBLIC_API_URL || "https://api.sufisciencecenter.info/v1",
 
   // Google OAuth Client ID
   GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "1057933844118-p7d72js5jlith3qi0ut68op8a5iou623.apps.googleusercontent.com",

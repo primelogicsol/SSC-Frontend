@@ -50,7 +50,7 @@ const Header2: React.FC<Header2Props> = ({
   };
   const handleProfileClick = () => {
     if (isAuthenticated) {
-      router.push("/profile");
+      router.push("/myprofile");
     } else {
       alert("You have to log in first"); // ⚡ replace with toast if using a UI lib
       router.push("/login"); // optional: redirect them to login

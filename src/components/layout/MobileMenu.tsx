@@ -535,7 +535,7 @@ const MobileMenu = ({
                   <span className="ml-2 text-sm">Library</span>
                 </Link>
                 <Link
-                  href="/profile"
+                  href="/myprofile"
                   className="text-white text-lg"
                 >
                   <i className="fas fa-user"></i>
@@ -560,7 +560,7 @@ const MobileMenu = ({
 <li className="flex items-center text-sm text-dark">
     {isAuthenticated ? (
       <>
-        <Link href="/profile" className="text-white flex items-center mr-4">
+        <Link href="/myprofile" className="text-white flex items-center mr-4">
           <i className="fa fa-user text-white bg-lightpurple p-2 rounded-full mr-2"></i>
           Profile
         </Link>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.9.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -48,6 +49,7 @@
     "isotope-layout": "^3.0.6",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.2",
+    "libphonenumber-js": "^1.12.23",
     "lucide-react": "^0.475.0",
     "next": "^15.1.5",
     "next-sanity": "^0.8.5",
