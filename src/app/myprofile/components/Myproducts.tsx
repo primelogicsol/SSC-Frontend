@@ -28,17 +28,58 @@ import {
 } from "@/components/ui/pagination";
 import apiClient from "@/lib/apiClient";
 import Link from "next/link";
+import { Loader2Icon, PackageXIcon } from "lucide-react";
+import { useCancelModal } from "../hooks/useCancelModal";
+import { useReturnModal } from "../hooks/useReturnModal";
 
-type OrderItem = {
+export type OrderItem = {
   orderId: number;
   orderStatus: string;
   paymentStatus: string;
   orderCreatedAt: string;
   item: {
     id: number;
+    orderId: number;
     category: string;
-    price: number;
+    productId: number;
+    vendorId: string;
     quantity: number;
+    price: number;
+    status: string;
+    trackingNumber: string | null;
+    shippedAt: string | null;
+    deliveredAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    order: {
+      id: number;
+      userId: string;
+      amount: number;
+      fullName: string;
+      country: string;
+      email?: string;
+      shippingAddress: string;
+      zip?: string;
+      phone?: string;
+      status: string;
+      paymentStatus: string;
+      priority?: string;
+      trackingNumber?: string | null;
+      estimatedDelivery?: string | null;
+      actualDelivery?: string | null;
+      cancellationReason?: string | null;
+      cancellationNotes?: string | null;
+      cancelledAt?: string | null;
+      cancelledBy?: string | null;
+      shippingMethod: string;
+      shippingCost: number;
+      selectedShippingService?: string;
+      estimatedDeliveryDays?: number;
+      carrier?: string | null;
+      shippingStatus?: string;
+      createdAt?: string;
+      updatedAt?: string;
+    };
     product: {
       id: number;
       title: string;
@@ -60,6 +101,8 @@ export default function ProductsTab() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
+  const { CancelModal, openCancelModal } = useCancelModal();
+  const { openReturnModal, ReturnModal } = useReturnModal();
   const fetchMyProducts = useCallback(async (filter?: string | null) => {
     try {
       setLoading(true);
@@ -138,65 +181,178 @@ export default function ProductsTab() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {loading && <p>Loading products...</p>}
           {error && <p className="text-red-500">{error}</p>}
 
           {/* Product Grid */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {paginated.map((order) => {
-              const product = order.item.product;
-              return (
-                <Card key={order.item.id} className="flex flex-col">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-lg font-semibold line-clamp-1">
-                      {product.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1 flex flex-col justify-between">
-                    <img
-                      src={
-                        product.images
-                          ? product.images?.[0]
-                          : product.coverImage
-                          ? product.coverImage
-                          : "/assets/images/loader.png"
-                      }
-                      alt={product.title}
-                      className="rounded-lg h-32 w-full object-cover mb-3"
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Category: {order.item.category}
-                    </p>
-                    <p className="text-sm font-medium mt-1">
-                      Price: ${order.item.price}
-                    </p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <Badge variant="outline" className="capitalize">
+          {loading ? (
+            <div className="w-full flex items-center justify-center min-h-[200px]">
+              <Loader2Icon className="text-fixnix-lightpurple animate-spin" />
+            </div>
+          ) : paginated.length ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {paginated.map((order) => {
+                const { item } = order;
+                const product = item.product;
+                const isDigital = product.url ? true : false; // adjust based on your category logic
+                const isPending = item.status === "PENDING";
+                const isDelivered = item.status === "DELIVERED";
+
+                return (
+                  <Card
+                    key={item.id}
+                    className="flex flex-col border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden bg-white"
+                  >
+                    {/* Header */}
+                    <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 bg-gray-50 border-b px-4 py-3">
+                      <div className="text-left sm:text-left">
+                        <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">
+                          {product.title}
+                        </CardTitle>
+                        <p className="text-xs sm:text-sm text-gray-500">
+                          Order ID: #{order.orderId} •{" "}
+                          {new Date(order.orderCreatedAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className={`capitalize w-fit mx-auto sm:mx-0 ${
+                          order.paymentStatus === "PAID"
+                            ? "border-green-500 text-green-600"
+                            : "border-yellow-500 text-yellow-600"
+                        }`}
+                      >
                         {order.paymentStatus}
                       </Badge>
-                      {product.url ? (
-                        <a
-                          href={product.url.replace(
-                            "/upload/",
-                            "/upload/fl_attachment:myproduct/"
+                    </CardHeader>
+
+                    {/* Body */}
+                    <CardContent className="flex flex-col gap-4 p-4 sm:p-5">
+                      {/* Product Image */}
+                      <div className="w-full">
+                        <img
+                          src={
+                            product.images?.[0] ||
+                            product.coverImage ||
+                            "/assets/images/loader.png"
+                          }
+                          alt={product.title}
+                          className="w-full h-40 sm:h-44 md:h-48 rounded-lg object-cover border"
+                        />
+                      </div>
+
+                      {/* Details */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-700">
+                            <span className="font-medium text-gray-900">
+                              Category:
+                            </span>{" "}
+                            {item.category}
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            <span className="font-medium text-gray-900">
+                              Price:
+                            </span>{" "}
+                            ${item.price} × {item.quantity}
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            <span className="font-medium text-gray-900">
+                              Shipping:
+                            </span>{" "}
+                            {order.item.order.shippingMethod} ($
+                            {order.item.order.shippingCost})
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            <span className="font-medium text-gray-900">
+                              Status:
+                            </span>{" "}
+                            <Badge
+                              variant="outline"
+                              className={`capitalize ${
+                                order.orderStatus === "DELIVERED"
+                                  ? "border-green-500 text-green-600"
+                                  : order.orderStatus === "PENDING"
+                                  ? "border-yellow-500 text-yellow-600"
+                                  : "border-gray-400 text-gray-500"
+                              }`}
+                            >
+                              {order.orderStatus.toLowerCase()}
+                            </Badge>
+                          </p>
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          {product.url ? (
+                            <a
+                              href={product.url.replace(
+                                "/upload/",
+                                "/upload/fl_attachment:myproduct/"
+                              )}
+                              download="myproduct"
+                              className="w-full sm:w-auto"
+                            >
+                              <Button
+                                size="sm"
+                                variant="default"
+                                className="w-full sm:w-auto bg-fixnix-lightpurple"
+                              >
+                                Download
+                              </Button>
+                            </a>
+                          ) : null
+                          // <span className="text-xs text-gray-400 text-center sm:text-left">
+                          //   No digital file available
+                          // </span>
+                          }
+
+                          {/* Conditional Action Buttons */}
+                          {!isDigital && (
+                            <>
+                              {isPending && (
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => openCancelModal(item.id)}
+                                >
+                                  Cancel Order
+                                </Button>
+                              )}
+
+                              {!isDelivered && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => openReturnModal(item.id)}
+                                >
+                                  Return Item
+                                </Button>
+                              )}
+                            </>
                           )}
-                          download="myproduct"
-                        >
-                          <Button
-                            size="sm"
-                            variant="default"
-                            className="bg-fixnix-lightpurple"
-                          >
-                            Download
-                          </Button>
-                        </a>
-                      ) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 text-center mx-auto w-full">
+              <PackageXIcon className="w-16 h-16 text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-fixnix-darkpurple">
+                No purchased products found
+              </h3>
+              <p className="text-sm text-gray-500">
+                Purchase products to see them listed here.
+              </p>
+              <Link href="/wall&artdecor#products">
+                <Button className="mt-4 bg-fixnix-lightpurple">
+                  Go to Shop
+                </Button>
+              </Link>
+            </div>
+          )}
 
           {/* Pagination */}
           {totalPages > 1 && (
@@ -235,6 +391,8 @@ export default function ProductsTab() {
           )}
         </CardContent>
       </Card>
+      {CancelModal}
+      {ReturnModal}
     </TabsContent>
   );
 }

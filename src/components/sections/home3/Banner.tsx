@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
-// Slide data type
 interface Slide {
   subTitle: string;
   title: string;
@@ -14,41 +13,35 @@ interface Slide {
   buttonLink: string;
 }
 
-// Component props
 interface BannerProps {
   slides: Slide[];
 }
 
-// Swiper options
-const swiperOptions = {
-  modules: [Autoplay, Navigation, Pagination],
-  slidesPerView: 1,
-  spaceBetween: 0,
-  loop: true,
-  autoplay: {
-    delay: 8000,
-    disableOnInteraction: false,
-  },
-  navigation: {
-    nextEl: ".h1n",
-    prevEl: ".h1p",
-  },
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-};
-
 export default function Banner({ slides }: BannerProps) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const prevRef = useRef<HTMLDivElement | null>(null);
+  const nextRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <section className="relative overflow-hidden">
       <Swiper
-        {...swiperOptions}
+        modules={[Autoplay, Navigation, Pagination]}
+        slidesPerView={1}
+        loop
+        autoplay={{ delay: 8000, disableOnInteraction: false }}
+        pagination={{ el: ".swiper-pagination", clickable: true }}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        onBeforeInit={(swiper) => {
+          // manually bind navigation refs before init
+          // (Swiper ignores string selectors when using React)
+          // @ts-ignore
+          swiper.params.navigation.prevEl = prevRef.current;
+          // @ts-ignore
+          swiper.params.navigation.nextEl = nextRef.current;
+        }}
+        navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
         className="swiper-container"
       >
         {slides.map((slide, index) => (
@@ -91,17 +84,34 @@ export default function Banner({ slides }: BannerProps) {
           </SwiperSlide>
         ))}
 
-        {/* Navigation Arrows */}
-        <div className="absolute top-1/2 left-4 -translate-y-1/2 z-10 h1p cursor-pointer">
-          <i className="fas fa-chevron-left text-white text-xl"></i>
-        </div>
-        <div className="absolute top-1/2 right-4 -translate-y-1/2 z-10 h1n cursor-pointer">
-          <i className="fas fa-chevron-right text-white text-xl"></i>
-        </div>
+        {/* Swiper Pagination Bullets */}
+        <div className="swiper-pagination absolute !bottom-6 !left-1/2 -translate-x-1/2 flex space-x-2 z-20"></div>
       </Swiper>
 
-      {/* Swiper Pagination Bullets */}
-      <div className="swiper-pagination absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20"></div>
+      {/* Navigation Arrows */}
+      {/* Prev Button (mobile: bottom-left; md+: center-left) */}
+      <div
+        ref={prevRef}
+        className="
+    absolute z-[100] h1p cursor-pointer
+    bottom-4 left-4                    
+    md:top-1/2 md:left-4 md:bottom-auto md:-translate-y-1/2  
+  "
+      >
+        <i className="fas fa-chevron-left text-white text-xl"></i>
+      </div>
+
+      {/* Next Button (mobile: bottom-left next to prev; md+: center-right) */}
+      <div
+        ref={nextRef}
+        className="
+    absolute z-[100] h1n cursor-pointer
+    bottom-4 left-16                   
+    md:top-1/2 md:right-4 md:left-auto md:bottom-auto md:-translate-y-1/2 
+  "
+      >
+        <i className="fas fa-chevron-right text-white text-xl"></i>
+      </div>
     </section>
   );
 }

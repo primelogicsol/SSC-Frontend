@@ -12,7 +12,7 @@ export default function Footer() {
               "url(assets/images/shapes/site-footer-shape-1.png)",
           }}
         ></div>
-        <div className="relative block py-16 md:py-20 lg:py-28">
+        <div className="relative block pt-16 md:pt-20 lg:pt-28">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {/* First Column - About SSC */}

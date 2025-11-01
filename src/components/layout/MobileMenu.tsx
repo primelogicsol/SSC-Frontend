@@ -402,7 +402,7 @@ const MobileMenu = ({
                 >
                   <li>
                     <Link
-                      href="/jewelry&accessories"
+                      href="/jewelry&accessories#products"
                       className="text-white text-sm font-medium"
                     >
                       Jewelry & Accessories
@@ -410,7 +410,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/wall&artdecor"
+                      href="/wall&artdecor#products"
                       className="text-white text-sm font-medium"
                     >
                       Art & Wall Decor
@@ -418,7 +418,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/home&living"
+                      href="/home&living#products"
                       className="text-white text-sm font-medium"
                     >
                       Home & Living
@@ -426,7 +426,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/fashion&apparel"
+                      href="/fashion&apparel#products"
                       className="text-white text-sm font-medium"
                     >
                       Fashion & Apparel
@@ -434,7 +434,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/wellness&meditation"
+                      href="/wellness&meditation#products"
                       className="text-white text-sm font-medium"
                     >
                       Wellness & Meditation
@@ -442,7 +442,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/digitalbooks"
+                      href="/digitalbooks#products"
                       className="text-white text-sm font-medium"
                     >
                       Digital Books
@@ -450,7 +450,7 @@ const MobileMenu = ({
                   </li>
                   <li>
                     <Link
-                      href="/audiospectrums"
+                      href="/audiospectrums#products"
                       className="text-white text-sm font-medium"
                     >
                       Audio Spectrum
