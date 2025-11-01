@@ -125,7 +125,7 @@ export default function Home() {
             </div>
 
             {/* Products */}
-            <div className="md:col-span-3">
+            <div className="md:col-span-3" id="products">
               <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                 <p>
                   Showing {(currentPage - 1) * productsPerPage + 1}–

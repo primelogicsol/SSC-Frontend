@@ -178,12 +178,13 @@ export default function AcademyPage() {
   const [data, setData] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const parts = pathname.split("/").filter(Boolean);
+  const slug = parts[1];
   useEffect(() => {
-    const parts = pathname.split("/").filter(Boolean);
-    const slug = parts[1];
     async function fetchData() {
       try {
         const content = await contentServices.getContent("academy", slug);
+
         setData(content);
       } catch (e) {
         console.error(e);
@@ -218,13 +219,83 @@ export default function AcademyPage() {
 
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Sidebar column */}
-            <div className="md:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-6">
               {data.blocks
                 .filter((b: any) => b.type === "sidebar")
                 .map((b: Block, i: number) => (
-                  <BlockRenderer key={`sidebar-${i}`} block={b} />
+                  <>
+                    <BlockRenderer key={`sidebar-${i}`} block={b} />
+                    {slug === "dialogseries" ? (
+                      <div className="space-y-6">
+                        <div className="p-6 border rounded-2xl bg-gradient-to-br from-white via-fixnix-lightpurple/10 to-white shadow-xl relative overflow-hidden">
+                          {/* decorative blur circle */}
+                          <div className="absolute -top-8 -right-8 w-44 h-44 bg-fixnix-lightpurple/10 rounded-full filter blur-3xl pointer-events-none" />
+                          <div className="flex items-start gap-4 lg:flex-col">
+                            {/* Icon circle */}
+                            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-fixnix-lightpurple flex items-center justify-center text-white text-lg shadow">
+                              {/* microphone icon */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                className="w-6 h-6"
+                                aria-hidden="true"
+                              >
+                                <path d="M12 14a3 3 0 003-3V6a3 3 0 10-6 0v5a3 3 0 003 3z" />
+                                <path d="M19 11a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 10-2 0 7 7 0 006 6.92V21a1 1 0 102 0v-3.08A7 7 0 0019 11z" />
+                              </svg>
+                            </div>
+
+                            <div className="flex-1">
+                              <h3 className="font-semibold mb-1 text-fixnix-darkpurple text-lg">
+                                Speak Your Sufi Truth
+                              </h3>
+                              <p className="text-sm text-gray-600 mb-2">
+                                Let your work and wisdom inspire others.
+                              </p>
+                              <p className="text-sm text-gray-500 mb-4">
+                                Join our interview series and share how Sufism
+                                shapes your world.
+                              </p>
+                              <p className="text-sm text-gray-500 mb-4">
+                                Your journey
+                                deserves to be heard.
+                              </p>
+
+                              {/* Animated link */}
+                              <Link
+                                href={"/interviewform"}
+                                className="inline-flex items-center gap-3 px-4 py-2 rounded-lg font-semibold text-fixnix-lightpurple bg-fixnix-lightpurple/10 group hover:bg-fixnix-lightpurple hover:text-white transition-colors duration-300 shadow-sm"
+                                aria-label="Apply for Interview"
+                              >
+                                <span>Schedule Now</span>
+                                <span className="transform transition-transform duration-300 group-hover:translate-x-1">
+                                  {/* arrow icon */}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    strokeWidth={2}
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M5 12h14M13 5l7 7-7 7"
+                                    />
+                                  </svg>
+                                </span>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
+                  </>
                 ))}
             </div>
 

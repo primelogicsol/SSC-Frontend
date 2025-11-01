@@ -288,7 +288,7 @@ export default function StickyHeader() {
             <ul className="bg-white absolute z-50 mt-0 pt-4 px-2 w-72 rounded-b-md max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-fixnix-darkpurple scrollbar-track-fixnix-lightpuple hidden group-hover:block">
               <li className="mb-2">
                 <Link
-                  href="/wall&artdecor"
+                  href="/wall&artdecor#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Art & Wall Decor
@@ -296,7 +296,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/jewelry&accessories"
+                  href="/jewelry&accessories#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Jewelry & Accessories
@@ -305,7 +305,7 @@ export default function StickyHeader() {
 
               <li className="mb-2">
                 <Link
-                  href="/home&living"
+                  href="/home&living#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Home & Living
@@ -313,7 +313,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/fashion&apparel"
+                  href="/fashion&apparel#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Fashion & Apparel
@@ -321,7 +321,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/wellness&meditation"
+                  href="/wellness&meditation#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Wellness & Meditation
@@ -329,7 +329,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/digitalbooks"
+                  href="/digitalbooks#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Digital Books
@@ -337,7 +337,7 @@ export default function StickyHeader() {
               </li>
               <li className="mb-2">
                 <Link
-                  href="/audiospectrums"
+                  href="/audiospectrums#products"
                   className="text-fixnix-darkpurple text-[15px] hover:bg-fixnix-darkpurple hover:text-white rounded px-4 py-1 transition-all"
                 >
                   Audio Spectrum

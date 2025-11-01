@@ -47,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({
   useEffect(() => {
     // Scroll handler to determine when to show animation
     const onScroll = () => {
-      const scrollCheck = window.scrollY > 100 ? 1 : 0;
+      const scrollCheck = window.scrollY > 50 ? 1 : 0;
       setScroll(scrollCheck);
     };
 

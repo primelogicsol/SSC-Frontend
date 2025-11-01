@@ -4,12 +4,17 @@ export const checkoutSchema = z.object({
   country: z.string().min(1, "Country is required"),
   fullName: z.string().min(2, "First name is required"),
   shippingAddress: z.string().min(5, "Street address is required"),
-//   apartment: z.string().optional(),
-//   city: z.string().min(2, "City is required"),
-//   state: z.string().min(2, "State is required"),
+  //   apartment: z.string().optional(),
+  //   city: z.string().min(2, "City is required"),
+  //   state: z.string().min(2, "State is required"),
   zip: z.string().min(4, "ZIP code is required"),
   phone: z.string().min(10, "Phone number is required"),
   email: z.string().email("Invalid email address"),
+  shippingCost: z.number().min(0),
+  selectedShippingService: z
+    .string()
+    .min(1, "Please select a shipping service"),
+  estimatedDeliveryDays: z.number().optional().nullable(),
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;

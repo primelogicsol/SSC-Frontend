@@ -58,7 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, category }) => {
 
       <div className="mt-4">
         <h3 className="text-lg font-semibold text-gray-800">{product.title}</h3>
-        <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+        <p className="text-sm text-gray-600 mb-2 line-clamp-2 text-ellipsis">{product.description}</p>
 
         {/* Rating */}
         {product.rating !== undefined && (

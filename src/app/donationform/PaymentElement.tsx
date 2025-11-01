@@ -93,10 +93,10 @@ const StripePaymentElementForm: React.FC<Props> = ({
 
       if (result?.paymentIntent) {
         setSuccess(true);
-        router.refresh();
-        successCallback();
-
         toast.success("Thanks for your donation 🎉");
+        successCallback();
+        router.push("/");
+
       }
     } catch (err) {
       setError("An unexpected error occurred.");

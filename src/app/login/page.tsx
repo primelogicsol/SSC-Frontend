@@ -45,7 +45,7 @@ export default function Login() {
       });
       router.push(returnUrl);
     } catch (err: any) {
-      toast.error("Authorization failed", {
+      toast.error(err.message || "Authorization failed", {
         position: "top-center",
         richColors: true,
       });

@@ -3,7 +3,7 @@ import Layout from "@/components/layout/Layout";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { checkoutSubmit, getCart, type CartItem } from "@/hooks/cart";
 import Image from "next/image";
 import PaymentButtons from "@/components/payments/PaymentButtons";
@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import CheckoutForm from "./CheckoutForm";
 import BillingForm from "./BillingForm";
 import ReactConfetti from "react-confetti";
+import ShippingOptions from "./ShippingServices";
+import apiClient from "@/lib/apiClient";
 
 type Address = {
   country: string;
@@ -98,14 +100,11 @@ export default function Home() {
       : 0;
   };
 
-  const calculateShipping = () => {
-    // Free shipping for orders over $50, otherwise $5.99
-    return calculateSubtotal() > 50 ? 0 : 5.99;
+  const calculateTotal = () => {
+    return calculateSubtotal();
   };
 
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateShipping();
-  };
+  //calculate shipping cost
 
   return (
     <>
@@ -156,7 +155,7 @@ export default function Home() {
               )}
 
               {/* Empty Cart Redirect */}
-              {cartItems.length === 0 && !loading && (
+              {cartItems && cartItems.length === 0 && !loading && (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">🛒</div>
                   <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-2">
@@ -187,11 +186,11 @@ export default function Home() {
                 </p>
               </div>
 
-              {cartItems.length ? (
+              {cartItems && cartItems.length ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Billing Details */}
                   <div className="space-y-8">
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                    {/* <div className="bg-white p-6 rounded-xl shadow-sm">
                       <div className="flex items-center space-x-3 mb-6">
                         <input
                           type="checkbox"
@@ -211,7 +210,7 @@ export default function Home() {
                       </div>
 
                       {showShippingForm && <BillingForm />}
-                    </div>
+                    </div> */}
 
                     {/* Order Summary */}
                     <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -220,66 +219,74 @@ export default function Home() {
                       </h2>
                       <div className="space-y-4">
                         <div className="border-b border-gray-200">
-                          <table className="w-full">
-                            <thead>
-                              <tr className="border-b border-gray-200">
-                                <th className="text-left py-4 text-gray-600 font-medium">
-                                  Product
-                                </th>
-                                <th className="text-right py-4 text-gray-600 font-medium">
-                                  Price
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {cartItems.length ? (
-                                cartItems.map((item) => {
-                                  const product = getProductInfo(item);
-                                  return (
-                                    <tr key={item.id}>
-                                      <td className="py-4 text-gray-600">
-                                        <div className="flex items-center">
-                                          <Image
-                                            src={product.image}
-                                            alt={product.title}
-                                            width={50}
-                                            height={50}
-                                            className="mr-3"
-                                          />
-                                          <span>{product.title}</span>
-                                        </div>
-                                      </td>
-                                      <td className="py-4 text-right text-gray-600">
-                                        ${product.price.toFixed(2)}
-                                      </td>
-                                    </tr>
-                                  );
-                                })
-                              ) : (
-                                <span>Error displaying items</span>
-                              )}
-                              <tr>
-                                <td className="py-4 text-gray-600">Subtotal</td>
-                                <td className="py-4 text-right text-gray-600">
-                                  ${calculateSubtotal().toFixed(2)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className="py-4 text-gray-600">Shipping</td>
-                                <td className="py-4 text-right text-gray-600">
-                                  ${calculateShipping().toFixed(2)}
-                                </td>
-                              </tr>
-                              <tr className="border-t border-gray-200">
-                                <td className="py-4 font-semibold text-gray-800">
-                                  Total
-                                </td>
-                                <td className="py-4 text-right font-semibold text-gray-800">
-                                  ${calculateTotal().toFixed(2)}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                          <div className="w-full space-y-4">
+                            {/* Header */}
+                            <div className="grid grid-cols-2 border-b border-gray-200 pb-2">
+                              <div className="text-left text-gray-600 font-medium">
+                                Product
+                              </div>
+                              <div className="text-right text-gray-600 font-medium">
+                                Price
+                              </div>
+                            </div>
+
+                            {/* Cart Items */}
+                            {cartItems && cartItems.length ? (
+                              cartItems.map((item) => {
+                                const product = getProductInfo(item);
+                                return (
+                                  <div
+                                    key={item.id}
+                                    className="grid grid-cols-2 items-center py-3 border-b border-gray-100 last:border-none"
+                                  >
+                                    <div className="flex items-center space-x-3">
+                                      <Image
+                                        src={product.image}
+                                        alt={product.title}
+                                        width={50}
+                                        height={50}
+                                        className="rounded-md"
+                                      />
+                                      <span className="text-gray-700">
+                                        {product.title}
+                                      </span>
+                                    </div>
+                                    <div className="text-right text-gray-700">
+                                      ${product.price.toFixed(2)}
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <p className="text-sm text-gray-500">
+                                Error displaying items
+                              </p>
+                            )}
+
+                            {/* Subtotal */}
+                            <div className="grid grid-cols-2 py-2">
+                              <div className="text-gray-600">Subtotal</div>
+                              <div className="text-right text-gray-700">
+                                ${calculateSubtotal().toFixed(2)}
+                              </div>
+                            </div>
+
+                            {/* Shipping Method */}
+                            {/* <div className="text-gray-600">Shipping Cost</div>
+                            <div className="text-right text-gray-700">
+                       
+                            </div> */}
+
+                            {/* Total */}
+                            <div className="grid grid-cols-2 border-t border-gray-200 pt-3">
+                              <div className="font-semibold text-gray-800">
+                                Total
+                              </div>
+                              <div className="text-right font-semibold text-gray-800">
+                                ${calculateTotal().toFixed(2)}
+                              </div>
+                            </div>
+                          </div>
                         </div>
 
                         <div className="pt-2">
@@ -300,7 +307,10 @@ export default function Home() {
                   </div>
 
                   {/* Shipping Details */}
-                  <CheckoutForm onSuccess={setSuccess} />
+                  <CheckoutForm
+                    onSuccess={setSuccess}
+                    subTotal={calculateSubtotal().toFixed()}
+                  />
                 </div>
               ) : null}
             </div>

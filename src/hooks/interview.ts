@@ -66,7 +66,7 @@ export const createInterview = async (data: CreateInterviewPayload) => {
 
 export const getInterviews = async (): Promise<Interview[]> => {
   const response = await apiClient.get("/user/book-interview");
-  return response.data;
+  return response.data.data;
 };
 
 export const cancelInterview = async (id: string) => {

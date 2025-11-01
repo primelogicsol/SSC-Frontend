@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC, use, useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutSchema, CheckoutFormValues } from "./Schema";
@@ -11,16 +11,29 @@ import { checkoutSubmit } from "@/hooks/cart";
 import { toast } from "sonner";
 import { loadStripe } from "@stripe/stripe-js";
 import { config } from "@/lib/config";
+import apiClient from "@/lib/apiClient";
+import ShippingOptions from "./ShippingServices";
+import { useDebounceCallback } from "@/hooks/use-debounce-callback";
 const stripePromise = loadStripe(config.STRIPE_PUBLIC_KEY!);
 interface Props {
   onSuccess: (value: boolean) => void;
+  subTotal: string;
 }
 
-const CheckoutForm: FC<Props> = ({ onSuccess }) => {
+const CheckoutForm: FC<Props> = ({ onSuccess, subTotal }) => {
   const [loading, setLoading] = useState(false);
+  const [isZipChanging, setIsZipChanging] = useState(false);
+  const [shippingRatesLoading, setShippingRatesLoading] = useState(false);
+  const [shippingRates, setShippingRates] = useState([]);
+  const [shippingCostError, setShippingCostError] = useState<string | null>(
+    null
+  );
+  const [shippingCost, setShippingCost] = useState(0);
+
   const methods = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: { country: "4" },
+    defaultValues: { country: "us" },
+    mode: "all",
   });
 
   const {
@@ -29,6 +42,8 @@ const CheckoutForm: FC<Props> = ({ onSuccess }) => {
   } = methods;
 
   const onSubmit = async (data: CheckoutFormValues) => {
+    console.log(data);
+
     setLoading(true);
     try {
       const res = await checkoutSubmit(data);
@@ -73,12 +88,55 @@ const CheckoutForm: FC<Props> = ({ onSuccess }) => {
       onSuccess(true);
     } catch (err: any) {
       console.error("Checkout error:", err);
-      toast.error(err.response?.data?.error || "Error processing request");
+      toast.error(err.response?.data?.message || "Error processing request");
       onSuccess(false);
     } finally {
       setLoading(false);
     }
   };
+
+  const calculateShippingCost = useCallback(
+    async (country: string, zip: string) => {
+      try {
+        methods.setValue("shippingCost", 0);
+        methods.setValue("selectedShippingService", "");
+        methods.setValue("estimatedDeliveryDays", null);
+        setShippingCostError(null);
+        setShippingRatesLoading(true);
+        const res = await apiClient.post("/vendor/shipping/calculate", {
+          destination: {
+            country,
+            zipCode: zip,
+          },
+        });
+        const result = await res.data.data;
+        setShippingRates(result.deliveryOptions);
+      } catch (error: any) {
+        setShippingCostError(
+          error.response.data.message || "Error calculating shipping cost"
+        );
+      } finally {
+        setShippingRatesLoading(false);
+      }
+    },
+    []
+  );
+  const debouncedSearch = useDebounceCallback(calculateShippingCost, 500);
+  useEffect(() => {
+    const country = methods.getValues("country");
+    const zip = methods.getValues("zip");
+    if (country && zip && zip.length >= 4) {
+      calculateShippingCost(country, zip);
+    }
+  }, [methods.watch("country"), calculateShippingCost]);
+
+  const selectedShippingCost = methods.watch("shippingCost");
+
+  useEffect(() => {
+    if (selectedShippingCost !== undefined) {
+      setShippingCost(methods.getValues("shippingCost"));
+    }
+  }, [selectedShippingCost]);
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -91,14 +149,15 @@ const CheckoutForm: FC<Props> = ({ onSuccess }) => {
           {/* Country Select */}
           <div>
             <select
+              defaultValue={"usa"}
               {...methods.register("country")}
               className="w-full h-12 rounded-lg bg-gray-50 border border-gray-200 px-4 text-gray-700 text-sm focus:outline-none focus:border-fixnix-lightpurple focus:ring-1 focus:ring-fixnix-lightpurple transition-all"
             >
               <option value="">Select a country</option>
-              <option value="1">Canada</option>
-              <option value="2">England</option>
-              <option value="3">Australia</option>
-              <option value="4">USA</option>
+              <option value="ca">Canada</option>
+              <option value="uk">UK</option>
+              <option value="au">Australia</option>
+              <option value="us">USA</option>
             </select>
           </div>
 
@@ -125,19 +184,38 @@ const CheckoutForm: FC<Props> = ({ onSuccess }) => {
             name="zip"
             label="ZIP Code"
             type="number"
+            onChange={(e) => {
+              methods.setValue("zip", e.target.value);
+              debouncedSearch(methods.getValues("country"), e.target.value);
+            }}
             min={4}
             max={5}
           />
+          {shippingRatesLoading ? (
+            <div className="text-center text-gray-500">Calculating...</div>
+          ) : shippingCostError ? (
+            <div className="text-center text-red-500">{shippingCostError}</div>
+          ) : shippingRates.length === 0 ? (
+            <div className="text-center text-gray-500">
+              Change address and ZIP code to see options
+            </div>
+          ) : (
+            <ShippingOptions shippingServices={shippingRates} />
+          )}
 
           {/* Submit */}
           <div className="relative w-full">
             <Button
               type="submit"
-              disabled={loading}
+              disabled={
+                loading || shippingCostError !== null || shippingRatesLoading
+              }
               className="w-full rounded-lg shadow-lg overflow-hidden relative bg-fixnix-lightpurple"
             >
               <span className="relative z-10">
-                {loading ? "Processing..." : `Confirm Order`}
+                {loading
+                  ? "Processing..."
+                  : `Confirm Order $${(Number(subTotal) + Number(shippingCost || 0)).toFixed(2)}`}
               </span>
               <motion.span
                 className="absolute top-0 left-0 h-full w-full pointer-events-none"

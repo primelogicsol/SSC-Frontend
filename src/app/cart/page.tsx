@@ -187,326 +187,307 @@ export default function Home() {
   return (
     <Layout headerStyle={2} footerStyle={1} breadcrumbTitle="Cart">
       {/* Start Cart Page */}
-      <section className="relative block bg-white py-[113px] pb-[120px]">
+      <section className="relative block bg-white py-12">
         <div className="container mx-auto px-4">
-          {/* Error Message */}
+          {/* Error / Loading */}
           {error && (
-            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">
               {error}
             </div>
           )}
-
-          {/* Loading State */}
           {loading && (
-            <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded">
               Loading cart items...
             </div>
           )}
 
-          {/* Gift Card Banner */}
-          <div className="mb-8 p-4 bg-purple-50 border border-purple-200 rounded-lg flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="text-fixnix-lightpurple">
-                <i className="fas fa-gift text-2xl"></i>
-              </div>
-              <p className="text-fixnix-darkpurple font-medium">
-                <span className="font-bold">Last-minute gift?</span> Buy a
-                voucher now!
+          {/* Header */}
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold text-fixnix-darkpurple">
+                Shopping Cart
+              </h1>
+              <p className="text-sm text-fixnix-gray">
+                Review your items, adjust quantities, and proceed to checkout.
               </p>
             </div>
-            <button
-              onClick={() => setShowGiftCard(!showGiftCard)}
-              className="text-fixnix-lightpurple hover:text-fixnix-darkpurple font-bold"
-            >
-              {showGiftCard ? "Hide Options" : "Add Gift Voucher"}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowGiftCard(!showGiftCard)}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded bg-fixnix-lightpurple hover:bg-fixnix-darkpurple text-white"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M16 5a3 3 0 0 0-5.5-1.9A3 3 0 0 0 8 5"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {showGiftCard ? "Hide Voucher" : "Add Gift Voucher"}
+              </button>
+              <button
+                onClick={handleClearCart}
+                disabled={loading || cartItems.length === 0}
+                className="px-4 py-2 rounded border border-gray-200 text-sm text-fixnix-darkpurple disabled:opacity-50"
+              >
+                Clear Cart
+              </button>
+            </div>
           </div>
 
-          {/* Gift Card Selection (Conditional) */}
-          {showGiftCard && (
-            <div className="mb-8 p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="md:w-1/3">
-                  <Image
-                    src="/assets/images/shop/giftvoucher.png"
-                    alt="Gift Voucher"
-                    width={300}
-                    height={200}
-                    className="w-full rounded-lg border border-gray-200"
-                  />
-                </div>
-                <div className="md:w-2/3">
-                  <h3 className="text-xl font-bold text-fixnix-darkpurple mb-3">
-                    Gift Voucher
-                  </h3>
-                  <p className="text-fixnix-gray mb-4">
-                    Perfect for last-minute gifts! Your recipient can redeem
-                    this voucher on any items in our store.
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                    <div className="flex-1">
-                      <label className="block text-fixnix-darkpurple font-medium mb-2">
-                        Amount
-                      </label>
-                      <div className="flex items-center">
-                        <span className="text-fixnix-gray text-xl mr-2">$</span>
-                        <input
-                          type="number"
-                          min="10"
-                          value={giftCardAmount}
-                          onChange={(e) =>
-                            setGiftCardAmount(Number(e.target.value))
-                          }
-                          className="w-full border border-gray-300 p-3 text-[16px] text-fixnix-darkpurple"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <label className="block text-fixnix-darkpurple font-medium mb-2">
-                        Recipient Email
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="email@example.com"
-                        className="w-full border border-gray-300 p-3 text-[16px] text-fixnix-gray"
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Items Column */}
+            <div className="lg:col-span-8">
+              {/* Gift Card Option (expanded) */}
+              {showGiftCard && (
+                <div className="mb-6 p-5 bg-violet-50 border border-violet-100 rounded-lg">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-40 flex-shrink-0">
+                      <Image
+                        src="/assets/images/shop/giftvoucher.png"
+                        alt="Gift Voucher"
+                        width={400}
+                        height={240}
+                        className="w-full rounded-lg object-cover border border-gray-100"
                       />
                     </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple">
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Empty Cart Message */}
-          {cartItems.length === 0 && !loading && (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🛒</div>
-              <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-2">
-                Your cart is empty
-              </h2>
-              <p className="text-fixnix-gray mb-6">
-                Add some items to get started!
-              </p>
-              <Link
-                href="/wall&artdecor"
-                className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple rounded"
-              >
-                Continue Shopping
-              </Link>
-            </div>
-          )}
-
-          {/* Cart Items Table */}
-          {cartItems.length > 0 && (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full min-w-[900px] border-collapse text-left">
-                <thead>
-                  <tr className="text-[20px] font-bold text-fixnix-darkpurple border-b border-gray-300">
-                    <th className="pb-5">Item</th>
-                    <th className="pb-5">Price</th>
-                    <th className="pb-5">Quantity</th>
-                    <th className="pb-5">Total</th>
-                    <th className="pb-5 text-right">Remove</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartItems.map((item, index) => {
-                    const productInfo = getProductInfo(item);
-                    return (
-                      <tr key={index} className="border-b border-gray-300">
-                        <td className="flex items-center py-8 space-x-9">
-                          <div className="w-[120px] border border-gray-300 overflow-hidden">
-                            <Image
-                              src={productInfo.image}
-                              alt="Product Image"
-                              width={500} // Adjust based on your design requirements
-                              height={300} // Adjust this height to fit your layout
-                              className="w-full"
-                            />
-                          </div>
-                          <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
-                            <Link
-                              href={`/productdetails/${getCartCategory(item)}/${
-                                item.id
-                              }`}
-                              className="text-fixnix-lightpurple"
-                            >
-                              {productInfo.title}
-                            </Link>
-                          </h3>
-                        </td>
-                        <td className="text-[18px] text-fixnix-gray">
-                          ${productInfo.price.toFixed(2)}
-                        </td>
-                        <td>
-                          <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
-                            <input
-                              type="number"
-                              value={item.qty}
-                              onChange={(e) =>
-                                handleQuantityChange(
-                                  item,
-                                  parseInt(e.target.value) || 1
-                                )
-                              }
-                              disabled={updatingItem === item.id}
-                              className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none"
-                            />
-                          </div>
-                        </td>
-                        <td className="text-[18px] text-fixnix-gray">
-                          ${(productInfo.price * item.qty).toFixed(2)}
-                        </td>
-                        <td className="text-right">
-                          <button
-                            onClick={() => handleRemoveItem(item)}
-                            disabled={deletingItem === item.id}
-                            className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple disabled:opacity-50"
-                          >
-                            <i className="fas fa-times"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-
-                  {/* Gift Card Row (Shown when added) */}
-                  {showGiftCard && (
-                    <tr className="border-b border-gray-300 bg-purple-50">
-                      <td className="flex items-center py-8 space-x-9">
-                        <div className="w-[120px] border border-gray-300 overflow-hidden">
-                          <div className="bg-fixnix-lightpurple h-full flex items-center justify-center">
-                            <i className="fas fa-gift text-white text-3xl"></i>
-                          </div>
-                        </div>
-                        <h3 className="text-[20px] font-bold text-fixnix-darkpurple">
-                          <span className="text-fixnix-lightpurple">
-                            Gift Voucher
-                          </span>
-                        </h3>
-                      </td>
-                      <td className="text-[18px] text-fixnix-gray">
-                        ${giftCardAmount.toFixed(2)}
-                      </td>
-                      <td>
-                        <div className="relative w-[98px] h-[50px] border border-gray-300 flex items-center">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-fixnix-darkpurple">
+                        Gift Voucher
+                      </h3>
+                      <p className="text-sm text-fixnix-gray mb-4">
+                        Send a flexible voucher. Recipient can redeem in
+                        checkout.
+                      </p>
+                      <div className="flex gap-3 items-center">
+                        <div className="flex items-center border border-gray-200 rounded overflow-hidden">
+                          <span className="px-3 text-fixnix-darkpurple">$</span>
                           <input
                             type="number"
-                            value="1"
-                            readOnly
-                            className="w-full h-full px-6 text-[18px] font-bold text-fixnix-gray outline-none border-none bg-white"
+                            min={10}
+                            value={giftCardAmount}
+                            onChange={(e) =>
+                              setGiftCardAmount(Number(e.target.value))
+                            }
+                            className="w-28 p-2 text-sm outline-none"
                           />
                         </div>
-                      </td>
-                      <td className="text-[18px] text-fixnix-gray">
-                        ${giftCardAmount.toFixed(2)}
-                      </td>
-                      <td className="text-right">
-                        <button
-                          onClick={() => setShowGiftCard(false)}
-                          className="text-fixnix-darkpurple text-[16px] hover:text-fixnix-lightpuple"
-                        >
-                          <i className="fas fa-times"></i>
+                        <input
+                          type="email"
+                          placeholder="Recipient email (optional)"
+                          className="flex-1 border border-gray-200 rounded p-2 text-sm"
+                        />
+                        <button className="px-4 py-2 bg-fixnix-lightpurple text-white rounded hover:bg-fixnix-darkpurple">
+                          Add Voucher
                         </button>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
-            <form className="w-full max-w-md">
-              <input
-                type="text"
-                placeholder="Enter Coupon Code"
-                className="w-full border border-gray-300 p-4 text-[14px] text-fixnix-gray mb-4"
-              />
-              <button className="w-full bg-fixnix-lightpurple text-white py-3 hover:bg-fixnix-darkpurple ">
-                Apply Coupon
-              </button>
-            </form>
-
-            <div>
-              <ul className="space-y-4 text-[18px] font-medium text-fixnix-gray">
-                <li className="flex justify-between">
-                  <span className="font-bold text-fixnix-darkpurple">
-                    Subtotal
-                  </span>
-                  <span>
-                    $
-                    {showGiftCard
-                      ? (calculateSubtotal() + giftCardAmount).toFixed(2)
-                      : calculateSubtotal().toFixed(2)}{" "}
-                    USD
-                  </span>
-                </li>
-                <li className="flex justify-between">
-                  <span className="font-bold text-fixnix-darkpurple">
-                    Shipping Cost
-                  </span>
-                  <span>$0.00 USD</span>
-                </li>
-                <li className="flex justify-between">
-                  <span className="font-bold text-fixnix-darkpurple">
-                    Total
-                  </span>
-                  <span className="text-fixnix-lightpuple font-bold">
-                    $
-                    {showGiftCard
-                      ? (calculateSubtotal() + giftCardAmount).toFixed(2)
-                      : calculateSubtotal().toFixed(2)}{" "}
-                    USD
-                  </span>
-                </li>
-              </ul>
-
-              <div className="flex justify-end mt-6 space-x-4">
-                {cartItems.length > 0 && (
-                  <button
-                    onClick={handleClearCart}
-                    disabled={loading}
-                    className="px-6 py-3 text-white bg-red-500 hover:bg-red-600 disabled:opacity-50"
+              {/* Empty state */}
+              {cartItems.length === 0 && !loading ? (
+                <div className="py-16 rounded-lg border border-gray-100 text-center">
+                  <div className="text-6xl mb-4">🛒</div>
+                  <h2 className="text-xl font-semibold text-fixnix-darkpurple mb-2">
+                    Your cart is empty
+                  </h2>
+                  <p className="text-sm text-fixnix-gray mb-6">
+                    Add items to get started.
+                  </p>
+                  <Link
+                    href="/wall&artdecor#products"
+                    className="inline-block px-6 py-3 bg-fixnix-lightpurple text-white rounded hover:bg-fixnix-darkpurple"
                   >
-                    Clear Cart
-                  </button>
-                )}
-                <Link
-                  href="#"
-                  className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-lightpurple"
-                >
-                  Update
-                </Link>
-                <Link
-                  href="/checkout"
-                  className="px-6 py-3 text-white bg-fixnix-lightpurple hover:bg-fixnix-darkpurple"
-                >
-                  Checkout
-                </Link>
-              </div>
-            </div>
-          </div>
+                    Continue Shopping
+                  </Link>
+                </div>
+              ) : (
+                /* Items list */
+                <div className="space-y-4">
+                  {cartItems.map((item) => {
+                    const productInfo = getProductInfo(item);
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 border border-gray-100 rounded-lg"
+                      >
+                        <div className="w-full sm:w-28 flex-shrink-0">
+                          <div className="w-full h-28 bg-white border border-gray-200 overflow-hidden rounded">
+                            <Image
+                              src={productInfo.image}
+                              alt={productInfo.title}
+                              width={400}
+                              height={300}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
 
-          {/* Deals Section */}
-          {/* <div className="mt-10 p-6 bg-gray-100 rounded-lg">
-            <h2 className="text-2xl font-bold text-fixnix-darkpurple mb-4">
-              Special Deals
-            </h2>
-            <p className="text-[18px] text-fixnix-gray">
-              Buy 2 items and get a 10% discount on your total purchase!
-            </p>
-            <p className="text-[18px] text-fixnix-gray">
-              Discount will be applied automatically at checkout.
-            </p>
-          </div> */}
+                        <div className="flex-1 min-w-0">
+                          <Link
+                            href={`/productdetails/${getCartCategory(item)}/${
+                              item.id
+                            }`}
+                            className="text-base font-semibold text-fixnix-darkpurple hover:underline"
+                          >
+                            {productInfo.title}
+                          </Link>
+                          <p className="text-sm text-fixnix-gray mt-1">
+                            ${productInfo.price.toFixed(2)}
+                          </p>
+
+                          <div className="mt-3 flex items-center gap-3">
+                            <div className="flex items-center rounded border border-gray-200">
+                              <button
+                                onClick={() =>
+                                  handleQuantityChange(
+                                    item,
+                                    Math.max(1, item.qty - 1)
+                                  )
+                                }
+                                disabled={updatingItem === item.id}
+                                className="px-3 py-1 text-lg bg-white disabled:opacity-50"
+                                aria-label="Decrease quantity"
+                              >
+                                —
+                              </button>
+                              <input
+                                type="number"
+                                value={item.qty}
+                                onChange={(e) =>
+                                  handleQuantityChange(
+                                    item,
+                                    parseInt(e.target.value) || 1
+                                  )
+                                }
+                                disabled={updatingItem === item.id}
+                                className="w-14 text-center p-1 outline-none border-l border-r border-transparent"
+                              />
+                              <button
+                                onClick={() =>
+                                  handleQuantityChange(item, item.qty + 1)
+                                }
+                                disabled={updatingItem === item.id}
+                                className="px-3 py-1 text-lg bg-white disabled:opacity-50"
+                                aria-label="Increase quantity"
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            <button
+                              onClick={() => handleRemoveItem(item)}
+                              disabled={deletingItem === item.id}
+                              className="text-sm text-red-600 hover:underline disabled:opacity-50"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 sm:mt-0 sm:ml-4 text-right min-w-[120px]">
+                          <div className="text-sm text-fixnix-gray">
+                            Item total
+                          </div>
+                          <div className="text-lg font-semibold text-fixnix-darkpurple">
+                            ${(productInfo.price * item.qty).toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Summary Column */}
+            <aside className="lg:col-span-4">
+              <div className="sticky top-24 space-y-4">
+                <div className="p-5 border border-gray-100 rounded-lg bg-white">
+                  <h3 className="text-lg font-semibold text-fixnix-darkpurple mb-3">
+                    Order Summary
+                  </h3>
+
+                  <div className="flex justify-between text-sm text-fixnix-gray mb-2">
+                    <span>Subtotal</span>
+                    <span>
+                      $
+                      {showGiftCard
+                        ? (calculateSubtotal() + giftCardAmount).toFixed(2)
+                        : calculateSubtotal().toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-sm text-fixnix-gray mb-4">
+                    <span>Shipping</span>
+                    <span>Calculated at checkout</span>
+                  </div>
+
+                  <div className="border-t border-dashed pt-4 flex justify-between items-center">
+                    <span className="text-base font-semibold text-fixnix-darkpurple">
+                      Total
+                    </span>
+                    <span className="text-lg font-bold text-fixnix-lightpuple">
+                      $
+                      {showGiftCard
+                        ? (calculateSubtotal() + giftCardAmount).toFixed(2)
+                        : calculateSubtotal().toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <Link
+                      href="/checkout"
+                      className="block w-full text-center px-4 py-3 bg-fixnix-lightpurple text-white rounded hover:bg-fixnix-darkpurple"
+                    >
+                      Proceed to Checkout
+                    </Link>
+                    <Link href="/wall&artdecor#products">
+                      <button className="w-full text-center px-4 mt-2 py-3 border border-gray-200 rounded bg-white text-fixnix-darkpurple disabled:opacity-50">
+                        Continue Shopping
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="p-5 border border-gray-100 rounded-lg bg-white">
+                  <h4 className="text-sm font-semibold text-fixnix-darkpurple mb-2">
+                    Have a coupon?
+                  </h4>
+                  <form className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter coupon code"
+                      className="flex-1 border border-gray-200 rounded p-2 text-sm"
+                    />
+                    <button className="px-3 py-2 bg-fixnix-lightpurple text-white rounded hover:bg-fixnix-darkpurple text-sm">
+                      Apply
+                    </button>
+                  </form>
+                  <p className="text-xs text-fixnix-gray mt-2">
+                    Coupons applied at checkout.
+                  </p>
+                </div>
+
+                <div className="p-4 text-xs text-fixnix-gray">
+                  <p>
+                    Secure checkout • 30-day returns • Live support available
+                  </p>
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
     </Layout>
