@@ -319,7 +319,7 @@ export default function ProductsTab() {
                                 </Button>
                               )}
 
-                              {!isDelivered && (
+                              {isDelivered && (
                                 <Button
                                   size="sm"
                                   variant="outline"
