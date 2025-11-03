@@ -22,6 +22,7 @@ export default function Login() {
     mode: "all",
   });
   const { login, googleLogin, loading: authLoading } = useAuth();
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
   const [error, setError] = useState<string | React.ReactElement | null>(null);
   const [googleError, setGoogleError] = useState<string | null>(null);
   const [resendLoading, setResendLoading] = useState(false);
@@ -112,12 +113,15 @@ export default function Login() {
 
   const handleGoogleResponse = async (response: any) => {
     try {
+      setGoogleLoginLoading(true);
       setGoogleError(null);
       const user = decodeJwt(response.credential);
       await googleLogin(user.email, user.name);
       router.push("/");
     } catch (err: any) {
       setGoogleError(err.message || "Google login failed");
+    } finally {
+      setGoogleLoginLoading(false);
     }
   };
 
@@ -156,12 +160,20 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-6xl w-full mx-auto py-10 sm:px-4 px-2">
+    <div className="max-w-6xl w-full mx-auto py-10 sm:px-4 px-2 relative">
       <div className={cn("flex flex-col gap-6")}>
         <Card className="overflow-hidden">
           <CardContent className="grid p-0 md:grid-cols-2">
             <FormProvider {...methods}>
-              <div className="max-sm:p-2 sm:p-6 md:p-8">
+              <div className="max-sm:p-2 sm:p-6 md:p-8 relative">
+                {googleLoginLoading && (
+                  <div className="absolute top-0 left-0 w-full h-full bg-slate-50/25 flex items-center justify-center z-50">
+                    <LoaderCircle
+                      className="animate-spin text-fixnix-lightpurple"
+                      size={60}
+                    />
+                  </div>
+                )}
                 <form
                   className=" min-h-[550px] max-h-max relative"
                   onSubmit={methods.handleSubmit(onSubmit)}

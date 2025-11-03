@@ -74,8 +74,6 @@ export default function ProductsTab() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { CancelModal, openCancelModal } = useCancelModal();
-  const { openReturnModal, ReturnModal } = useReturnModal();
   const fetchMyProducts = useCallback(async (filter?: string | null) => {
     try {
       setLoading(true);
@@ -99,6 +97,9 @@ export default function ProductsTab() {
   useEffect(() => {
     fetchMyProducts();
   }, [fetchMyProducts]);
+
+  const { CancelModal, openCancelModal } = useCancelModal(fetchMyProducts);
+  const { openReturnModal, ReturnModal } = useReturnModal(fetchMyProducts);
 
   // Filter
   // const filtered =
@@ -332,12 +333,14 @@ export default function ProductsTab() {
                   <PaginationPrevious
                     onClick={() => page > 1 && setPage(page - 1)}
                     className={
-                      page === 1 ? "pointer-events-none opacity-50" : ""
+                      page === 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
                     }
                   />
                 </PaginationItem>
                 {Array.from({ length: totalPages }, (_, i) => (
-                  <PaginationItem key={i}>
+                  <PaginationItem key={i} className="cursor-pointer">
                     <PaginationLink
                       onClick={() => setPage(i + 1)}
                       isActive={page === i + 1}
@@ -352,7 +355,7 @@ export default function ProductsTab() {
                     className={
                       page === totalPages
                         ? "pointer-events-none opacity-50"
-                        : ""
+                        : "cursor-pointer"
                     }
                   />
                 </PaginationItem>
