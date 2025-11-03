@@ -18,7 +18,7 @@ type CancelData = {
   notes?: string;
 };
 
-export function useCancelModal() {
+export function useCancelModal(successCallback:()=> void) {
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [cancelItemId, setCancelItemId] = useState<number | null>(null);
   const [cancelForm, setCancelForm] = useState<CancelData>({
@@ -54,6 +54,7 @@ export function useCancelModal() {
       if (res.status) {
         toast.success("Order item cancelled successfully.");
         setCancelModalOpen(false);
+        successCallback()
       }
     } catch (error: any) {
       console.error(error);

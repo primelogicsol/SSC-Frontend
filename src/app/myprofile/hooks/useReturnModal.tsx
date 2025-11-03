@@ -19,8 +19,7 @@ type ReturnData = {
   notes?: string;
 };
 
-export function useReturnModal() {
-  const router = useRouter();
+export function useReturnModal(successCallback: () => void) {
   const [returnModalOpen, setReturnModalOpen] = useState(false);
   const [returnItemId, setReturnItemId] = useState<number | null>(null);
   const [returnForm, setReturnForm] = useState<ReturnData>({
@@ -56,8 +55,8 @@ export function useReturnModal() {
 
       if (res.status) {
         toast.success("Return request submitted successfully.");
-        router.refresh()
         setReturnModalOpen(false);
+        successCallback();
       }
     } catch (error: any) {
       console.error(error);
