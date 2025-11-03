@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import apiClient from "@/lib/apiClient";
+import { useRouter } from "next/navigation";
 
 type ReturnData = {
   reason: string;
@@ -19,6 +20,7 @@ type ReturnData = {
 };
 
 export function useReturnModal() {
+  const router = useRouter();
   const [returnModalOpen, setReturnModalOpen] = useState(false);
   const [returnItemId, setReturnItemId] = useState<number | null>(null);
   const [returnForm, setReturnForm] = useState<ReturnData>({
@@ -54,6 +56,7 @@ export function useReturnModal() {
 
       if (res.status) {
         toast.success("Return request submitted successfully.");
+        router.refresh()
         setReturnModalOpen(false);
       }
     } catch (error: any) {

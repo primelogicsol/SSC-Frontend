@@ -31,6 +31,8 @@ import Link from "next/link";
 import { Loader2Icon, PackageXIcon } from "lucide-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useReturnModal } from "../hooks/useReturnModal";
+import Image from "next/image";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export type OrderItem = {
   orderId: number;
@@ -51,40 +53,11 @@ export type OrderItem = {
     deliveredAt: string | null;
     createdAt: string;
     updatedAt: string;
-    order: {
-      id: number;
-      userId: string;
-      amount: number;
-      fullName: string;
-      country: string;
-      email?: string;
-      shippingAddress: string;
-      zip?: string;
-      phone?: string;
-      status: string;
-      paymentStatus: string;
-      priority?: string;
-      trackingNumber?: string | null;
-      estimatedDelivery?: string | null;
-      actualDelivery?: string | null;
-      cancellationReason?: string | null;
-      cancellationNotes?: string | null;
-      cancelledAt?: string | null;
-      cancelledBy?: string | null;
-      shippingMethod: string;
-      shippingCost: number;
-      selectedShippingService?: string;
-      estimatedDeliveryDays?: number;
-      carrier?: string | null;
-      shippingStatus?: string;
-      createdAt?: string;
-      updatedAt?: string;
-    };
     product: {
       id: number;
       title: string;
       price: number;
-      images?: string[];
+      images: string[];
       coverImage?: string;
       url?: string;
       mp4Url?: string;
@@ -193,7 +166,7 @@ export default function ProductsTab() {
               {paginated.map((order) => {
                 const { item } = order;
                 const product = item.product;
-                const isDigital = product.url ? true : false; // adjust based on your category logic
+                const isDigital = !!product.url;
                 const isPending = item.status === "PENDING";
                 const isDelivered = item.status === "DELIVERED";
 
@@ -228,16 +201,19 @@ export default function ProductsTab() {
                     {/* Body */}
                     <CardContent className="flex flex-col gap-4 p-4 sm:p-5">
                       {/* Product Image */}
-                      <div className="w-full">
-                        <img
-                          src={
-                            product.images?.[0] ||
-                            product.coverImage ||
-                            "/assets/images/loader.png"
-                          }
-                          alt={product.title}
-                          className="w-full h-40 sm:h-44 md:h-48 rounded-lg object-cover border"
-                        />
+                      <div className="w-full  h-40 sm:h-44 md:h-48 overflow-hidden rounded-lg ">
+                        <AspectRatio ratio={16 / 9}>
+                          <Image
+                            src={
+                              product.images?.[0] ||
+                              product.coverImage ||
+                              "/assets/images/loader.png"
+                            }
+                            fill
+                            alt={product.title}
+                            className="w-full rounded-lg object-contain border"
+                          />
+                        </AspectRatio>
                       </div>
 
                       {/* Details */}
@@ -257,35 +233,33 @@ export default function ProductsTab() {
                           </p>
                           <p className="text-sm text-gray-700">
                             <span className="font-medium text-gray-900">
-                              Shipping:
-                            </span>{" "}
-                            {order.item.order.shippingMethod} ($
-                            {order.item.order.shippingCost})
-                          </p>
-                          <p className="text-sm text-gray-700">
-                            <span className="font-medium text-gray-900">
                               Status:
                             </span>{" "}
                             <Badge
                               variant="outline"
                               className={`capitalize ${
-                                order.orderStatus === "DELIVERED"
+                                item.status === "DELIVERED"
                                   ? "border-green-500 text-green-600"
-                                  : order.orderStatus === "PENDING"
+                                  : item.status === "SHIPPED"
+                                  ? "border-blue-500 text-blue-600"
+                                  : item.status === "CANCELLED"
+                                  ? "border-red-500 text-red-600"
+                                  : item.status === "PENDING"
                                   ? "border-yellow-500 text-yellow-600"
                                   : "border-gray-400 text-gray-500"
                               }`}
                             >
-                              {order.orderStatus.toLowerCase()}
+                              {item.status.toLowerCase()}
                             </Badge>
                           </p>
                         </div>
 
                         {/* Footer Actions */}
                         <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                          {product.url ? (
+                          {/* Digital Download */}
+                          {isDigital && (
                             <a
-                              href={product.url.replace(
+                              href={product?.url?.replace(
                                 "/upload/",
                                 "/upload/fl_attachment:myproduct/"
                               )}
@@ -300,11 +274,7 @@ export default function ProductsTab() {
                                 Download
                               </Button>
                             </a>
-                          ) : null
-                          // <span className="text-xs text-gray-400 text-center sm:text-left">
-                          //   No digital file available
-                          // </span>
-                          }
+                          )}
 
                           {/* Conditional Action Buttons */}
                           {!isDigital && (
