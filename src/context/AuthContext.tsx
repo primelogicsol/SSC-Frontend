@@ -78,9 +78,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await apiClient.get("/user/refresh-access-token", {
         headers: { Authorization: `Bearer ${refreshToken}` },
       });
-      
+
       // Handle the response structure properly
-      const newAccessToken = res.data?.data?.accessToken || res.data?.accessToken;
+      const newAccessToken =
+        res.data?.data?.accessToken || res.data?.accessToken;
       if (newAccessToken) {
         localStorage.setItem("accessToken", newAccessToken);
         return newAccessToken;
@@ -98,28 +99,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const data = await loginApi(email, password);
       console.log("Login response:", data);
-      
+
       // Check if this is a verification response (user not verified)
-      if (data.message && data.message.includes("Verification link is sent to you email") && !data.data) {
-        // User needs to verify their account first
-        throw new Error("Please verify your email address first. A verification link has been sent to your email.");
+      if (
+        data.message &&
+        data.message
+          .trim()
+          .includes("Verification Code is sent to your email") &&
+        !data.data
+      ) {
+        router.push(`/otp?email=${email}`);
+        throw new Error(
+          "Please verify your email address first. A verification link has been sent to your email."
+        );
       }
-      
+
       // Check if the response has the expected structure with tokens
       const accessToken = data.data?.accessToken;
       const refreshToken = data.data?.refreshToken;
-      
-      console.log("Extracted tokens:", { accessToken: !!accessToken, refreshToken: !!refreshToken });
-      
+
+      console.log("Extracted tokens:", {
+        accessToken: !!accessToken,
+        refreshToken: !!refreshToken,
+      });
+
       if (accessToken && refreshToken) {
         // Set tokens first
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         console.log("Tokens saved, fetching profile...");
-        
+
         // Add a small delay to ensure tokens are saved
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         // Fetch profile and membership
         try {
           await fetchUserProfile();
@@ -127,19 +139,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (profileError) {
           console.error("Profile fetch failed:", profileError);
         }
-        
+
         try {
           await fetchMembership();
           console.log("Membership fetched successfully");
         } catch (membershipError) {
           console.error("Membership fetch failed:", membershipError);
         }
-        
+
         console.log("Login process completed");
       } else {
         console.error("No access token or refresh token found in response");
         console.log("Response structure:", JSON.stringify(data, null, 2));
-        throw new Error("Login failed. Please try again or contact support.");
+        if (
+          data.message &&
+          data.message === "Verification Code is sent to you email "
+        ) {
+          router.push(`/otp?email=${email}`);
+          throw new Error(
+            data.message || "Login failed. Please try again or contact support."
+          );
+        }
+        throw new Error(
+          data.message || "Login failed. Please try again or contact support."
+        );
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -159,7 +182,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("refreshToken", data.data.refreshToken);
         await fetchUserProfile();
         await fetchMembership();
-        router.push("/")
+        router.push("/");
       } else {
         throw new Error("Google login failed - missing tokens");
       }
