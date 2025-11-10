@@ -5,6 +5,7 @@ import "../styles/fixnix.css";
 import { AuthProvider } from "@/context/AuthContext";
 import NextjsTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
+import ScrollToTopButton from "@/components/ScrollToTop";
 
 // Define fonts with their respective CSS variables
 const roboto = Roboto({
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${sourceCodePro.variable} antialiased`}
       >
+        <ScrollToTopButton />
         <NextjsTopLoader color="#ffffff" />
         <Toaster position="top-center" richColors />
         <AuthProvider>{children}</AuthProvider>

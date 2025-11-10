@@ -227,7 +227,7 @@ export default function AcademyPage() {
                 .map((b: Block, i: number) => (
                   <>
                     <BlockRenderer key={`sidebar-${i}`} block={b} />
-                    {slug === "dialogseries" ? (
+                    {/* {slug === "dialogseries" ? ( */}
                       <div className="space-y-6">
                         <div className="p-6 border rounded-2xl bg-gradient-to-br from-white via-fixnix-lightpurple/10 to-white shadow-xl relative overflow-hidden">
                           {/* decorative blur circle */}
@@ -294,7 +294,7 @@ export default function AcademyPage() {
                           </div>
                         </div>
                       </div>
-                    ) : null}
+                    {/* // ) : null} */}
                   </>
                 ))}
             </div>
