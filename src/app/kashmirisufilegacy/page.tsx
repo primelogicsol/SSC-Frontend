@@ -66,11 +66,28 @@ export default function Home() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await fetch("/assets/data/sufi_saints.json", { cache: "no-store" });
-        const payload = await res.json();
+        // Fetch from backend API
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+        const res = await fetch(`${apiUrl}/v1/sufi-saints`, { 
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+          }
+        });
+        
+        if (!res.ok) {
+          throw new Error(`API request failed: ${res.status}`);
+        }
+        
+        const response = await res.json();
+        // API returns: { code: 200, message: "ok", data: { collection, count, fields, data } }
+        const payload = response.data;
+        
         const items = Array.isArray(payload?.data)
-          ? (payload.data as any[]).map((d, idx) => ({
-              id: idx + 1,
+          ? (payload.data as any[]).map((d) => ({
+              id: d.id || 0,
               name: d.name ?? "",
               dates_raw: d.dates_raw ?? null,
               period: d.period ?? "",
@@ -81,7 +98,27 @@ export default function Home() {
           : [];
         setSaints(items);
       } catch (e) {
-        console.error("Failed to load saints data", e);
+        console.error("Failed to load saints data from API", e);
+        // Fallback to local JSON if API fails
+        try {
+          const res = await fetch("/assets/data/sufi_saints.json", { cache: "no-store" });
+          const payload = await res.json();
+          const items = Array.isArray(payload?.data)
+            ? (payload.data as any[]).map((d, idx) => ({
+                id: idx + 1,
+                name: d.name ?? "",
+                dates_raw: d.dates_raw ?? null,
+                period: d.period ?? "",
+                century: d.century ?? "",
+                summary: d.summary ?? "",
+                tags: Array.isArray(d.tags) ? d.tags : []
+              }))
+            : [];
+          setSaints(items);
+          console.log("Loaded saints data from local JSON fallback");
+        } catch (fallbackError) {
+          console.error("Failed to load saints data from fallback", fallbackError);
+        }
       }
     };
     loadData();
