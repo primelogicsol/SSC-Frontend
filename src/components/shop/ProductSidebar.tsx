@@ -14,12 +14,12 @@ export default function ProductSidebar({ searchQuery, setSearchQuery }: Props) {
   const pathname = usePathname();
   const categories = [
     { name: "Accessories", href: "/jewelry&accessories#products" },
-    { name: "Music", href: "/audiospectrums#products" },
     { name: "Decoration", href: "/wall&artdecor#products" },
-    { name: "Digital Books", href: "/digitalbooks#products" },
     { name: "Fashion", href: "/fashion&apparel#products" },
     { name: "Home & Living", href: "/home&living#products" },
     { name: "Meditation", href: "/wellness&meditation#products" },
+    { name: "Music", href: "/audiospectrums#products" },
+    { name: "Digital Books", href: "/digitalbooks#products" },
   ];
 
   const [inputValue, setInputValue] = useState(searchQuery);

@@ -436,7 +436,7 @@ const InterviewForm = () => {
 
   return (
     <Layout headerStyle={2} footerStyle={1}>
-      <div className="max-w-6xl mx-auto my-8 px-4">
+      <div className="max-w-6xl mx-auto my-8 sm:px-4 px-2">
         <h1 className="text-3xl font-bold text-center text-fixnix-lightpurple mb-8">
           SSC Interview Application
         </h1>
@@ -479,7 +479,7 @@ const InterviewForm = () => {
         ) : null}
         {/* Existing Interviews Section */}
         {existingInterviews.length > 0 && (
-          <div className="mb-10 bg-gray-50 p-6 rounded-xl shadow-md max-w-3xl mx-auto">
+          <div className="mb-10 bg-gray-50 md:p-6 p-2 rounded-xl shadow-md max-w-3xl mx-auto">
             <h2 className="text-xl font-bold text-fixnix-lightpurple mb-4">
               {" "}
               Your Scheduled Interviews
@@ -616,7 +616,7 @@ const InterviewForm = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 max-w-3xl mx-auto p-8 bg-white shadow-2xl rounded-2xl"
+          className="space-y-6 max-w-3xl mx-auto md:p-8 sm:p-4 p-2 bg-white shadow-2xl rounded-2xl"
         >
           {formSubmitted && (
             <div className="bg-green-100 border border-fixnix-darkpurple text-fixnix-darkpurple p-4 rounded-lg">
@@ -670,7 +670,7 @@ const InterviewForm = () => {
               <h3 className="text-lg font-semibold text-fixnix-lightpurple mb-4">
                 Areas of Impact
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {[
                   "Spiritual Leadership",
                   "Transformative Education",
@@ -757,7 +757,7 @@ const InterviewForm = () => {
               <h3 className="text-lg font-semibold text-fixnix-lightpurple mb-4">
                 Interview Intent
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {[
                   "Inspire Others",
                   "Share Knowledge",

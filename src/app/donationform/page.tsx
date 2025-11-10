@@ -155,9 +155,9 @@ export default function DonationForm() {
 
       //   setSuccess("");
       // }, 3000);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error creating donation:", err);
-      toast.error("Something went wrong");
+      toast.error(err.message || "Something went wrong");
       setError("Failed to process donation. Please try again.");
     } finally {
       setLoading(false);
